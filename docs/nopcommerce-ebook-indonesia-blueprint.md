@@ -17,7 +17,7 @@
 | Runtime | **.NET 9** (what 4.90 targets). ⚠️ .NET 9 is **Standard-Term-Support** and its support window closes ~mid-2026 — see §2 for the mandatory upgrade plan to nopCommerce 5.0 / .NET 10 (LTS). |
 | Biggest risk | **No official Indonesian payment plugin exists for nopCommerce.** Midtrans/Xendit/DOKU ship plugins for WooCommerce/Shopify/Magento, *not* nopCommerce → budget a **custom payment plugin** (recommended: Midtrans Snap, which gives QRIS + Virtual Account + e-wallets in one integration). |
 | MVP payment | **Manual bank transfer / QRIS-by-upload** using the built-in "Manual" payment method (zero code) → then add Midtrans. |
-| Do NOT | Do not fork/modify nopCommerce core. Do not expose eBook files as static URLs. Do not run app+DB with no backup test. Do not skip the .NET LTS upgrade plan. |
+| Do NOT | Do not fork/modify nopCommerce core. Do not expose eBook files as static URLs. Do not run app+DB with no backup test. Do not skip the .NET LTS upgrade plan. Do not rely on Stripe/PayPal for an Indonesia-only entity (see §8). Do not start on the pre-GA 5.0 `develop` branch. |
 
 ---
 
@@ -115,8 +115,8 @@ nopCommerce keeps its identity and uploaded content under `App_Data` and `wwwroo
 - nopCommerce 4.90 targets **.NET 9** (install the .NET 9 ASP.NET runtime; SDK 9 + VS 2022 17.14+ to build/develop).
 - ⚠️ **Runtime lifecycle caveat (important for a "low-maintenance" goal):** .NET 9 is a **Standard-Term-Support (STS)** release; its support window closes around **mid-2026**. .NET 8 is the current LTS (supported into late 2026) and **.NET 10 (LTS)** shipped Nov 2025. nopCommerce **5.0** is expected to move to .NET 10.
 - **Recommendation:**
-  1. **Build on 4.90.x / .NET 9 now** — it is the newest *stable* line and has the PostgreSQL fixes you want. nopCommerce 5.0 is not yet a proven stable at the time of writing.
-  2. **Treat the move to nopCommerce 5.0 / .NET 10 (LTS) as a planned, budgeted maintenance item** for the first 1–2 quarters post-launch. Keep core untouched (§15) precisely so this upgrade stays cheap.
+  1. **Build on 4.90.x / .NET 9 now** — it is the newest *stable* line and has the PostgreSQL fixes you want. **nopCommerce 5.0 / .NET 10 is not yet released as GA** (speculated ~spring 2026; only in-progress `develop`-branch work). Critically, **no marketplace plugins — including every Stripe/payment plugin — support 5.0 yet** (they top out at 4.90), so starting on 5.0 would also mean *no* off-the-shelf payments. Building a production store on a pre-GA `develop` branch trades away exactly the stability/low-maintenance this project is for.
+  2. **Treat the move to nopCommerce 5.0 / .NET 10 (LTS) as a planned, budgeted upgrade.** **Upgrade trigger:** proceed only when (a) 5.0 is GA *and* (b) your required plugins (payment gateway, theme) publish 5.0-compatible builds. Pin the build to a specific tag (`NOP_VERSION=release-4.90.x`) for reproducible deploys until then, and keep core untouched (§15) so the jump stays cheap.
   3. In the meantime, the app is **not internet-facing directly** — it sits behind Caddy/Cloudflare on an internal network — which materially reduces the practical risk of a runtime nearing EOL. Keep the base image patched (`mcr.microsoft.com/dotnet/aspnet:9.0` receives updates) and rebuild regularly.
 - *Alternative considered:* 4.70 on .NET 8 (LTS to late 2026). Rejected for this project because it lacks 4.90's PostgreSQL collation fixes and is itself near EOL — you'd be upgrading either way, so start on the line with the best PostgreSQL behavior.
 
@@ -441,14 +441,17 @@ Draft with the customer's lawyer; structure to cover:
 | **Xendit** | **No official nopCommerce plugin** | Invoices/VA/QRIS/e-wallets/cards; strong disbursement/split for marketplaces | **Custom plugin** (moderate) | Clean API/docs; great if you later need payouts/marketplace splits. |
 | **DOKU** | **No official nopCommerce plugin** | VA/QRIS/e-wallets/cards | **Custom plugin** | Established local player; fine alternative to Midtrans. |
 | **PayPal** | **Official nopCommerce plugin** (PayPal Commerce/Standard) | Cards + PayPal balance (international) | **Config only** | Useful for *foreign* buyers of English eBooks; **not** a primary Indonesian rail (low local adoption, FX/IDR friction). |
+| **Stripe** | **Off-the-shelf marketplace plugins for 4.90** (nopStation, nopCommercePlus, foxnetsoft) | Cards + Apple/Google Pay; 135+ currencies; **NOT** QRIS / local VA / Indonesian e-wallets | **Config only** (buy + configure, ~$0–19) | ⚠️ **Invite-only/preview for Indonesian merchants** — an Indonesia-only entity generally **cannot open a Stripe account**. Card-first → underserves Indonesian buyers. Viable *only* with a foreign (e.g. Singapore) entity and/or international card buyers. |
 
 > **Reality check (the project's #1 risk):** unlike WordPress/Shopify, **there is no turnkey Indonesian gateway plugin for nopCommerce.** Plan a **custom `IPaymentMethod` plugin**. The good news: nopCommerce's payment plugin contract is well-defined, these gateways expose clean REST APIs (and Snap/redirect flows keep you out of PCI scope), and it's a contained, well-bounded build — *not* a core change.
+
+> **Confirmed scope for this project (entity = Indonesia-only; buyers = Indonesian consumers in IDR):** **Stripe and PayPal are *not* viable as the primary rail** — Stripe won't onboard an Indonesia-only merchant, and neither serves QRIS/VA/e-wallets, which is how Indonesians pay. The decided path is **manual QRIS/bank transfer (MVP) → custom Midtrans plugin (production)**. Revisit Stripe/PayPal only if a Stripe-supported (e.g. Singapore) entity is added or you start targeting international card buyers.
 
 ### 8.2 Best MVP payment approach
 **Built-in Manual method, relabeled "Transfer Bank / QRIS (verifikasi manual)."** Show bank account + a static QRIS image; buyer pays and sends proof via WhatsApp; staff **mark order Paid** → downloads auto-activate (§6.4). Zero code, launch immediately, validate demand. Trade-off: manual effort and fulfillment delay (minutes–hours).
 
 ### 8.3 Best production payment approach
-**Custom Midtrans (Snap) plugin.** One integration delivers **QRIS + Virtual Account + e-wallets + cards** with **automatic** payment confirmation via webhook. This removes manual reconciliation and gives instant download activation. Add **Xendit** later if you need payouts/splits, and keep **PayPal** enabled for international card buyers. (Decision matrix: §15.)
+**Custom Midtrans (Snap) plugin.** One integration delivers **QRIS + Virtual Account + e-wallets + cards** with **automatic** payment confirmation via webhook. This removes manual reconciliation and gives instant download activation. Add **Xendit** later if you need payouts/splits. (International card options like Stripe/PayPal only become relevant if you add a foreign entity — see §8.1.) (Decision matrix: §15.)
 
 ### 8.4 Downloads activate only after confirmed payment — how
 - Product setting **Download activation = "When order is paid"** (§5.6).
