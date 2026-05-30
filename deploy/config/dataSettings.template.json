@@ -1,0 +1,5 @@
+{
+  "DataProvider": "${NOP_DATA_PROVIDER}",
+  "ConnectionString": "Host=${NOP_DB_HOST};Port=${NOP_DB_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Pooling=true;Maximum Pool Size=100;Timeout=15;Command Timeout=60;",
+  "WithNoLock": false
+}
