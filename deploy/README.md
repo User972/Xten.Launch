@@ -53,6 +53,18 @@ docker compose restart nopcommerce
 from `.env`. **You must also copy these off the VPS** (object storage) and run the
 **quarterly restore test** in blueprint §11.5.
 
+## Post-deploy QA
+
+After deploy (and after enabling the theme), run the smoke test and follow the checklist:
+
+```bash
+deploy/qa/smoke.sh https://YOUR_DOMAIN --product /your-ebook-seo-name --category /c/your-genre --webhook
+```
+
+It verifies the theme is active, security headers, the editorial template overrides, the
+**download-auth guard**, and the **Midtrans webhook signature guard** (read-only; safe on prod).
+See **[deploy/qa/QA-CHECKLIST.md](qa/QA-CHECKLIST.md)** for the manual visual/functional/security passes.
+
 ## Notes / caveats
 - The `Dockerfile` builds nopCommerce from source; cross-check plugin-copy steps against the
   official `nopSolutions/nopCommerce_docker` repo for your exact version.

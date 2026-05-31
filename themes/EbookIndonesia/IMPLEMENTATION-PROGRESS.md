@@ -70,8 +70,10 @@ Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pend
 ## Phase 8 — QA & polish — 🟡
 - ✅ Static checks: JSON valid, CSS balanced, JS/Razor syntax sanity, no core edits, no secrets,
   download security unchanged.
-- ⬜ Runtime QA (needs a deployed instance): enable theme → verify homepage/product/category/blog/
-  account/checkout render; mobile Lighthouse; sticky Buy bar; FAQ accordion; EN/ID switch.
+- ✅ Runtime QA is now **repeatable**: `deploy/qa/smoke.sh` (theme active, security headers, the
+  product/category overrides, the **download-auth guard**, and the **Midtrans webhook guard**) +
+  `deploy/qa/QA-CHECKLIST.md` (manual mobile visual / functional / security / perf / a11y passes).
+- ⬜ Execute the QA pass against a deployed instance and record sign-off in the checklist.
 
 ## Definition of done for the optional ⬜ items
 Only pursue a view override when a concrete need can't be met by CSS + admin content. If so, base it

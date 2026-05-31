@@ -81,8 +81,10 @@ the built-in `DefaultClean` theme — no extra wiring, no static-file config. A 
 ## Known limitations
 
 - **Razor views compile at runtime** (nopCommerce uses runtime view compilation for themes), so the
-  three `.cshtml` overrides are validated when first served, not at `docker build`. Smoke-test the
-  homepage, a product page, and the footer after deploy.
+  five `.cshtml` overrides (Head, Home, Footer, Product, Category) are validated when first served,
+  not at `docker build`. After deploy, run **`deploy/qa/smoke.sh`** and follow
+  **`deploy/qa/QA-CHECKLIST.md`** (Phase 8) — they verify the overrides render, the theme is active,
+  security headers, and that downloads stay auth-gated.
 - Deeper page restructures (full product/category/checkout template rewrites) were intentionally
   **not** done — they'd be fragile across upgrades. The editorial feel is achieved via CSS + admin
   content. If a future requirement truly needs a structural change, override the specific partial
