@@ -23,22 +23,27 @@ Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pend
   benefits, FAQ, final CTA).
 - Admin step: paste the homepage content into the `HomepageText` topic (per language).
 
-## Phase 3 — Product page — 🟡
+## Phase 3 — Product page — ✅
 - ✅ CSS landing-page treatment: cover, headline, subtitle, **price (IDR)**, prominent Buy button,
   **free-preview** (`download-sample-button`) styling, editorial `.full-description` (what-you'll-
   learn / who-for / TOC / FAQ via admin HTML), `.product-collateral`, author (manufacturer) block,
   sticky mobile Buy bar.
 - ✅ Recipe documented (README): drive landing sections via product **Full description** + **Sample
   download** + widget zones (ProductDetailsBottom etc.).
-- ⬜ Optional: override `Views/Product/ProductTemplate.Simple.cshtml` for a structural inline buy
-  panel / dedicated TOC / author component (deferred — fragile across upgrades; not required).
+- ✅ `Views/Product/ProductTemplate.Simple.cshtml` override — faithful to 4.90 (all partials,
+  components, widget zones, ViewDataDictionary prefixes preserved). 3-area grid: editorial content
+  left + **sticky buy box** right on desktop; **cover → buy → content** on mobile. **Auto Table of
+  Contents** (theme.js, from description H2s) + **dedicated author block** (localized manufacturer
+  partial). The add-to-cart form still wraps the whole article → cart/checkout/download unchanged.
 
-## Phase 4 — Category / topic pages — 🟡
+## Phase 4 — Category / topic pages — ✅
 - ✅ CSS: editorial **category description** typography (serif, admin HTML) above content-led **book
   cards** (`.item-box .product-item` with cover, title, benefit summary, price, CTA; free-preview &
   format badges via `.xt-badge`).
 - ✅ Recipe: fill category Description for the editorial intro; use sub-categories/topics for guides.
-- ⬜ Optional: override `Views/Catalog/CategoryTemplate.*` to add a hero band / FAQ region (deferred).
+- ✅ `Views/Catalog/CategoryTemplate.ProductsInGridOrLines.cshtml` override — editorial **hero band**
+  (category name + description as lead) atop the curated book grid; breadcrumb, CatalogFilters,
+  subcategories, featured products, selectors, the AJAX product list and all widget zones preserved.
 
 ## Phase 5 — Blog / articles — 🟡
 - ✅ CSS: modern article list + readable serif article body, dates, titles, and an in-article

@@ -82,9 +82,32 @@
     }
   }
 
+  /* ---- Auto Table of Contents from the product description headings ---- */
+  function initToc() {
+    var nav = document.querySelector(".xt-toc");
+    if (!nav) return;
+    var desc = document.querySelector(".full-description");
+    if (!desc) return;
+    var heads = desc.querySelectorAll("h2");
+    if (heads.length < 2) return; // only worth a TOC with 2+ sections
+    var ul = document.createElement("ul");
+    heads.forEach(function (h, i) {
+      if (!h.id) h.id = "sec-" + (i + 1);
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + h.id;
+      a.textContent = (h.textContent || "").trim();
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    nav.appendChild(ul);
+    nav.classList.add("is-built");
+  }
+
   ready(function () {
     try { initFaq(); } catch (e) {}
     try { initSmoothScroll(); } catch (e) {}
     try { initStickyBuy(); } catch (e) {}
+    try { initToc(); } catch (e) {}
   });
 })();
