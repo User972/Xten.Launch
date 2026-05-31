@@ -817,6 +817,8 @@ Configure under `Content Management → Message templates`; set the **Email acco
 - `deploy/app/entrypoint.sh` — optional headless seeding of `dataSettings.json` from secrets.
 - `deploy/config/dataSettings.template.json` — PostgreSQL connection template.
 - `deploy/config/appsettings.redis-snippet.json` — Redis/hosting/cache block to merge into `App_Data/appsettings.json`.
+- `plugins/Nop.Plugin.Payments.Midtrans/` — buildable Midtrans Snap payment plugin (redirect + signature-verified webhook → mark order paid → activate downloads). See its README.
+- `storefront/` — mobile-first home page (CSS + EN/ID markup) and Terms/Privacy/Refund topic content in English + Bahasa Indonesia.
 
 ### Appendix B — Sources (verified May 2026)
 - nopCommerce releases (4.90.4, 16 Mar 2026): https://github.com/nopSolutions/nopCommerce/releases

@@ -21,11 +21,25 @@ The [`deploy/`](deploy/) folder contains a runnable starting point referenced by
 
 See **[deploy/README.md](deploy/README.md)** for the quick-start.
 
+## Midtrans payment plugin
+
+[`plugins/Nop.Plugin.Payments.Midtrans/`](plugins/Nop.Plugin.Payments.Midtrans/) — a buildable
+nopCommerce 4.90 / .NET 9 payment plugin (the one required custom build). Midtrans **Snap**
+redirect for **QRIS + Virtual Account + e-wallets + cards**, with a **signature-verified webhook**
+that marks the order Paid → which auto-activates the downloadable eBook. No core changes.
+See **[its README](plugins/Nop.Plugin.Payments.Midtrans/README.md)** for build/install/sandbox-test steps.
+
+## Storefront content
+
+[`storefront/`](storefront/) — a polished, mobile-first **home page** (CSS + EN/ID markup) and the
+**Terms / Privacy / Refund** pages in **English + Bahasa Indonesia**, ready to paste into
+nopCommerce Topics or a theme/widget. See **[storefront/README.md](storefront/README.md)**.
+
 ## Key decisions at a glance
 
 - **Platform:** nopCommerce **4.90.x** on **.NET 9** (plan the upgrade to 5.0 / .NET 10 LTS — see blueprint §2).
 - **Database:** **PostgreSQL** (needs `citext`; pre-created by `deploy/config/init-citext.sql`).
-- **Payments:** MVP = manual bank-transfer/QRIS (built-in, no code); Production = **custom Midtrans Snap plugin** (QRIS + VA + e-wallets) — the one required custom build.
+- **Payments:** MVP = manual bank-transfer/QRIS (built-in, no code); Production = **custom Midtrans Snap plugin** (QRIS + VA + e-wallets) — scaffolded in [`plugins/`](plugins/Nop.Plugin.Payments.Midtrans/). (Stripe is not viable for an Indonesia-only entity — see blueprint §8.)
 - **Downloads:** stored in the DB, served only through authorized controller logic; guest checkout OFF + validate-user-on-download ON.
 - **Core code:** **not modified** — admin config + plugins only.
 
