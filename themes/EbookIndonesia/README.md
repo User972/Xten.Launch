@@ -33,6 +33,10 @@ themes/EbookIndonesia/
 │  │                                            #   _ViewImports; without this, every override fails
 │  │                                            #   to compile and the storefront renders blank.
 │  ├─ Shared/Head.cshtml                        # injects theme CSS + JS + fonts + no-flash theme
+│  ├─ Shared/_Header.cshtml                     # custom header matching the design: top utility
+│  │                                            #   strip (EN/ID) + sticky bar (logo, inline nav,
+│  │                                            #   search, account/cart, terracotta CTA). Fixed nav
+│  │                                            #   links — edit hrefs/labels to your real pages.
 │  ├─ Shared/Components/Footer/Default.cshtml   # modern footer (override; keeps all components)
 │  ├─ Home/Index.cshtml                         # editorial homepage (override; keeps all zones)
 │  ├─ Product/ProductTemplate.Simple.cshtml     # product landing (sticky buy box, TOC, author)

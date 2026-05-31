@@ -631,3 +631,52 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .flyout-cart .buttons .checkout-button { background: var(--xt-accent); color:#fff; }
 .flyout-cart .buttons .cart-button { background: transparent; color: var(--xt-brand); border:1px solid var(--xt-brand); }
 .xt-cart-close { position:absolute; top:14px; right:16px; z-index:5; width:36px; height:36px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface); color: var(--xt-ink); font-size:20px; line-height:1; cursor:pointer; }
+
+/* 23. CUSTOM HEADER (matches the Check design header structure) =========
+   Built by Views/Shared/_Header.cshtml. This theme owns the header markup here, so these rules
+   don't fight DefaultClean. The separate nopCommerce menu bar is hidden (nav lives in the header). */
+.header-menu { display:none !important; }              /* nav moved into the header */
+.xt-header { background: var(--xt-page); }
+
+/* top utility strip */
+.xt-utility { background: var(--xt-brand-deep); color: var(--xt-parch); font-size:.82rem; }
+.xt-utility__in { max-width: var(--xt-wrap); margin:0 auto; padding:8px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.xt-utility__msg { color: rgba(250,246,238,.85); }
+.xt-utility__right { display:flex; align-items:center; gap:14px; }
+.xt-utility a, .xt-utility .language-selector .selector-title, .xt-utility .language-list a { color: rgba(250,246,238,.9); }
+.xt-utility a:hover { color:#fff; }
+.xt-utility .language-selector, .xt-utility .language-list { display:flex; align-items:center; gap:8px; margin:0; padding:0; border:0; }
+.xt-utility .language-list li { display:inline-flex; list-style:none; margin:0; }
+.xt-utility select { background: transparent; color: var(--xt-parch); border:1px solid rgba(250,246,238,.3); border-radius: var(--xt-r-sm); padding:4px 8px; min-height:auto; }
+
+/* sticky main bar */
+.xt-headbar { position:sticky; top:0; z-index:1000; background: var(--xt-page); border-bottom:1px solid var(--xt-line); }
+.xt-headbar__in { max-width: var(--xt-wrap); margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:18px; }
+.xt-headbar__logo { flex:none; }
+.xt-headbar__logo img { max-height:42px; width:auto; }
+.xt-nav { display:flex; align-items:center; gap:22px; flex:1; min-width:0; overflow-x:auto; }
+.xt-nav::-webkit-scrollbar { display:none; }
+.xt-nav { scrollbar-width:none; }
+.xt-nav a { color: var(--xt-ink-soft); font-weight:600; white-space:nowrap; text-decoration:none; padding:6px 0; }
+.xt-nav a:hover { color: var(--xt-brand); }
+.xt-headbar__actions { display:flex; align-items:center; gap:12px; margin-left:auto; flex:none; }
+.xt-headbar__actions .search-box { margin:0; }
+.xt-headbar__actions .search-box-text { min-height:40px; width:160px; max-width:42vw; }
+/* compact account/cart links inside the bar */
+.xt-headbar__actions .header-links, .xt-headbar__actions .header-links ul { display:flex; align-items:center; gap:14px; margin:0; padding:0; list-style:none; }
+.xt-headbar__actions .header-links li { margin:0; display:inline-flex; }
+.xt-headbar__actions .header-links a, .xt-headbar__actions .header-links span { white-space:nowrap; }
+/* terracotta CTA */
+.xt-cta { display:inline-flex; align-items:center; white-space:nowrap; background: var(--xt-accent); color:#fff; font-weight:800;
+  border-radius: var(--xt-r-pill); padding:10px 18px; text-decoration:none; box-shadow:0 6px 18px -8px rgba(217,119,87,.7); }
+.xt-cta:hover { background: var(--xt-accent-600); color:#fff; text-decoration:none; }
+
+@media (max-width: 1000px) {
+  .xt-utility__msg { display:none; }
+  .xt-headbar__in { flex-wrap:wrap; gap:12px; }
+  .xt-nav { order:3; width:100%; gap:18px; padding-bottom:2px; }
+  .xt-headbar__actions .search-box-text { width:120px; }
+}
+@media (max-width: 560px) {
+  .xt-headbar__actions .header-links .ico-account, .xt-headbar__actions .header-links .ico-wishlist { display:none; } /* keep cart + CTA on small screens */
+}

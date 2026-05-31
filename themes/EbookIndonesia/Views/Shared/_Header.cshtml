@@ -1,0 +1,53 @@
+@*
+    eBook Indonesia theme — custom header that matches the "Check" design structure:
+      • top utility strip (deep teal): EN/ID language switch (currency/tax hidden — IDR-only store)
+      • sticky main bar: logo · inline nav · compact search · account/cart · terracotta CTA
+    Functional nopCommerce components are kept (Logo, LanguageSelector, HeaderLinks, FlyoutShoppingCart,
+    SearchBox) and all header widget zones are preserved. The separate nopCommerce menu bar
+    (rendered by _Root in `.header-menu`) is hidden via CSS since the nav now lives here.
+    NOTE: the nav links below are FIXED (per design). Edit the hrefs/labels to your real pages.
+*@
+<header class="header xt-header">
+    <a class="skip" href="#main">@T("Header.SkipNavigation.Text")</a>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
+
+    <!-- top utility strip -->
+    <div class="xt-utility">
+        <div class="xt-utility__in">
+            <span class="xt-utility__msg">Secure checkout · instant download after payment</span>
+            <div class="xt-utility__right">
+                @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
+            </div>
+        </div>
+    </div>
+
+    <!-- sticky main bar -->
+    <div class="xt-headbar">
+        <div class="xt-headbar__in">
+            <div class="xt-headbar__logo">
+                @await Component.InvokeAsync(typeof(LogoViewComponent))
+            </div>
+
+            <nav class="xt-nav" aria-label="Primary">
+                <a href="/search">eBooks</a>
+                <a href="/search">Topics</a>
+                <a href="/free-resources">Free Resources</a>
+                <a href="/blog">Blog</a>
+                <a href="/about-us">About</a>
+                <a href="/contactus">Contact</a>
+            </nav>
+
+            <div class="xt-headbar__actions">
+                <div class="xt-search">
+                    @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+                </div>
+                @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+                @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
+                <a class="xt-cta" href="/search">Browse eBooks</a>
+            </div>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
+</header>

@@ -121,8 +121,8 @@
       apply(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
     });
 
-    // Prefer the nopCommerce header selectors area; otherwise float it top-right.
-    var host = document.querySelector(".header-selectors-wrapper") || document.querySelector(".header-links");
+    // Place it in the custom header actions; fall back to nopCommerce areas, else float top-right.
+    var host = document.querySelector(".xt-headbar__actions") || document.querySelector(".header-selectors-wrapper") || document.querySelector(".header-links");
     if (host) { host.insertBefore(btn, host.firstChild); }
     else { btn.classList.add("is-floating"); document.body.appendChild(btn); }
   }
