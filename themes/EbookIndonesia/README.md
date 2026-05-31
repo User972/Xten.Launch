@@ -26,9 +26,16 @@ themes/EbookIndonesia/
 │  ├─ js/theme.js                              # vanilla: FAQ accordion, sticky Buy bar, smooth-scroll
 │  └─ images/README.md                         # what images to add (none shipped)
 ├─ Views/
-│  ├─ Shared/Head.cshtml                        # injects the theme CSS + JS (override)
+│  ├─ _ViewImports.cshtml                       # REQUIRED — NopRazorPage base, NopHtml/NopUrl, tag
+│  │                                            #   helpers + @using namespaces. Theme views live
+│  │                                            #   OUTSIDE /Views so they don't inherit the global
+│  │                                            #   _ViewImports; without this, every override fails
+│  │                                            #   to compile and the storefront renders blank.
+│  ├─ Shared/Head.cshtml                        # injects theme CSS + JS + fonts + no-flash theme
 │  ├─ Shared/Components/Footer/Default.cshtml   # modern footer (override; keeps all components)
-│  └─ Home/Index.cshtml                         # editorial homepage (override; keeps all zones)
+│  ├─ Home/Index.cshtml                         # editorial homepage (override; keeps all zones)
+│  ├─ Product/ProductTemplate.Simple.cshtml     # product landing (sticky buy box, TOC, author)
+│  └─ Catalog/CategoryTemplate.ProductsInGridOrLines.cshtml  # category editorial hero
 ├─ docs/default-elements-decision-table.md      # keep/remove/replace decisions
 ├─ IMPLEMENTATION-PROGRESS.md                   # phased plan + status (resume here)
 └─ README.md                                    # this file
