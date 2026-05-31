@@ -113,7 +113,7 @@ img { max-width: 100%; height: auto; }
 /* upper grid (brand · link columns · newsletter) and lower bar share the content width */
 .xt-foot.xt-foot-grid, .xt-footer .footer-lower { max-width: var(--xt-wrap); margin: 0 auto; padding: var(--xt-s10) var(--xt-s4); }
 .xt-foot-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s8); }
-@media (min-width: 768px) { .xt-foot-grid { grid-template-columns: 1.3fr 2fr 1.2fr; } }
+@media (min-width: 768px) { .xt-foot-grid { grid-template-columns: 1.3fr 2.4fr 1.1fr; } }
 
 /* brand column */
 .xt-foot-title { color:#fff; font-family: var(--xt-font-display); font-weight:600; font-size:1.4rem; letter-spacing:-.01em; margin-bottom: var(--xt-s3); }
@@ -121,12 +121,19 @@ img { max-width: 100%; height: auto; }
 .xt-foot-social { margin-top: var(--xt-s5); }
 .xt-foot-social ul { display:flex; flex-wrap:wrap; gap:10px 16px; margin:0; padding:0; list-style:none; }
 .xt-foot-social li { display:inline-flex; margin:0; }
-.xt-foot-social a { color: rgba(250,246,238,.8); font-weight:600; }
-.xt-foot-social a:hover { color:#fff; }
+.xt-foot-social a { display:inline-flex; align-items:center; color: rgba(250,246,238,.85); font-weight:600; font-size:.82rem;
+  border:1px solid rgba(250,246,238,.28); border-radius: var(--xt-r-pill); padding:6px 14px; }
+.xt-foot-social a:hover { color:#fff; border-color: var(--xt-accent); background: rgba(217,119,87,.12); text-decoration:none; }
 
-/* link columns — kill DefaultClean's white list box + blue toggle pill; mono terracotta labels */
-.xt-footer .footer-navigation { display:flex; flex-wrap:wrap; gap: var(--xt-s8); width:100%; }
+/* link columns — kill DefaultClean's white list box + blue toggle pill; mono terracotta labels.
+   Mobile-first: stacked. Desktop: EQUAL columns in one row (flex:1 1 0) so a 3rd menu never wraps
+   below the others; min-width:0 lets a long label wrap inside its column instead of breaking the row. */
+.xt-footer .footer-navigation { display:flex; flex-direction:column; gap: var(--xt-s5); width:100%; }
 .xt-footer .footer-menu { display:block; max-width:none; margin:0; }
+@media (min-width: 768px) {
+  .xt-footer .footer-navigation { flex-direction:row; gap: var(--xt-s6); }
+  .xt-footer .footer-menu { flex:1 1 0; min-width:0; }
+}
 .xt-footer .footer-menu__list { background:transparent; overflow:visible; }
 .xt-footer .footer-menu__item { display:block; padding:0; margin:0 0 var(--xt-s2); line-height:1.5; text-align:left; }
 .xt-footer .footer-menu__title, .xt-footer .footer-menu__toggle {
@@ -164,8 +171,7 @@ img { max-width: 100%; height: auto; }
 .xt-footer .theme-selector { float:none; margin:0; }
 .xt-footer .theme-selector select { background: rgba(250,246,238,.08); color: var(--xt-parch); border:1px solid rgba(250,246,238,.25); border-radius: var(--xt-r-sm); }
 
-/* mobile: stack the link columns (lists stay visible — no DefaultClean accordion needed) */
-@media (max-width: 767px) { .xt-footer .footer-navigation { flex-direction:column; gap: var(--xt-s5); } }
+/* (mobile stacking of the link columns is the base style above; the row layout kicks in at 768px) */
 
 /* 7. BUTTONS & FORMS ======================================================= */
 .button-1, .button-2, input[type="button"].button-1, input[type="submit"].button-1,
