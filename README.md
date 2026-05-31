@@ -48,6 +48,21 @@ The Docker build copies it into `Nop.Web/Themes/EbookIndonesia`. See
 [decision table](themes/EbookIndonesia/docs/default-elements-decision-table.md), and
 [progress/plan](themes/EbookIndonesia/IMPLEMENTATION-PROGRESS.md).
 
+## Continuous integration
+
+[`.github/workflows/`](.github/workflows/):
+- **`ci.yml`** (every push/PR): `static-checks` runs [`deploy/qa/static-checks.sh`](deploy/qa/static-checks.sh)
+  (JSON/CSS/JS/shell/Razor/HTML validation, no-secrets, and the download-security guardrail);
+  `smoke` runs [`deploy/qa/smoke.sh`](deploy/qa/smoke.sh) against staging **when** the repo variable
+  `STAGING_URL` is set (skipped otherwise).
+- **`build-nopcommerce.yml`** (manual / `workflow_dispatch`): clones nopCommerce 4.90.4, builds the
+  **Midtrans plugin** against `Nop.Web`, publishes (theme included), and asserts both land in the output.
+
+**To gate merges:** in **Settings → Branches → Branch protection**, mark **`Static checks`** (and,
+once `STAGING_URL` is configured, **`Smoke test (staging)`**) as **required status checks**.
+Configure staging under **Settings → Secrets and variables → Actions → Variables**:
+`STAGING_URL` (+ optional `STAGING_PRODUCT_PATH`, `STAGING_CATEGORY_PATH`, `STAGING_INSECURE`).
+
 ## Key decisions at a glance
 
 - **Platform:** nopCommerce **4.90.x** on **.NET 9** (plan the upgrade to 5.0 / .NET 10 LTS — see blueprint §2).
