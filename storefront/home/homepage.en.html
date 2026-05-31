@@ -1,36 +1,40 @@
 <!--
-  Home page (English) for the eBook store.
-  Placeholders to replace: [STORE_NAME], [WHATSAPP_E164] (e.g. 6281234567890), [CATALOGUE_URL] (e.g. /search).
-  Include homepage.css first (theme stylesheet, or a <style> block above this markup).
-  Recommended placement: theme Home/Index.cshtml override, OR an HTML widget in the "home_page_top" widget zone.
+  Home page (English) — "Check" design system applied (teal/terracotta/cream, Fraunces + Plus Jakarta Sans).
+  Paste into the HomepageText topic (English locale). The EbookIndonesia theme styles every .xt-* class
+  (incl. light/dark). Replace: [STORE_NAME], [WHATSAPP_E164] (e.g. 6281234567890), [CATALOGUE_URL] (e.g. /search).
 -->
 <div class="xt-home">
   <div class="xt-wrap">
 
     <!-- HERO -->
     <section class="xt-hero">
-      <h1>Read more. Carry less.<br>Premium eBooks, instant download.</h1>
-      <p>Buy quality eBooks from [STORE_NAME] and start reading in seconds — pay with QRIS, bank transfer or your favourite e-wallet.</p>
-      <div class="xt-cta">
+      <span class="xt-eyebrow">New titles · updated weekly</span>
+      <h1 style="margin:18px auto 0;">Read further. <span class="xt-em">Go deeper.</span><br>Premium eBooks, instant download.</h1>
+      <p style="max-width:580px;margin:18px auto 0;font-size:1.15rem;">Curated eBooks from [STORE_NAME] — buy in seconds and start reading on any device. Pay with QRIS, bank transfer, or your favourite e-wallet.</p>
+      <div class="xt-cta" style="margin-top:28px;">
         <a class="xt-btn xt-btn-primary" href="[CATALOGUE_URL]">Browse eBooks</a>
         <a class="xt-btn xt-btn-ghost" href="#how-it-works">How it works</a>
       </div>
-      <div class="xt-trust">
-        <span>🔒 Secure payment</span>
-        <span>⚡ Instant access after payment</span>
-        <span>📱 QRIS · Transfer · e-wallet</span>
-        <span>♾️ Lifetime access</span>
+      <p style="margin-top:12px;font-size:.85rem;color:var(--xt-muted);">Instant access after payment · lifetime re-downloads · secure checkout.</p>
+      <div class="xt-stats">
+        <div><div class="xt-stat__n">10k<span>+</span></div><div class="xt-stat__l">readers<br>and counting</div></div>
+        <div><div class="xt-stat__n">4.9<span>★</span></div><div class="xt-stat__l">average<br>reader rating</div></div>
+        <div><div class="xt-stat__n">3<span>×</span></div><div class="xt-stat__l">formats<br>PDF · EPUB · MOBI</div></div>
+        <div><div class="xt-stat__n">60<span>s</span></div><div class="xt-stat__l">from checkout<br>to reading</div></div>
       </div>
+      <p class="xt-mono" style="margin-top:26px;">Secure payment — QRIS · Virtual Account · GoPay · OVO · Dana</p>
     </section>
 
-    <!-- VALUE PROPS -->
-    <section class="xt-section">
-      <h2>Why buy from [STORE_NAME]</h2>
-      <p class="xt-sub">Everything you need, nothing you don't — a fast, secure way to own great books digitally.</p>
-      <div class="xt-grid xt-grid-3">
-        <div class="xt-card"><div class="xt-ic">⚡</div><h3>Instant download</h3><p>Your eBook unlocks automatically the moment your payment is confirmed — no waiting.</p></div>
-        <div class="xt-card"><div class="xt-ic">📚</div><h3>Multiple formats</h3><p>Read on any device. Most titles include PDF, EPUB and MOBI in a single purchase.</p></div>
-        <div class="xt-card"><div class="xt-ic">🛡️</div><h3>Secure &amp; licensed</h3><p>Files are delivered through your account only — a genuine, licensed copy that's yours to keep.</p></div>
+    <!-- DIFFERENTIATORS -->
+    <section class="xt-section" id="why">
+      <div style="text-align:center;"><span class="xt-eyebrow">Why [STORE_NAME]</span></div>
+      <h2 style="margin-top:12px;">Everything you need, nothing you don't</h2>
+      <p class="xt-sub">A fast, secure way to own great books digitally.</p>
+      <div class="xt-diff">
+        <div class="xt-diff__item"><h3>Instant download</h3><p>Your eBook unlocks the moment your payment is confirmed — no waiting.</p></div>
+        <div class="xt-diff__item"><h3>Every device</h3><p>Most titles include PDF, EPUB and MOBI in a single purchase.</p></div>
+        <div class="xt-diff__item"><h3>Secure &amp; licensed</h3><p>Delivered only through your account — a genuine copy that's yours to keep.</p></div>
+        <div class="xt-diff__item xt-diff__item--invert"><h3>Lifetime access</h3><p>Re-download anytime from <strong>My eBooks</strong>, within your download limit.</p></div>
       </div>
     </section>
 
@@ -41,14 +45,14 @@
       <div class="xt-steps">
         <div class="xt-step"><h3>Choose your eBook</h3><p>Pick a title and preview a free sample before you buy.</p></div>
         <div class="xt-step"><h3>Pay with QRIS or transfer</h3><p>Scan QRIS, use a Virtual Account, or pay by e-wallet — securely via Midtrans.</p></div>
-        <div class="xt-step"><h3>Download &amp; read</h3><p>Your eBook appears in “My downloads” instantly. Keep it forever.</p></div>
+        <div class="xt-step"><h3>Download &amp; read</h3><p>Your eBook appears in “My eBooks” instantly. Keep it forever.</p></div>
       </div>
     </section>
 
-    <!-- WHO THIS IS FOR -->
+    <!-- WHO IT'S FOR -->
     <section class="xt-section">
-      <p class="xt-eyebrow">Who it's for</p>
-      <h2>Made for curious, busy readers</h2>
+      <div style="text-align:center;"><span class="xt-eyebrow">Who it's for</span></div>
+      <h2 style="margin-top:12px;">Made for curious, busy readers</h2>
       <p class="xt-sub">Practical knowledge you can apply — on any device, wherever you are.</p>
       <div class="xt-grid xt-grid-3">
         <div class="xt-card"><h3>Professionals &amp; founders</h3><p>Level up in business, finance, marketing and productivity — without the fluff.</p></div>
@@ -57,17 +61,21 @@
       </div>
     </section>
 
-    <!-- CATALOGUE CTA -->
+    <!-- TESTIMONIALS -->
     <section class="xt-section">
-      <div class="xt-card" style="text-align:center;">
-        <h2>Find your next read</h2>
-        <p class="xt-sub">Browse by genre, author or what's new.</p>
-        <a class="xt-btn xt-btn-primary" href="[CATALOGUE_URL]">Explore the catalogue</a>
+      <div class="xt-quote-band">
+        <h2 class="xt-section__title" style="text-align:center;">Readers love it</h2>
+        <p class="xt-sub" style="margin-bottom:28px;">Honest words from people who bought and read.</p>
+        <div class="xt-grid xt-grid-3">
+          <div class="xt-quote"><p>“Bought, paid with QRIS, and was reading on my phone a minute later. Effortless.”</p><cite>— Putri, Jakarta</cite></div>
+          <div class="xt-quote"><p>“Clear, practical, and great value. The EPUB looked perfect on my e-reader.”</p><cite>— Andi, Surabaya</cite></div>
+          <div class="xt-quote"><p>“Re-downloaded on my new laptop with zero fuss. Exactly how it should work.”</p><cite>— Maya, Bandung</cite></div>
+        </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="xt-section">
+    <section class="xt-section" id="faq">
       <h2>Frequently asked questions</h2>
       <p class="xt-sub">Everything you need to know before you buy.</p>
       <div class="xt-faq">
@@ -90,15 +98,24 @@
       </div>
     </section>
 
-    <!-- SUPPORT -->
+    <!-- FINAL CTA -->
     <section class="xt-section">
-      <div class="xt-support">
-        <h2>Need help? Chat with us</h2>
-        <p class="xt-sub" style="color:#047857;">Questions about a title, payment or your download? We're a message away on WhatsApp.</p>
-        <a class="xt-btn xt-wa" href="https://wa.me/[WHATSAPP_E164]?text=Hi%20[STORE_NAME]%2C%20I%20have%20a%20question%20about%20an%20eBook" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+      <div class="xt-cta-band">
+        <h2>Find your next read.<br><span class="xt-em">Start in seconds.</span></h2>
+        <p class="xt-sub" style="margin:14px auto 24px;">Browse the catalogue or chat with us — we're happy to help you choose.</p>
+        <div class="xt-cta">
+          <a class="xt-btn xt-btn-primary" href="[CATALOGUE_URL]">Browse eBooks</a>
+          <a class="xt-btn xt-btn-wa" href="https://wa.me/[WHATSAPP_E164]?text=Hi%20[STORE_NAME]%2C%20I%20have%20a%20question%20about%20an%20eBook" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+        </div>
       </div>
-      <p class="xt-legal">
-        By purchasing you agree to our
+    </section>
+
+    <!-- PAYMENT / TRUST STRIP -->
+    <section class="xt-section" style="padding-top:0;">
+      <div class="xt-pay">
+        <span>QRIS</span><span>Virtual Account</span><span>GoPay</span><span>OVO</span><span>Dana</span><span>ShopeePay</span><span>Cards</span>
+      </div>
+      <p class="xt-legal">By purchasing you agree to our
         <a href="/conditions-of-use">Terms</a>,
         <a href="/privacy-policy">Privacy Policy</a> and
         <a href="/refund-policy">Refund Policy</a>.

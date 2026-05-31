@@ -6,6 +6,20 @@ widget zone and dynamic component is preserved → upgrade-safe, plugin-safe, no
 
 Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pending) · ⬜ not started
 
+## Applied design — "Check" system (Claude Design handoff) — ✅
+Re-skinned the theme to the `Check Homepage.html` visual system (bundle `xten-customer-portal`):
+- **Palette** (styles.css §21): deep teal `#0F3D3E` + terracotta `#D97757` on cream `#FAF6EE`, ink `#15201F`;
+  tokens re-pointed so the whole storefront adopts it. **Light/dark toggle** via `[data-theme]` token
+  flip (dark page `#0C1111`, cards `#161E1D`, parchment text), persisted to `localStorage` with a
+  no-flash inline script in `Head.cshtml`; toggle button injected by `theme.js`.
+- **Type**: Fraunces (display) + Plus Jakarta Sans (body) + JetBrains Mono (labels) via Google Fonts.
+- **Components**: cream editorial hero (eyebrow pill, terracotta emphasis), trust stats, numbered
+  differentiators (last inverted), teal testimonial band, deep-teal final CTA band, payment strip,
+  pulsing **WhatsApp float** + terracotta-pill CTAs, terracotta focus ring.
+- **Homepage content** (`storefront/home/homepage.{en,id}.html`) rebuilt to the Check structure, bilingual.
+- ⚠️ Trade-off: switched from system fonts to **Google Fonts** (`display=swap` + preconnect) per the
+  design — self-host/subset later if you need to claw back the request. Smoke-test light **and** dark.
+
 ## Phase 1 — Theme scaffold + layout + CSS foundation — ✅
 - ✅ `theme.json` (SystemName `EbookIndonesia`, descriptor per 4.90 schema).
 - ✅ `Views/Shared/Head.cshtml` — injects `Content/css/styles.css` + `Content/js/theme.js` the
