@@ -589,7 +589,7 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 .xt-wa-float svg { width:28px; height:28px; position:relative; }
 
 /* light/dark toggle (created by theme.js; injected into the header, else floats top-right) */
-.xt-theme-toggle { width:40px; height:40px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface);
+.xt-theme-toggle { width:42px; height:42px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface);
   color: var(--xt-ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
 .xt-theme-toggle:hover { border-color: var(--xt-brand); }
 .xt-theme-toggle .icon-sun { display:none; }
@@ -716,10 +716,27 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .xt-headbar__actions { display:flex; align-items:center; gap:12px; margin-left:auto; flex:none; }
 .xt-headbar__actions .search-box { margin:0; }
 .xt-headbar__actions .search-box-text { min-height:40px; width:160px; max-width:42vw; }
-/* compact account/cart links inside the bar */
-.xt-headbar__actions .header-links, .xt-headbar__actions .header-links ul { display:flex; align-items:center; gap:14px; margin:0; padding:0; list-style:none; }
+/* action cluster: search + circular icon buttons (account/cart) + toggle + CTA */
+.xt-headbar__actions .header-links, .xt-headbar__actions .header-links ul { display:flex; align-items:center; gap:10px; margin:0; padding:0; list-style:none; }
 .xt-headbar__actions .header-links li { margin:0; display:inline-flex; }
-.xt-headbar__actions .header-links a, .xt-headbar__actions .header-links span { white-space:nowrap; }
+/* declutter to match the design: drop wishlist / inbox / register from the header cluster */
+.xt-headbar__actions .header-links .ico-wishlist, .xt-headbar__actions .header-links .ico-inbox, .xt-headbar__actions .header-links .ico-register { display:none; }
+/* remaining links (account/login/logout/cart) → circular icon buttons (label text hidden, SVG mask shown) */
+.xt-headbar__actions .header-links > ul > li > a {
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border-radius:50%; border:1px solid var(--xt-line);
+  background: var(--xt-surface); color: var(--xt-ink); font-size:0; white-space:nowrap;
+}
+.xt-headbar__actions .header-links > ul > li > a:hover { border-color: var(--xt-brand); color: var(--xt-brand); text-decoration:none; }
+.xt-headbar__actions .header-links > ul > li > a::before {
+  content:""; width:20px; height:20px; background: currentColor;
+  -webkit-mask: var(--xt-ico) center / 20px 20px no-repeat; mask: var(--xt-ico) center / 20px 20px no-repeat;
+}
+.xt-headbar__actions .ico-account, .xt-headbar__actions .ico-login { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjgiIHI9IjMuNiIvPjxwYXRoIGQ9Ik01LjUgMjBhNi41IDYuNSAwIDAgMSAxMyAwIi8+PC9zdmc+"); }
+.xt-headbar__actions .ico-logout { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOS41IDRINS41QTEuNSAxLjUgMCAwIDAgNCA1LjV2MTNBMS41IDEuNSAwIDAgMCA1LjUgMjBoNCIvPjxwYXRoIGQ9Ik0xNS41IDE2LjUgMjAgMTJsLTQuNS00LjVNMjAgMTJIOS41Ii8+PC9zdmc+"); }
+.xt-headbar__actions .ico-cart   { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSI5IiBjeT0iMjAiIHI9IjEuMyIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMjAiIHI9IjEuMyIvPjxwYXRoIGQ9Ik0yLjUgNEg1bDIuMiAxMC45YTEgMSAwIDAgMCAxIC44aDguNWExIDEgMCAwIDAgMS0uNzhMMjAuNiA4SDYiLz48L3N2Zz4="); }
+.xt-headbar__actions .ico-cart .cart-label { display:none; }
+.xt-headbar__actions .ico-cart .cart-qty { position:absolute; top:-4px; right:-4px; }
 /* terracotta header CTA — unique class so it never collides with the homepage's .xt-cta button
    GROUP container (§9), which the HomepageText topic uses to wrap the hero / CTA-band buttons. */
 .xt-headcta { display:inline-flex; align-items:center; white-space:nowrap; background: var(--xt-accent); color:#fff; font-weight:800;
@@ -733,5 +750,5 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
   .xt-headbar__actions .search-box-text { width:120px; }
 }
 @media (max-width: 560px) {
-  .xt-headbar__actions .header-links .ico-account, .xt-headbar__actions .header-links .ico-wishlist { display:none; } /* keep cart + CTA on small screens */
+  .xt-headbar__actions .header-links > ul > li > a.ico-account { display:none; } /* compact: keep cart + CTA on small screens */
 }

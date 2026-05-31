@@ -121,10 +121,12 @@
       apply(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
     });
 
-    // Place it in the custom header actions; fall back to nopCommerce areas, else float top-right.
+    // Place it in the custom header actions next to the cart (just before the CTA); else float top-right.
     var host = document.querySelector(".xt-headbar__actions") || document.querySelector(".header-selectors-wrapper") || document.querySelector(".header-links");
-    if (host) { host.insertBefore(btn, host.firstChild); }
-    else { btn.classList.add("is-floating"); document.body.appendChild(btn); }
+    if (host) {
+      var cta = host.querySelector(".xt-headcta");
+      if (cta) { host.insertBefore(btn, cta); } else { host.insertBefore(btn, host.firstChild); }
+    } else { btn.classList.add("is-floating"); document.body.appendChild(btn); }
   }
 
   /* ---- WhatsApp float — clones the first wa.me link on the page (admin-controlled number) ---- */
