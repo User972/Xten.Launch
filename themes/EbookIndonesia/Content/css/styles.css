@@ -555,3 +555,88 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 [data-theme="dark"] .xt-theme-toggle .icon-moon { display:none; }
 .xt-theme-toggle.is-floating { position:fixed; z-index:60; top:14px; right:14px; box-shadow: var(--xt-sh-2); }
 @media (prefers-reduced-motion: reduce) { .xt-wa-float::before { animation:none; } }
+
+/* 22. CHECK EBOOK STORE + CART (revision) ===============================
+   Restyles nopCommerce product cards into "Check" eBook book-cards, turns the header cart into an
+   icon + terracotta count badge (bump on add), and restyles nopCommerce's flyout mini-cart into a
+   right slide-over drawer. The REAL nopCommerce cart/checkout/Midtrans flow is used throughout —
+   no mock cart, no localStorage cart, no front-end checkout. Plus reusable designed book-cover
+   jackets, filter chips and a bundle banner for curated widgets/topics. */
+
+/* product cards = premium book cards (catalog / home / featured grids) */
+.item-box .product-item { border-radius: var(--xt-r-xl); }
+.item-box .picture img { box-shadow: 0 16px 36px -20px rgba(0,0,0,.45); }
+.item-box .product-title a { font-family: var(--xt-font-display); font-weight:600; letter-spacing:-.01em; }
+.item-box .prices .actual-price { font-family: var(--xt-font-display); }
+/* small card add-to-cart = TEAL pill (terracotta is reserved for the big/bundle CTAs) */
+.item-box .product-box-add-to-cart-button {
+  background: var(--xt-brand) !important; color: var(--xt-parch) !important; border:0;
+  border-radius: var(--xt-r-pill); box-shadow:none; width:auto;
+}
+.item-box .product-box-add-to-cart-button:hover { background: var(--xt-brand-deep) !important; }
+
+/* designed book-cover jacket (reusable: curated widgets/topics, or as an image fallback) */
+.xt-jacket { position:relative; aspect-ratio:3/4; border-radius:12px; overflow:hidden; display:flex; box-shadow:0 16px 36px -20px rgba(0,0,0,.55); color:#FAF6EE; }
+.xt-jacket__in { position:relative; z-index:2; display:flex; flex-direction:column; height:100%; width:100%; padding:20px 18px 18px 24px; }
+.xt-jacket__spine { position:absolute; left:0; top:0; bottom:0; width:11px; background:linear-gradient(90deg, rgba(0,0,0,.32), rgba(0,0,0,0)); z-index:3; }
+.xt-jacket__frame { position:absolute; inset:12px 12px 12px 18px; border:1px solid currentColor; opacity:.2; border-radius:5px; z-index:1; }
+.xt-jacket::after { content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(255,255,255,.08), transparent 40%, rgba(0,0,0,.30)); pointer-events:none; }
+.xt-jacket__imprint { font-family: var(--xt-font-mono); font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; opacity:.7; }
+.xt-jacket__series { font-family: var(--xt-font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; opacity:.78; }
+.xt-jacket__title { font-family: var(--xt-font-display); font-weight:600; letter-spacing:-.02em; line-height:1.02; font-size:1.4rem; margin-top:7px; }
+.xt-jacket__by { font-size:11.5px; opacity:.82; margin-top:9px; }
+.xt-jacket__rule { height:1px; background:currentColor; opacity:.28; margin-bottom:9px; }
+.xt-jacket--teal { background:#0F3D3E; color:#FAF6EE; }
+.xt-jacket--deep { background:#0A2C2D; color:#FAF6EE; }
+.xt-jacket--terra{ background:#BC5E3E; color:#FBEFE7; }
+.xt-jacket--ink  { background:#1C2625; color:#F1EAD9; }
+.xt-jacket--gold { background:#C8A24B; color:#241D08; }
+.xt-jacket--sand { background:#E7DCC4; color:#173130; }
+
+/* badges + filter chips (chips style category navigation; nopCommerce drives the filtering) */
+.xt-badge--best { background: var(--xt-accent); color:#fff; }
+.xt-badge--new  { background: var(--xt-brand); color: var(--xt-parch); }
+.xt-chip { display:inline-flex; align-items:center; padding:8px 16px; border-radius: var(--xt-r-pill); font-size:.82rem; font-weight:600; cursor:pointer;
+  background: var(--xt-surface); border:1px solid var(--xt-line); color: var(--xt-ink-soft); transition: background-color .2s, color .2s, border-color .2s; text-decoration:none; }
+.xt-chip:hover { border-color: var(--xt-brand); text-decoration:none; }
+.xt-chip.is-active, .xt-chip[aria-current="true"], .xt-chip[aria-current="page"] { background: var(--xt-brand); color: var(--xt-parch); border-color: var(--xt-brand); }
+
+/* bundle banner (admin promo block in a widget/topic, or a real "bundle" product) */
+.xt-bundle { background: var(--xt-brand); color: var(--xt-parch); border-radius: var(--xt-r-xl); padding: clamp(24px,4vw,40px); }
+.xt-bundle h3 { font-family: var(--xt-font-display); color: var(--xt-parch); font-size: clamp(1.3rem,3vw,1.8rem); margin:0 0 8px; }
+.xt-bundle p { color: rgba(250,246,238,.78); margin:0; }
+.xt-bundle .xt-btn { margin-top: var(--xt-s4); }
+
+/* header cart: icon + terracotta count badge + bump on add (real nopCommerce cart) */
+.header-links .ico-cart, .header-links a.cart, .header-links .cart-label { position:relative; }
+.cart-qty, .header-links .cart-qty {
+  display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 5px;
+  border-radius:10px; background: var(--xt-accent); color:#fff; font-size:11px; font-weight:700; line-height:1;
+}
+.xt-cart-bump { display:inline-flex; animation: xt-cartbump .4s ease; }
+@keyframes xt-cartbump { 0%,100%{transform:scale(1)} 35%{transform:scale(1.18)} }
+
+/* cart drawer — nopCommerce's flyout mini-cart restyled as a right slide-over.
+   Real "View cart"/"Checkout" buttons inside still go to /cart and /checkout. */
+.xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:60; }
+html.xt-cart-open .xt-cart-overlay { opacity:1; visibility:visible; }
+.flyout-cart {
+  position:fixed; top:0; right:0; height:100%; width:min(440px,100vw);
+  background: var(--xt-surface); border-left:1px solid var(--xt-line);
+  transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
+  z-index:61; display:flex; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
+}
+html.xt-cart-open .flyout-cart { transform:translateX(0); }
+.flyout-cart .mini-shopping-cart { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
+.flyout-cart .count { padding:20px 22px; border-bottom:1px solid var(--xt-line); font-weight:600; }
+.flyout-cart .items { flex:1; overflow-y:auto; padding:8px 22px; }
+.flyout-cart .item { display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--xt-line); }
+.flyout-cart .item .picture img { width:46px; height:61px; object-fit:cover; border-radius:6px; box-shadow:0 6px 14px -8px rgba(0,0,0,.5); }
+.flyout-cart .item .product .name a { font-weight:700; color: var(--xt-ink); }
+.flyout-cart .item .price, .flyout-cart .item .quantity, .flyout-cart .item .attributes { color: var(--xt-muted); font-size:.85rem; }
+.flyout-cart .totals { padding:16px 22px; border-top:1px solid var(--xt-line); font-size:1.05rem; }
+.flyout-cart .buttons { padding:16px 22px 22px; display:flex; flex-direction:column; gap:10px; border-top:1px solid var(--xt-line); }
+.flyout-cart .buttons .button-1 { width:100%; }
+.flyout-cart .buttons .checkout-button { background: var(--xt-accent); color:#fff; }
+.flyout-cart .buttons .cart-button { background: transparent; color: var(--xt-brand); border:1px solid var(--xt-brand); }
+.xt-cart-close { position:absolute; top:14px; right:16px; z-index:5; width:36px; height:36px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface); color: var(--xt-ink); font-size:20px; line-height:1; cursor:pointer; }

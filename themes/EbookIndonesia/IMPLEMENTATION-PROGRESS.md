@@ -19,6 +19,13 @@ Re-skinned the theme to the `Check Homepage.html` visual system (bundle `xten-cu
 - **Homepage content** (`storefront/home/homepage.{en,id}.html`) rebuilt to the Check structure, bilingual.
 - ⚠️ Trade-off: switched from system fonts to **Google Fonts** (`display=swap` + preconnect) per the
   design — self-host/subset later if you need to claw back the request. Smoke-test light **and** dark.
+- **eBook-store + cart revision** (styles.css §22, theme.js): nopCommerce product cards restyled as
+  Check book-cards (small card add-to-cart = teal pill; terracotta reserved for big/bundle CTAs);
+  reusable designed cover jackets (`.xt-jacket` ×6 colorways), filter chips (`.xt-chip`), bundle
+  banner (`.xt-bundle`); header cart → icon + **terracotta count badge + bump on add**; nopCommerce's
+  **flyout mini-cart restyled as a right slide-over drawer** (overlay/Esc close, opens on cart-click
+  and on add). **The REAL nopCommerce cart/checkout/Midtrans flow is used — no mock cart/checkout,
+  no localStorage cart**; the drawer's View-cart/Checkout buttons are nopCommerce's own (→ /cart, /checkout).
 
 ## Phase 1 — Theme scaffold + layout + CSS foundation — ✅
 - ✅ `theme.json` (SystemName `EbookIndonesia`, descriptor per 4.90 schema).

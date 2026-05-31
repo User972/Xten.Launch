@@ -142,9 +142,56 @@
     document.body.appendChild(f);
   }
 
+  /* ---- Cart drawer: present nopCommerce's REAL flyout mini-cart as a right slide-over ----
+     No mock cart — the flyout content + its View-cart/Checkout buttons are nopCommerce's own
+     (they navigate to /cart and /checkout). Safe no-op if the flyout isn't present. */
+  function initCartDrawer() {
+    var flyout = document.getElementById("flyout-cart");
+    if (!flyout) return;
+    var root = document.documentElement;
+
+    var overlay = document.createElement("div");
+    overlay.className = "xt-cart-overlay";
+    document.body.appendChild(overlay);
+
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "xt-cart-close";
+    close.setAttribute("aria-label", "Close cart");
+    close.innerHTML = "&times;";
+    flyout.appendChild(close);
+
+    function open() { root.classList.add("xt-cart-open"); }
+    function shut() { root.classList.remove("xt-cart-open"); }
+
+    close.addEventListener("click", shut);
+    overlay.addEventListener("click", shut);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") shut(); });
+
+    // Open the drawer from the header cart link (fall back to /cart navigation if not found).
+    var trigger = document.querySelector('.header-links .ico-cart, .header-links a.cart, .header-links a[href$="/cart"], .header-upper a[href$="/cart"]');
+    if (trigger) {
+      trigger.addEventListener("click", function (e) { e.preventDefault(); open(); });
+    }
+
+    // Bump the count badge and open the drawer when the cart quantity changes (real AJAX add).
+    var qty = document.querySelector(".cart-qty");
+    if (qty) {
+      var last = (qty.textContent || "").trim();
+      new MutationObserver(function () {
+        var now = (qty.textContent || "").trim();
+        if (now === last) return;
+        last = now;
+        qty.classList.remove("xt-cart-bump"); void qty.offsetWidth; qty.classList.add("xt-cart-bump");
+        open();
+      }).observe(qty, { childList: true, characterData: true, subtree: true });
+    }
+  }
+
   ready(function () {
     try { initTheme(); } catch (e) {}
     try { initWaFloat(); } catch (e) {}
+    try { initCartDrawer(); } catch (e) {}
     try { initFaq(); } catch (e) {}
     try { initSmoothScroll(); } catch (e) {}
     try { initStickyBuy(); } catch (e) {}
