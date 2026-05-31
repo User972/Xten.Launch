@@ -22,7 +22,8 @@ themes/EbookIndonesia/
 ├─ theme.json                                  # descriptor (SystemName=EbookIndonesia)
 ├─ preview.jpg                                 # ADD: admin theme-picker thumbnail (optional)
 ├─ Content/
-│  ├─ css/styles.css                           # the whole design system (tokens→pages→a11y)
+│  ├─ css/styles.css                           # the RE-SKIN (tokens/components), layered ON TOP of
+│  │                                            #   DefaultClean's base stylesheet (loaded first by Head.cshtml)
 │  ├─ js/theme.js                              # vanilla: FAQ accordion, sticky Buy bar, smooth-scroll
 │  └─ images/README.md                         # what images to add (none shipped)
 ├─ Views/

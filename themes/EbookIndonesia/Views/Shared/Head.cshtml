@@ -15,8 +15,10 @@
     var themeName = await themeContext.GetWorkingThemeNameAsync();
     var supportRtl = await Html.ShouldUseRtlThemeAsync();
 
-    //main theme stylesheet (the design system) -> ~/Themes/EbookIndonesia/Content/css/styles.css
-    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
+    //BASE layout/structure from the stock DefaultClean stylesheet. This theme ships only a re-skin
+    //on top (it does NOT duplicate nopCommerce's full layout CSS), so DefaultClean must load first
+    //to provide the header/menu/columns/responsive structure.
+    NopHtml.AppendCssFileParts($"~/Themes/DefaultClean/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
 
     //keep parity with the default theme so catalog galleries still get their CSS
     if (catalogSettings.DisplayAllPicturesOnCatalogPages)
@@ -24,6 +26,9 @@
         NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
     }
     NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+
+    //this theme's re-skin (Check design system) — appended LAST so it overrides the base
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
 
     //theme behaviour: dependency-free vanilla JS (FAQ accordion, sticky Buy CTA, smooth scroll,
     //light/dark toggle, WhatsApp float)
