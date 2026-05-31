@@ -1,7 +1,8 @@
-# Storefront content — home page & legal pages
+# Storefront content — home page, legal pages & emails
 
-Ready-to-use content for the eBook store: a polished, mobile-first **home page** and the
-**Terms / Privacy / Refund** pages, in **English + Bahasa Indonesia**.
+Ready-to-use content for the eBook store: a polished, mobile-first **home page**, the
+**Terms / Privacy / Refund** pages, and the **transactional email templates** (order
+confirmation / payment received / download available) — all in **English + Bahasa Indonesia**.
 
 ```
 storefront/
@@ -9,11 +10,18 @@ storefront/
 │  ├─ homepage.css        # styles (mobile-first, prefix xt-)
 │  ├─ homepage.en.html    # home markup (English)
 │  └─ homepage.id.html    # home markup (Bahasa Indonesia)
-└─ legal/
-   ├─ terms.en.html   / terms.id.html      → Topic "Conditions of use"
-   ├─ privacy.en.html / privacy.id.html    → Topic "Privacy info"
-   └─ refund.en.html  / refund.id.html     → new Topic "Refund Policy"
+├─ legal/
+│  ├─ terms.en.html   / terms.id.html      → Topic "Conditions of use"
+│  ├─ privacy.en.html / privacy.id.html    → Topic "Privacy info"
+│  └─ refund.en.html  / refund.id.html     → new Topic "Refund Policy"
+└─ emails/                                  → Message templates (see emails/README.md)
+   ├─ order-placed.en.html    / .id.html    → OrderPlaced.CustomerNotification
+   ├─ order-paid.en.html      / .id.html    → OrderPaid.CustomerNotification (enable it!)
+   └─ order-completed.en.html / .id.html    → OrderCompleted.CustomerNotification
 ```
+
+> **Email templates** have their own step-by-step wiring guide in
+> **[emails/README.md](emails/README.md)** (system names, which one to enable, per-language paste, tokens, testing).
 
 > Replace the bracketed placeholders everywhere before publishing:
 > `[STORE_NAME] [LEGAL_ENTITY] [DOMAIN] [SUPPORT_EMAIL] [WHATSAPP] [CITY] [DATE] [N] [CATALOGUE_URL] [WHATSAPP_E164]`.

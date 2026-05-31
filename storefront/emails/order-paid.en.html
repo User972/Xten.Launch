@@ -1,0 +1,40 @@
+<!--
+  MESSAGE TEMPLATE: OrderPaid.CustomerNotification  (English / default language)
+  WHERE: Admin → Content management → Message templates → "OrderPaid.CustomerNotification" → edit (English).
+  STATE: ⚠️ DISABLED BY DEFAULT — tick "Is active" and Save, otherwise this email never sends.
+  SUBJECT:  Payment received — your eBooks are ready 🎉 (Order #%Order.OrderNumber%)
+  Replace [WHATSAPP_E164]. The %Order.Product(s)% table includes a Download link per item once payment is confirmed.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;margin:0;padding:24px 0;">
+  <tr><td align="center">
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
+      <tr><td style="background:#0f172a;padding:22px 28px;">
+        <a href="%Store.URL%" style="color:#ffffff;font-size:20px;font-weight:bold;text-decoration:none;">%Store.Name%</a>
+      </td></tr>
+      <tr><td style="padding:28px;">
+        <h1 style="margin:0 0 12px;font-size:20px;">Payment received — your eBooks are ready 🎉</h1>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#334155;">Great news, %Order.CustomerFullName% — your payment for order <strong>#%Order.OrderNumber%</strong> is confirmed. Your eBook(s) are unlocked and ready to download.</p>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 18px;">
+          <tr><td align="center" bgcolor="#f59e0b" style="border-radius:10px;">
+            <a href="%Store.URL%customer/downloadableproducts" target="_blank" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:bold;color:#1f2937;text-decoration:none;">Go to My Downloads</a>
+          </td></tr>
+        </table>
+
+        <p style="margin:0 0 14px;font-size:14px;line-height:1.6;color:#334155;">Your download links are in the table below, on your <a href="%Order.OrderURLForCustomer%" style="color:#6366f1;">order page</a>, and anytime in <strong>My account → Downloadable products</strong>. You can re-download within your download limit.</p>
+
+        <h3 style="margin:18px 0 8px;font-size:15px;">Your items</h3>
+        %Order.Product(s)%
+
+        <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#64748b;">Your eBooks are licensed for your personal use — please don't share or redistribute the files. Each copy is tied to your account.</p>
+      </td></tr>
+      <tr><td style="background:#f8fafc;padding:18px 28px;font-size:12px;line-height:1.7;color:#64748b;border-top:1px solid #e2e8f0;">
+        Need help with your download? Chat with us on <a href="https://wa.me/[WHATSAPP_E164]" style="color:#6366f1;text-decoration:none;">WhatsApp</a>.<br/>
+        <a href="%Store.URL%conditions-of-use" style="color:#64748b;">Terms</a> &middot;
+        <a href="%Store.URL%privacy-policy" style="color:#64748b;">Privacy</a> &middot;
+        <a href="%Store.URL%refund-policy" style="color:#64748b;">Refund Policy</a><br/>
+        &copy; %Store.Name%
+      </td></tr>
+    </table>
+  </td></tr>
+</table>

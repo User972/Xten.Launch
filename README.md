@@ -31,9 +31,11 @@ See **[its README](plugins/Nop.Plugin.Payments.Midtrans/README.md)** for build/i
 
 ## Storefront content
 
-[`storefront/`](storefront/) — a polished, mobile-first **home page** (CSS + EN/ID markup) and the
-**Terms / Privacy / Refund** pages in **English + Bahasa Indonesia**, ready to paste into
-nopCommerce Topics or a theme/widget. See **[storefront/README.md](storefront/README.md)**.
+[`storefront/`](storefront/) — a polished, mobile-first **home page** (CSS + EN/ID markup), the
+**Terms / Privacy / Refund** pages, and the **transactional email templates** (order confirmation /
+payment received / download available) — all in **English + Bahasa Indonesia**, ready to paste into
+nopCommerce Topics / Message templates / a theme. See **[storefront/README.md](storefront/README.md)**
+and **[storefront/emails/README.md](storefront/emails/README.md)**.
 
 ## Key decisions at a glance
 
