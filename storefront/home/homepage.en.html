@@ -1,7 +1,12 @@
 <!--
-  Home page (English) — "Check" design system applied (teal/terracotta/cream, Fraunces + Plus Jakarta Sans).
-  Paste into the HomepageText topic (English locale). The EbookIndonesia theme styles every .xt-* class
-  (incl. light/dark). Replace: [STORE_NAME], [WHATSAPP_E164] (e.g. 6281234567890), [CATALOGUE_URL] (e.g. /search).
+  Home page (English) — paste into the HomepageText topic (English locale).
+  HOW: Admin → Content management → Topics → "HomepageText" → Edit → toggle the body editor to
+  HTML source view (the “<>” / “Tools → Source code” button) → paste ALL of this → Save.
+  The EbookIndonesia theme styles every .xt-* class (light + dark) — no extra CSS needed.
+
+  ONE thing to fill in: replace [WHATSAPP_E164] with your WhatsApp number in international format
+  (e.g. 6281234567890). That link also powers the floating WhatsApp button.
+  (Catalogue buttons point at /search — change to a specific category URL if you prefer.)
 -->
 <div class="xt-home">
   <div class="xt-wrap">
@@ -10,9 +15,9 @@
     <section class="xt-hero">
       <span class="xt-eyebrow">New titles · updated weekly</span>
       <h1 style="margin:18px auto 0;">Read further. <span class="xt-em">Go deeper.</span><br>Premium eBooks, instant download.</h1>
-      <p style="max-width:580px;margin:18px auto 0;font-size:1.15rem;">Curated eBooks from [STORE_NAME] — buy in seconds and start reading on any device. Pay with QRIS, bank transfer, or your favourite e-wallet.</p>
+      <p style="max-width:580px;margin:18px auto 0;font-size:1.15rem;">Curated eBooks you can buy in seconds and start reading on any device. Pay with QRIS, bank transfer, or your favourite e-wallet.</p>
       <div class="xt-cta" style="margin-top:28px;">
-        <a class="xt-btn xt-btn-primary" href="[CATALOGUE_URL]">Browse eBooks</a>
+        <a class="xt-btn xt-btn-primary" href="/search">Browse eBooks</a>
         <a class="xt-btn xt-btn-ghost" href="#how-it-works">How it works</a>
       </div>
       <p style="margin-top:12px;font-size:.85rem;color:var(--xt-muted);">Instant access after payment · lifetime re-downloads · secure checkout.</p>
@@ -27,7 +32,7 @@
 
     <!-- DIFFERENTIATORS -->
     <section class="xt-section" id="why">
-      <div style="text-align:center;"><span class="xt-eyebrow">Why [STORE_NAME]</span></div>
+      <div style="text-align:center;"><span class="xt-eyebrow">Why buy here</span></div>
       <h2 style="margin-top:12px;">Everything you need, nothing you don't</h2>
       <p class="xt-sub">A fast, secure way to own great books digitally.</p>
       <div class="xt-diff">
@@ -104,8 +109,8 @@
         <h2>Find your next read.<br><span class="xt-em">Start in seconds.</span></h2>
         <p class="xt-sub" style="margin:14px auto 24px;">Browse the catalogue or chat with us — we're happy to help you choose.</p>
         <div class="xt-cta">
-          <a class="xt-btn xt-btn-primary" href="[CATALOGUE_URL]">Browse eBooks</a>
-          <a class="xt-btn xt-btn-wa" href="https://wa.me/[WHATSAPP_E164]?text=Hi%20[STORE_NAME]%2C%20I%20have%20a%20question%20about%20an%20eBook" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+          <a class="xt-btn xt-btn-primary" href="/search">Browse eBooks</a>
+          <a class="xt-btn xt-btn-wa" href="https://wa.me/[WHATSAPP_E164]?text=Hi%2C%20I%20have%20a%20question%20about%20an%20eBook" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
         </div>
       </div>
     </section>
