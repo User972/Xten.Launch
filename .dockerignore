@@ -1,0 +1,24 @@
+# Build context is the repo root (see deploy/docker-compose.yml). Keep it lean —
+# only themes/, deploy/app/, deploy/config/ (and optionally plugins/) are needed by the image.
+.git
+.gitignore
+.dockerignore
+
+# secrets must never enter the image
+**/.env
+deploy/.env
+
+# docs / content not needed at build or runtime
+docs/
+storefront/
+**/*.md
+**/IMPLEMENTATION-PROGRESS.md
+
+# compose/proxy files are runtime-only, not build inputs
+deploy/docker-compose.yml
+deploy/Caddyfile
+
+# editor / OS noise
+.vs/
+.idea/
+.DS_Store

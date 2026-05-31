@@ -1,0 +1,30 @@
+@using Nop.Core.Domain.Catalog
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.UI
+
+@inject CatalogSettings catalogSettings
+@inject IThemeContext themeContext
+
+@*
+    Theme head injection. nopCommerce's _Root.Head.cshtml renders this partial inside <head>,
+    then emits the registered CSS/JS. `themeName` resolves to the ACTIVE theme's SystemName,
+    so the paths below automatically point at this theme. No nopCommerce core changes.
+*@
+@{
+    Layout = "";
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+    var supportRtl = await Html.ShouldUseRtlThemeAsync();
+
+    //main theme stylesheet (the design system) -> ~/Themes/EbookIndonesia/Content/css/styles.css
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
+
+    //keep parity with the default theme so catalog galleries still get their CSS
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+
+    //theme behaviour: dependency-free vanilla JS (FAQ accordion, sticky mobile Buy CTA, smooth scroll)
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/theme.js");
+}

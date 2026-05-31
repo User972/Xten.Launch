@@ -37,6 +37,17 @@ payment received / download available) — all in **English + Bahasa Indonesia**
 nopCommerce Topics / Message templates / a theme. See **[storefront/README.md](storefront/README.md)**
 and **[storefront/emails/README.md](storefront/emails/README.md)**.
 
+## Storefront theme
+
+[`themes/EbookIndonesia/`](themes/EbookIndonesia/) — a custom nopCommerce 4.90 / .NET 9 theme that
+makes the storefront feel like a **modern publisher / curated eBook platform** (soft commerce,
+editorial, mobile-first, EN/ID). CSS-led design system + three faithful view overrides (Head,
+Home, Footer) + admin/widget/content playbook. **No core changes**; every widget zone preserved.
+The Docker build copies it into `Nop.Web/Themes/EbookIndonesia`. See
+**[its README](themes/EbookIndonesia/README.md)**, the
+[decision table](themes/EbookIndonesia/docs/default-elements-decision-table.md), and
+[progress/plan](themes/EbookIndonesia/IMPLEMENTATION-PROGRESS.md).
+
 ## Key decisions at a glance
 
 - **Platform:** nopCommerce **4.90.x** on **.NET 9** (plan the upgrade to 5.0 / .NET 10 LTS — see blueprint §2).

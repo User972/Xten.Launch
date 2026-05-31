@@ -1,0 +1,58 @@
+@model FooterModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+
+@inject IWorkContext workContext
+
+@*
+    Modern editorial footer — eBook Indonesia theme.
+    Keeps every dynamic nopCommerce component (footer menu/topics, social, newsletter, copyright,
+    tax info, theme selector, footer widget zone) and the "Powered by nopCommerce" line
+    (do NOT remove without the official copyright-removal key). Only the layout is modernised.
+    Brand blurb + WhatsApp/support live in an admin-editable, bilingual "FooterInfo" topic
+    (create it under Content management → Topics; if absent, this area simply renders nothing).
+*@
+<footer class="footer xt-footer">
+    <div class="xt-foot xt-foot-grid">
+        <div class="xt-foot-brand">
+            <div class="xt-foot-title">@Model.StoreName</div>
+            @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "FooterInfo" })
+            <div class="xt-foot-social">
+                @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
+            </div>
+        </div>
+
+        <div class="xt-foot-menu">
+            @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
+        </div>
+
+        <div class="xt-foot-news">
+            <h2 class="title">@T("Footer.FollowUs")</h2>
+            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
+        </div>
+    </div>
+
+    <div class="footer-lower xt-foot-lower">
+        <div class="footer-info">
+            <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
+            @if (Model.DisplayTaxShippingInfoFooter)
+            {
+                var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                <span class="footer-tax-shipping">
+                    @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))
+                </span>
+            }
+        </div>
+        @if (!Model.HidePoweredByNopCommerce)
+        {
+            <div class="footer-powered-by">
+                @*Removing this requires an official key: https://www.nopcommerce.com/nopcommerce-copyright-removal-key*@
+                Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a>
+            </div>
+        }
+        @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
+    </div>
+
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
+</footer>

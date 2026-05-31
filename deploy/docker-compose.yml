@@ -31,8 +31,10 @@ services:
 
   nopcommerce:
     build:
-      context: .
-      dockerfile: app/Dockerfile
+      # Build context is the REPOSITORY ROOT so the image can include themes/ (and, if you
+      # uncomment it in the Dockerfile, plugins/). Dockerfile COPY paths are repo-root-relative.
+      context: ..
+      dockerfile: deploy/app/Dockerfile
       args:
         NOP_VERSION: ${NOP_VERSION:-release-4.90.4}
     restart: unless-stopped
