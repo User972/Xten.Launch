@@ -6,6 +6,8 @@ Implementation blueprint and deployment scaffold for a **digital-eBook nopCommer
 
 📘 **[docs/nopcommerce-ebook-indonesia-blueprint.md](docs/nopcommerce-ebook-indonesia-blueprint.md)** — the full 19-section architecture & implementation blueprint (versioning, PostgreSQL, Indonesia config, eBook product setup, payments, download security, performance, backup/DR, phasing, launch checklist, risk register, final recommendation).
 
+🤝 **[docs/AGENT-HANDOFF.md](docs/AGENT-HANDOFF.md)** — full context to resume work (constraints, repo map, theme architecture + gotchas, current state, how to build/verify). Hand this to a new agent or read it first.
+
 ## Deploy scaffold
 
 The [`deploy/`](deploy/) folder contains a runnable starting point referenced by the blueprint:
