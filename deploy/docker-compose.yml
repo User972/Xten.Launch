@@ -31,8 +31,8 @@ services:
 
   nopcommerce:
     build:
-      # Build context is the REPOSITORY ROOT so the image can include themes/ (and, if you
-      # uncomment it in the Dockerfile, plugins/). Dockerfile COPY paths are repo-root-relative.
+      # Build context is the REPOSITORY ROOT so the image includes themes/ and plugins/.
+      # Dockerfile COPY paths are repo-root-relative.
       context: ..
       dockerfile: deploy/app/Dockerfile
       args:

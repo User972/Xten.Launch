@@ -19,8 +19,13 @@ RUN git clone --depth 1 --branch "${NOP_VERSION}" https://github.com/nopSolution
 # is repo-root-relative. nopCommerce globs Themes/** as content, so the theme's Views/CSS/JS
 # are copied into the publish output exactly like the built-in DefaultClean theme.
 COPY themes/EbookIndonesia/ src/Presentation/Nop.Web/Themes/EbookIndonesia/
-# OPTIONAL — build the Midtrans payment plugin into the image the same way (uncomment):
-# COPY plugins/Nop.Plugin.Payments.Midtrans/ src/Plugins/Nop.Plugin.Payments.Midtrans/
+
+# Build the Midtrans payment plugin into the image. Its csproj uses $(SolutionDir)
+# ProjectReferences, so the project must be ADDED TO THE SOLUTION — a bare COPY alone
+# won't compile it (the plugin DLL lands in Nop.Web/Plugins/Payments.Midtrans and is then
+# included in the publish output).
+COPY plugins/Nop.Plugin.Payments.Midtrans/ src/Plugins/Nop.Plugin.Payments.Midtrans/
+RUN dotnet sln src/NopCommerce.sln add src/Plugins/Nop.Plugin.Payments.Midtrans/Nop.Plugin.Payments.Midtrans.csproj
 
 RUN dotnet restore src/NopCommerce.sln
 RUN dotnet build   src/NopCommerce.sln -c Release

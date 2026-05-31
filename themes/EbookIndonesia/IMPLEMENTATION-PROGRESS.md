@@ -63,7 +63,8 @@ Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pend
 ## Phase 7 — Docker integration & docs — ✅
 - ✅ `deploy/docker-compose.yml` build context → repo root; `deploy/app/Dockerfile` copies the theme
   into the published `Nop.Web/Themes/EbookIndonesia`; runtime COPY paths fixed; root `.dockerignore`
-  added to keep context lean. Midtrans plugin copy provided as an optional commented line.
+  added to keep context lean. The Midtrans plugin is copied in and added to the solution so it
+  compiles into the image (single `docker compose up --build` → theme **and** plugin).
 - ✅ Docs: theme `README.md`, `docs/default-elements-decision-table.md`, this progress file; root
   README/blueprint pointers updated.
 
