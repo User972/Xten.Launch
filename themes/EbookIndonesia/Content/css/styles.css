@@ -67,11 +67,7 @@ img { max-width: 100%; height: auto; }
 
 /* 3. LAYOUT CONTAINERS ===================================================== */
 .master-wrapper-content { padding-bottom: var(--xt-s12); }
-.center-1, .master-column-wrapper, .page:not(.home-page) > .page-body,
-.html-home-page .master-wrapper-content > .master-column-wrapper {
-  max-width: var(--xt-wrap); margin-left:auto; margin-right:auto;
-  padding-left: var(--xt-s4); padding-right: var(--xt-s4);
-}
+/* (content width/centering is left to DefaultClean's base layout to avoid conflicts) */
 .page:not(.home-page) { margin-top: var(--xt-s8); }
 .page:not(.home-page) > .page-title { margin: 0 0 var(--xt-s6); }
 .page:not(.home-page) > .page-title h1 { font-size: clamp(1.5rem,3.4vw,2.2rem); }
@@ -79,12 +75,8 @@ img { max-width: 100%; height: auto; }
 /* 4. HEADER ================================================================ */
 .header { background: var(--xt-surface); }
 .header-upper { border-bottom: 1px solid var(--xt-line); }
-.header, .header-lower {
-  max-width: var(--xt-wrap); margin: 0 auto;
-  padding: var(--xt-s4) var(--xt-s4);
-}
+/* header width/positioning is left to DefaultClean's base layout (don't fight its desktop header) */
 .header-logo a, .header-logo img { max-height: 46px; }
-.header-links { gap: var(--xt-s3); }
 .header-links a, .header-selectors-wrapper a { color: var(--xt-ink-soft); font-weight: 600; }
 .search-box input.search-box-text {
   border: 1px solid var(--xt-line); border-radius: var(--xt-r-pill);
@@ -99,8 +91,7 @@ img { max-width: 100%; height: auto; }
 
 /* 5. PRIMARY NAVIGATION ==================================================== */
 .header-menu { background: var(--xt-ink); border-radius: 0; }
-.header-menu, .top-menu { max-width: var(--xt-wrap); margin: 0 auto; }
-.top-menu.notmobile > li > a { color:#e5e7eb; font-weight: 600; padding: 14px 16px; }
+.top-menu.notmobile > li > a { color:#e5e7eb; font-weight: 600; }
 .top-menu.notmobile > li > a:hover { color:#fff; background: rgba(255,255,255,.06); text-decoration:none; }
 .top-menu.notmobile .sublist { border-radius: var(--xt-r); box-shadow: var(--xt-sh-2); }
 .menu-toggle { background: var(--xt-ink); color:#fff; border-radius: var(--xt-r-sm); font-weight:700; }
