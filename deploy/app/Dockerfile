@@ -36,7 +36,7 @@ RUN dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release -o /app/pu
 # ---------- runtime ----------
 # Pinned to .NET 9 to match the build SDK and the net9.0 app (see note above). An aspnet:10 runtime
 # image ships only the .NET 10 shared framework, so a net9.0 app would fail to start here.
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 RUN apt-get update \
  && apt-get install -y --no-install-recommends gettext-base curl \
