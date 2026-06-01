@@ -152,46 +152,65 @@
      No mock cart — the flyout content + its View-cart/Checkout buttons are nopCommerce's own
      (they navigate to /cart and /checkout). Safe no-op if the flyout isn't present. */
   function initCartDrawer() {
-    var flyout = document.getElementById("flyout-cart");
-    if (!flyout) return;
+    // Only wire up if nopCommerce actually rendered the mini-cart flyout (admin: mini shopping cart on).
+    if (!document.getElementById("flyout-cart")) return;
     var root = document.documentElement;
 
     var overlay = document.createElement("div");
     overlay.className = "xt-cart-overlay";
     document.body.appendChild(overlay);
 
-    var close = document.createElement("button");
-    close.type = "button";
-    close.className = "xt-cart-close";
-    close.setAttribute("aria-label", "Close cart");
-    close.innerHTML = "&times;";
-    flyout.appendChild(close);
-
-    function open() { root.classList.add("xt-cart-open"); }
     function shut() { root.classList.remove("xt-cart-open"); }
 
-    close.addEventListener("click", shut);
+    // Make sure the drawer is a direct child of <body> and has a close button. nopCommerce renders
+    // #flyout-cart INSIDE the header, whose sticky bar + the page wrappers form stacking contexts; our
+    // full-screen overlay (on <body>) would then paint OVER the drawer — you'd see the dim overlay but
+    // no panel. Portaling it to <body> puts drawer + overlay in the same (root) stacking context, so
+    // z-index alone orders them. Re-run on open because AjaxCart can replace #flyout-cart after an add.
+    function ensureDrawer() {
+      var fc = document.getElementById("flyout-cart");
+      if (!fc) return;
+      if (fc.parentElement !== document.body) document.body.appendChild(fc);
+      if (!fc.querySelector(".xt-cart-close")) {
+        var close = document.createElement("button");
+        close.type = "button";
+        close.className = "xt-cart-close";
+        close.setAttribute("aria-label", "Close cart");
+        close.innerHTML = "&times;";
+        close.addEventListener("click", shut);
+        fc.appendChild(close);
+      }
+    }
+    function open() { ensureDrawer(); root.classList.add("xt-cart-open"); }
+
     overlay.addEventListener("click", shut);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") shut(); });
 
-    // Open the drawer from the header cart link (fall back to /cart navigation if not found).
-    var trigger = document.querySelector('.header-links .ico-cart, .header-links a.cart, .header-links a[href$="/cart"], .header-upper a[href$="/cart"]');
-    if (trigger) {
-      trigger.addEventListener("click", function (e) { e.preventDefault(); open(); });
-    }
+    // Open from the header cart link. Delegated on document so it keeps working if AjaxCart
+    // re-renders the cart link after an add-to-cart. Real cart/checkout links inside still navigate.
+    document.addEventListener("click", function (e) {
+      var t = e.target.closest && e.target.closest('.header-links .ico-cart, .header-links a.cart, .header-links a[href$="/cart"], .header-upper a[href$="/cart"]');
+      if (!t) return;
+      e.preventDefault();
+      open();
+    });
 
-    // Bump the count badge and open the drawer when the cart quantity changes (real AJAX add).
-    var qty = document.querySelector(".cart-qty");
-    if (qty) {
-      var last = (qty.textContent || "").trim();
-      new MutationObserver(function () {
-        var now = (qty.textContent || "").trim();
-        if (now === last) return;
-        last = now;
-        qty.classList.remove("xt-cart-bump"); void qty.offsetWidth; qty.classList.add("xt-cart-bump");
-        open();
-      }).observe(qty, { childList: true, characterData: true, subtree: true });
-    }
+    // Bump the badge + open when the cart quantity changes (real AJAX add). Observe the stable
+    // .header-links container (not the .cart-qty node, which AjaxCart replaces) so it keeps working.
+    var linksHost = document.querySelector(".header-links") || document.body;
+    function readQty() { var q = linksHost.querySelector(".cart-qty"); return q ? (q.textContent || "").trim() : ""; }
+    var lastQty = readQty();
+    new MutationObserver(function () {
+      var q = linksHost.querySelector(".cart-qty");
+      if (!q) return;
+      var now = (q.textContent || "").trim();
+      if (now === lastQty) return;
+      lastQty = now;
+      q.classList.remove("xt-cart-bump"); void q.offsetWidth; q.classList.add("xt-cart-bump");
+      open();
+    }).observe(linksHost, { childList: true, characterData: true, subtree: true });
+
+    ensureDrawer(); // portal immediately so the first open is instant
   }
 
   ready(function () {

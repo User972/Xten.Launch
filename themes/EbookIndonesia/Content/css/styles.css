@@ -679,13 +679,15 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 
 /* cart drawer — nopCommerce's flyout mini-cart restyled as a right slide-over.
    Real "View cart"/"Checkout" buttons inside still go to /cart and /checkout. */
-.xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:60; }
+/* overlay + drawer sit above the sticky header (z:1000) and are portaled to <body> by theme.js so
+   they share the root stacking context (otherwise the header's contexts trap the drawer behind this). */
+.xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:9998; }
 html.xt-cart-open .xt-cart-overlay { opacity:1; visibility:visible; }
 .flyout-cart {
   position:fixed; top:0; right:0; height:100%; width:min(440px,100vw);
   background: var(--xt-surface); border-left:1px solid var(--xt-line);
   transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
-  z-index:61; display:flex; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
+  z-index:9999; display:flex; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
 }
 html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .flyout-cart .mini-shopping-cart { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
