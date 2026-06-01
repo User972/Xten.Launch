@@ -6,6 +6,29 @@ widget zone and dynamic component is preserved → upgrade-safe, plugin-safe, no
 
 Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pending) · ⬜ not started
 
+## Session log — Check-reference alignment + nopCommerce 4.90 markup fixes — ✅ (branch `claude/epic-sagan-qINMg`)
+After the custom header landed, a clean rebuild surfaced real issues, fixed in order:
+- `664438b` **Footer** — re-skin had styled **legacy** `.footer-block .title/.list`; 4.90's FooterMenu
+  emits `.footer-navigation > .footer-menu > .footer-menu__title/__list/__link`, so DefaultClean's own
+  footer CSS (light-grey `.footer{#eee}`, white list box, blue Subscribe) was winning. Retargeted the real
+  classes and **scoped every footer rule under `.xt-footer`** (specificity beats stylesheet load order).
+  Removed dead §5 nav rules (`.top-menu/.menu-toggle/.sublist` — gone in 4.90).
+- `4bf2f93` **`.xt-cta` collision + width** — header CTA reused `.xt-cta` (the homepage's button-GROUP
+  container) and boxed the hero buttons; renamed header button → `.xt-headcta`. Widened the page body to
+  `--xt-wrap` (~1160) to match header/footer, inside DefaultClean's `min-width:1001px` breakpoint via
+  `body .master-wrapper-content` (+ defensive full-bleed `.header.xt-header`).
+- `6c2e1f6` **Footer layout** — menu columns now an even row (`flex:1 1 0; min-width:0`); social → outlined chips.
+- `df7d686` **Header action cluster** — hid wishlist/inbox/register; account/cart → circular icon buttons
+  (SVG via base64 mask; cart badge kept); toggle moved next to the cart. ⚠️ icons render but weren't visually verified.
+- `b713fe3` **Homepage hero paste-ready** — `storefront/home/homepage.{en,id}.html` finalized
+  (catalogue→/search, `[STORE_NAME]` reworded out, one `[WHATSAPP_E164]` placeholder, in-file paste steps).
+
+**Legacy-class audit:** confirmed-current (safe) — header-links/cart/`#topcartlink`, flyout cart, book
+cards, language selector. Only the footer (fixed) + dead §5 nav targeted legacy classes.
+**Open (admin):** paste the `HomepageText` topic; curate the footer (disable compare/recently-viewed/vendor;
+populate footer columns + a `FooterInfo` topic; set store name + social URLs). **Open (code):** header nav
+topics (`/free-resources`, `/about-us`); optional EN/ID toggle override; optional footer icon-circles.
+
 ## Applied design — "Check" system (Claude Design handoff) — ✅
 Re-skinned the theme to the `Check Homepage.html` visual system (bundle `xten-customer-portal`):
 - **Palette** (styles.css §21): deep teal `#0F3D3E` + terracotta `#D97757` on cream `#FAF6EE`, ink `#15201F`;

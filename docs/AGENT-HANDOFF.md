@@ -4,8 +4,9 @@
 > project, the hard constraints, the repo layout, the theme architecture (including the non-obvious
 > gotchas), the exact current state, and how to continue.
 >
-> **Branch:** `claude/zen-bell-G2jyN` · **Latest commit at handoff:** `63afd17` · commit + push here;
+> **Branch:** `claude/epic-sagan-qINMg` · **Latest commit:** `b713fe3` · commit + push here;
 > don't open a PR unless asked. The user prefers **plain-language** explanations.
+> (Older docs say `claude/zen-bell-G2jyN`; that same line of work now continues on `claude/epic-sagan-qINMg`.)
 
 ## Project
 
@@ -82,6 +83,17 @@ pulsing **WhatsApp float**.
    override against the **real `release-4.90.4` source** (fetch raw files from
    `raw.githubusercontent.com/nopSolutions/nopCommerce/release-4.90.4/...`), preserve every partial/
    view-component/widget-zone, then validate with `deploy/qa/static-checks.sh` and smoke-test after deploy.
+5. **DefaultClean 4.90 renamed a lot of markup** — verify class names against the real source before you
+   style them, or your CSS silently misses (this bit us on the footer, which looked *broken* because
+   DefaultClean's own `.footer{background:#eee}` filled the gap). Confirmed renames: footer columns are
+   now `.footer-navigation > .footer-menu > .footer-menu__title / __list / __link` (NOT the legacy
+   `.footer-block .title/.list`); the main menu is `.menu__item / .menu__link / .menu__toggle` (NOT
+   `.top-menu/.sublist`). When a SHARED class (`.footer`, `.header`, `.master-wrapper-content`) fights
+   you, **scope the rule under our own class** (`.footer.xt-footer`, `.header.xt-header`) or an ancestor
+   (`body .master-wrapper-content`) so SPECIFICITY wins regardless of stylesheet load order — never rely
+   on source order. Confirmed-CURRENT (safe to target) classes: `.header-links/.cart-qty/.ico-cart/#topcartlink`,
+   the flyout cart (`#flyout-cart/.mini-shopping-cart/.count/.items/.item/.totals/.buttons`), and book
+   cards (`.item-box/.product-item/.add-info/.product-box-add-to-cart-button`).
 
 **Theme files:**
 
@@ -105,24 +117,45 @@ copy the tutoring content or its mock cart/checkout.
 
 ## Current state / open thread (start here)
 
-We just fixed a series of rendering failures, in order:
-- **blank storefront** → added `Views/_ViewImports.cshtml`
-- **stacked / no-layout** → `Head.cshtml` now loads DefaultClean's base CSS before the re-skin
-- **layout conflicts** → removed re-skin width rules that fought DefaultClean
-- **header didn't match the design** → added the custom `_Header.cshtml` (commit `63afd17`)
+The storefront **renders correctly** (header, body, footer) and we've been aligning it to the "Check"
+reference the user supplied (the original IELTS/tutoring design — match the LOOK, not the words). Work
+this session (branch `claude/epic-sagan-qINMg`):
 
-The user is doing a **clean rebuild on the latest commit to confirm it renders**. **Awaiting their
-confirmation/screenshot.**
+- **Footer FIXED** (`664438b`, `6c2e1f6`) — it had styled legacy `.footer-block` classes; retargeted to
+  4.90's real `.footer-menu__*` and scoped every footer rule under `.xt-footer` so it beats DefaultClean.
+  Footer is now the deep-teal editorial panel (terracotta mono labels, readable parchment links, styled
+  newsletter + outlined social chips, copyright/powered-by row), columns in an even row. Dropped the dead
+  §5 legacy nav rules.
+- **`.xt-cta` collision FIXED + body widened** (`4bf2f93`) — the header CTA reused `.xt-cta` (the
+  homepage's button-GROUP container) and boxed the hero buttons in terracotta; renamed it `.xt-headcta`.
+  Widened the page body to `--xt-wrap` (~1160) to match header/footer, inside DefaultClean's
+  `min-width:1001px` breakpoint via `body .master-wrapper-content`.
+- **Header action cluster cleaned** (`df7d686`) — hid wishlist/inbox/register; account + cart are now
+  **circular icon buttons** (SVG embedded as base64 masks; cart count badge kept); light/dark toggle
+  moved next to the cart. ⚠️ icons render (valid base64) but were NOT visually verified — eyeball them.
+- **Homepage hero made paste-ready** (`b713fe3`) — `storefront/home/homepage.{en,id}.html` finalized:
+  catalogue → `/search`, `[STORE_NAME]` reworded out, **one** placeholder left (`[WHATSAPP_E164]`).
 
-**Immediate next steps once they confirm:**
-1. Verify the homepage renders with a **horizontal header** (utility strip + logo/nav/search/cart/CTA),
-   correct columns, working light/dark toggle, WhatsApp float, and the cart drawer.
-2. **Polish to match the design:** DefaultClean constrains content to ~980px; the Check design is wider
-   (~1160–1280). Widen the container WITHOUT refighting DefaultClean's media queries (own the wrapper,
-   or override `.center-1` width inside the SAME `@media (min-width:1001px)`).
-3. Point the **fixed header nav links** (`_Header.cshtml`) at real pages; create the topics they reference.
-4. eBook **product cards** already restyled (`.item-box` → book-cards) — verify with real products.
-5. Confirm **cart**: add-to-cart → badge bump → flyout opens as the right drawer → Checkout → Midtrans.
+**What still needs the USER (admin, not code):**
+- **Render the hero:** paste `homepage.en.html` / `homepage.id.html` into the `HomepageText` topic (HTML
+  source view), per language, and fill `[WHATSAPP_E164]`. Takes effect on save — **no rebuild**.
+- **Curate the footer** (it shows nopCommerce defaults incl. compare/recently-viewed/vendor): disable
+  product comparison + recently-viewed + vendors; place Terms/Privacy/Refund/About/Contact topics into the
+  footer columns; create a `FooterInfo` topic (per language) with the brand blurb + a `wa.me` link (also
+  powers the WhatsApp float); set the real Store name + social URLs.
+- Rebuild on `b713fe3` and confirm footer / header icons / width render.
+
+**Immediate next steps (code):**
+1. **Header nav links** (`_Header.cshtml`) are fixed hrefs: `/search`, `/free-resources`, `/blog`,
+   `/about-us`, `/contactus`. `/free-resources` + `/about-us` need topics created (or repoint them);
+   the rest are real routes. (NOT done — offered.)
+2. Optional **EN/ID text toggle**: nopCommerce's LanguageSelector renders a `<select>` (or flag images),
+   not the reference's "EN / ID" text toggle — needs a small `LanguageSelector` view override (allowed;
+   not in the forbidden Download/Checkout/Customer/Order list). Held off per "don't override unless needed".
+3. Optional: footer social as true icon-circles (currently text chips); verify account/checkout/blog page
+   CSS against real 4.90 markup (low-risk — no-ops if renamed, nothing fights them like the footer did).
+4. Confirm **cart**: add-to-cart → badge bump → flyout opens as the right drawer → Checkout → Midtrans.
+5. After deploy, run `deploy/qa/smoke.sh` + the QA checklist.
 
 ## How to build / verify
 
@@ -130,8 +163,9 @@ confirmation/screenshot.**
   --no-cache nopcommerce && docker compose up -d` (first run: nopCommerce install wizard → PostgreSQL).
 - **Enable theme:** Admin → Configuration → Settings → General → Theme → **eBook Indonesia**. Also
   enable the **"mini shopping cart"** (Shopping cart settings) for the drawer.
-- **Homepage content:** paste `storefront/home/homepage.{en,id}.html` into the **HomepageText** topic
-  per language.
+- **Homepage hero (no rebuild):** paste `storefront/home/homepage.{en,id}.html` into the **HomepageText**
+  topic per language via the editor's **HTML source view**; fill `[WHATSAPP_E164]`. These `.html` files are
+  admin-paste content, not served directly — editing them doesn't change the live site until pasted.
 - **Static checks (before every commit):** `bash deploy/qa/static-checks.sh`
 - **Runtime smoke (after deploy):** `deploy/qa/smoke.sh https://YOUR_DOMAIN --product /seo --category /c/x`
 - **Compile plugin+theme against real nop:** run `.github/workflows/build-nopcommerce.yml`
@@ -139,7 +173,7 @@ confirmation/screenshot.**
 
 ## Working agreements
 
-- Branch `claude/zen-bell-G2jyN`; clear commits; push; no PR unless asked.
+- Branch `claude/epic-sagan-qINMg`; clear commits; push; no PR unless asked.
 - Validate with `deploy/qa/static-checks.sh` before committing (JSON/CSS/JS/Razor balance, storefront
   HTML, no secrets, download-security guardrail).
 - Never commit nopCommerce core or secrets. Don't weaken download security or the Midtrans webhook.
@@ -149,5 +183,7 @@ confirmation/screenshot.**
 - Explain changes to the user in plain, non-jargon language.
 
 **START HERE:** read `README.md`, `themes/EbookIndonesia/README.md` and `IMPLEMENTATION-PROGRESS.md`,
-then `themes/EbookIndonesia/Views/Shared/Head.cshtml` + `_Header.cshtml` + `Content/css/styles.css`.
-Then ask the user for the latest homepage screenshot/console output and continue the "Current state" thread.
+then the theme files (`Views/Shared/Head.cshtml` + `_Header.cshtml` + `Content/css/styles.css` +
+`Content/js/theme.js`) and the "Current state" section above. The build renders; the open work is
+design-alignment + the admin content steps. Ask the user for a fresh screenshot (and whether they've
+pasted the `HomepageText` topic) before changing anything, then continue from "Immediate next steps".

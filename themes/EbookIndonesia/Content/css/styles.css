@@ -67,7 +67,13 @@ img { max-width: 100%; height: auto; }
 
 /* 3. LAYOUT CONTAINERS ===================================================== */
 .master-wrapper-content { padding-bottom: var(--xt-s12); }
-/* (content width/centering is left to DefaultClean's base layout to avoid conflicts) */
+/* Widen the page body to match the custom header/footer (~1160 = --xt-wrap). Scoped under `body` and
+   placed INSIDE DefaultClean's own desktop breakpoint so it cleanly overrides
+   `.master-wrapper-content{width:980px}` (and the 1200px bump at ≥1367) without refighting its
+   mobile-first cascade. To go wider/narrower everywhere, just change --xt-wrap. */
+@media (min-width: 1001px) {
+  body .master-wrapper-content { width:auto; max-width: var(--xt-wrap); padding-left: var(--xt-s4); padding-right: var(--xt-s4); }
+}
 .page:not(.home-page) { margin-top: var(--xt-s8); }
 .page:not(.home-page) > .page-title { margin: 0 0 var(--xt-s6); }
 .page:not(.home-page) > .page-title h1 { font-size: clamp(1.5rem,3.4vw,2.2rem); }
@@ -90,34 +96,82 @@ img { max-width: 100%; height: auto; }
 .shopping-cart-link .cart-label { font-weight: 600; }
 
 /* 5. PRIMARY NAVIGATION ==================================================== */
-.header-menu { background: var(--xt-ink); border-radius: 0; }
-.top-menu.notmobile > li > a { color:#e5e7eb; font-weight: 600; }
-.top-menu.notmobile > li > a:hover { color:#fff; background: rgba(255,255,255,.06); text-decoration:none; }
-.top-menu.notmobile .sublist { border-radius: var(--xt-r); box-shadow: var(--xt-sh-2); }
-.menu-toggle { background: var(--xt-ink); color:#fff; border-radius: var(--xt-r-sm); font-weight:700; }
+/* The storefront nav is OWNED by this theme's custom header (.xt-nav in _Header.cshtml), and the
+   stock nopCommerce MainMenu bar (.header-menu — inner .menu__* BEM markup in 4.90) is hidden in §23.
+   So no rules belong here. (Pre-4.90 this targeted legacy .top-menu/.menu-toggle/.sublist, which no
+   longer exist — that markup was replaced by .menu__item/.menu__link/.menu__toggle.) */
 
-/* 6. FOOTER (also overridden in Views/Shared/Components/Footer/Default.cshtml) */
-.footer { background: var(--xt-brand-deep); color:#cbd5e1; margin-top: var(--xt-s16); }
-.footer a { color:#e2e8f0; }
-.footer a:hover { color:#fff; }
-.footer-upper, .footer-lower, .xt-foot {
-  max-width: var(--xt-wrap); margin: 0 auto; padding: var(--xt-s10) var(--xt-s4);
-}
-.footer .footer-block .title, .footer .title strong { color:#fff; font-weight:800; }
-.footer-lower { border-top: 1px solid rgba(255,255,255,.1); padding-top: var(--xt-s6); padding-bottom: var(--xt-s6); }
-.footer-disclaimer { color:#94a3b8; }
-.newsletter-email .newsletter-subscribe-text { border-radius: var(--xt-r-pill) 0 0 var(--xt-r-pill); }
-.newsletter-subscribe-button { border-radius: 0 var(--xt-r-pill) var(--xt-r-pill) 0; background: var(--xt-accent); color: var(--xt-accent-ink); border:0; }
-/* modern footer columns (Views/Shared/Components/Footer/Default.cshtml) */
+/* 6. FOOTER — deep-teal editorial panel (markup: Views/Shared/Components/Footer/Default.cshtml).
+   Every rule is scoped under our own `.xt-footer` class so it reliably out-ranks DefaultClean's
+   shared `.footer` / `.footer-menu__*` rules (specificity beats stylesheet load order). nopCommerce
+   4.90's FooterMenu emits `.footer-navigation > .footer-menu > .footer-menu__title/__list/__link`
+   (NOT the legacy `.footer-block .title/.list`), so we target those real classes. */
+.footer.xt-footer { background: var(--xt-brand-deep); color: rgba(250,246,238,.78); margin-top: var(--xt-s16); text-align: left; }
+.xt-footer a { color: rgba(250,246,238,.82); }
+.xt-footer a:hover { color: #fff; }
+
+/* upper grid (brand · link columns · newsletter) and lower bar share the content width */
+.xt-foot.xt-foot-grid, .xt-footer .footer-lower { max-width: var(--xt-wrap); margin: 0 auto; padding: var(--xt-s10) var(--xt-s4); }
 .xt-foot-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s8); }
-.xt-foot-title { color:#fff; font-weight:800; font-size:1.2rem; margin-bottom: var(--xt-s3); }
-.xt-foot-brand .topic-block, .xt-foot-brand p { color:#94a3b8; max-width:340px; }
-.xt-foot-social { margin-top: var(--xt-s4); }
-.xt-footer .footer-block { margin: 0 0 var(--xt-s5); }
-.xt-footer .footer-block .title { margin-bottom: var(--xt-s2); }
-.xt-footer .footer-block .list a { color:#cbd5e1; line-height: 2; }
-.xt-foot-lower { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap: var(--xt-s4); }
-@media (min-width: 768px) { .xt-foot-grid { grid-template-columns: 1.4fr 1fr 1.1fr; } }
+@media (min-width: 768px) { .xt-foot-grid { grid-template-columns: 1.3fr 2.4fr 1.1fr; } }
+
+/* brand column */
+.xt-foot-title { color:#fff; font-family: var(--xt-font-display); font-weight:600; font-size:1.4rem; letter-spacing:-.01em; margin-bottom: var(--xt-s3); }
+.xt-foot-brand .topic-block, .xt-foot-brand p { color: rgba(250,246,238,.7); max-width:340px; }
+.xt-foot-social { margin-top: var(--xt-s5); }
+.xt-foot-social ul { display:flex; flex-wrap:wrap; gap:10px 16px; margin:0; padding:0; list-style:none; }
+.xt-foot-social li { display:inline-flex; margin:0; }
+.xt-foot-social a { display:inline-flex; align-items:center; color: rgba(250,246,238,.85); font-weight:600; font-size:.82rem;
+  border:1px solid rgba(250,246,238,.28); border-radius: var(--xt-r-pill); padding:6px 14px; }
+.xt-foot-social a:hover { color:#fff; border-color: var(--xt-accent); background: rgba(217,119,87,.12); text-decoration:none; }
+
+/* link columns — kill DefaultClean's white list box + blue toggle pill; mono terracotta labels.
+   Mobile-first: stacked. Desktop: EQUAL columns in one row (flex:1 1 0) so a 3rd menu never wraps
+   below the others; min-width:0 lets a long label wrap inside its column instead of breaking the row. */
+.xt-footer .footer-navigation { display:flex; flex-direction:column; gap: var(--xt-s5); width:100%; }
+.xt-footer .footer-menu { display:block; max-width:none; margin:0; }
+@media (min-width: 768px) {
+  .xt-footer .footer-navigation { flex-direction:row; gap: var(--xt-s6); }
+  .xt-footer .footer-menu { flex:1 1 0; min-width:0; }
+}
+.xt-footer .footer-menu__list { background:transparent; overflow:visible; }
+.xt-footer .footer-menu__item { display:block; padding:0; margin:0 0 var(--xt-s2); line-height:1.5; text-align:left; }
+.xt-footer .footer-menu__title, .xt-footer .footer-menu__toggle {
+  background:none; padding:0; margin:0 0 var(--xt-s3); cursor:auto;
+  font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; font-weight:500;
+  color: var(--xt-accent);
+}
+.xt-footer .footer-menu__link { color: rgba(250,246,238,.78); display:inline-flex; }
+.xt-footer .footer-menu__link:hover { color:#fff; }
+
+/* newsletter / follow column */
+.xt-foot-news .title, .xt-footer .newsletter .title {
+  font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; font-weight:500;
+  color: var(--xt-accent); margin:0 0 var(--xt-s3);
+}
+.xt-foot-news .newsletter .title { display:none; } /* avoid two stacked labels (keep "Follow us") */
+.xt-footer .newsletter-email { display:flex; max-width:320px; }
+.xt-footer .newsletter-subscribe-text {
+  flex:1; min-width:0; background: rgba(250,246,238,.95); color:#15201F; border:0;
+  border-radius: var(--xt-r-pill) 0 0 var(--xt-r-pill); min-height:44px;
+}
+.xt-footer .newsletter-subscribe-button {
+  border:0; border-radius: 0 var(--xt-r-pill) var(--xt-r-pill) 0; min-height:44px;
+  background: var(--xt-accent); color:#fff; box-shadow:none; padding:0 18px; white-space:nowrap;
+}
+.xt-footer .newsletter-subscribe-button:hover { background: var(--xt-accent-600); }
+.xt-footer .newsletter-validation, .xt-footer .newsletter-result { color: rgba(250,246,238,.7); }
+
+/* lower bar (copyright · powered-by · theme selector) */
+.xt-foot-lower.footer-lower { width:auto; border-top: 1px solid rgba(250,246,238,.14); display:flex; flex-wrap:wrap; align-items:center; gap: var(--xt-s4) var(--xt-s6); font-size:.85rem; }
+.xt-footer .footer-info { float:none; line-height:1.6; }
+.xt-footer .footer-disclaimer { color: rgba(250,246,238,.6); }
+.xt-footer .footer-powered-by { float:none; margin:0; font-size:.85rem; color: rgba(250,246,238,.6); }
+.xt-footer .footer-powered-by a { color: rgba(250,246,238,.85); font-weight:600; }
+.xt-footer .theme-selector { float:none; margin:0; }
+.xt-footer .theme-selector select { background: rgba(250,246,238,.08); color: var(--xt-parch); border:1px solid rgba(250,246,238,.25); border-radius: var(--xt-r-sm); }
+
+/* (mobile stacking of the link columns is the base style above; the row layout kicks in at 768px) */
 
 /* 7. BUTTONS & FORMS ======================================================= */
 .button-1, .button-2, input[type="button"].button-1, input[type="submit"].button-1,
@@ -523,10 +577,8 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 .xt-step::before { background: var(--xt-accent); }
 .item-box .picture, .product-essential .gallery { background: var(--xt-surface-2); }
 
-/* footer: mono terracotta column labels on the deep-teal footer */
-.xt-footer .footer-block .title, .xt-footer .footer-block .title strong {
-  font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; color: var(--xt-accent);
-}
+/* footer column labels are styled in §6 against nopCommerce 4.90's real `.footer-menu__title`
+   (the legacy `.footer-block .title` markup no longer exists), so no extra rule is needed here. */
 
 /* WhatsApp float (created by theme.js from the first wa.me link on the page) */
 .xt-wa-float { position:fixed; z-index:50; right:18px; bottom:90px; width:56px; height:56px; border-radius:50%;
@@ -537,7 +589,7 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 .xt-wa-float svg { width:28px; height:28px; position:relative; }
 
 /* light/dark toggle (created by theme.js; injected into the header, else floats top-right) */
-.xt-theme-toggle { width:40px; height:40px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface);
+.xt-theme-toggle { width:42px; height:42px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface);
   color: var(--xt-ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
 .xt-theme-toggle:hover { border-color: var(--xt-brand); }
 .xt-theme-toggle .icon-sun { display:none; }
@@ -636,7 +688,9 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
    Built by Views/Shared/_Header.cshtml. This theme owns the header markup here, so these rules
    don't fight DefaultClean. The separate nopCommerce menu bar is hidden (nav lives in the header). */
 .header-menu { display:none !important; }              /* nav moved into the header */
-.xt-header { background: var(--xt-page); }
+/* full-bleed header (the utility/headbar bars center their own ~1160 inner wrappers). The `.header`
+   part beats DefaultClean's `.header{width:980px}`/`{1200px}` so the bars never get boxed-in. */
+.header.xt-header { background: var(--xt-page); width:auto; max-width:none; margin:0; }
 
 /* top utility strip */
 .xt-utility { background: var(--xt-brand-deep); color: var(--xt-parch); font-size:.82rem; }
@@ -662,14 +716,32 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .xt-headbar__actions { display:flex; align-items:center; gap:12px; margin-left:auto; flex:none; }
 .xt-headbar__actions .search-box { margin:0; }
 .xt-headbar__actions .search-box-text { min-height:40px; width:160px; max-width:42vw; }
-/* compact account/cart links inside the bar */
-.xt-headbar__actions .header-links, .xt-headbar__actions .header-links ul { display:flex; align-items:center; gap:14px; margin:0; padding:0; list-style:none; }
+/* action cluster: search + circular icon buttons (account/cart) + toggle + CTA */
+.xt-headbar__actions .header-links, .xt-headbar__actions .header-links ul { display:flex; align-items:center; gap:10px; margin:0; padding:0; list-style:none; }
 .xt-headbar__actions .header-links li { margin:0; display:inline-flex; }
-.xt-headbar__actions .header-links a, .xt-headbar__actions .header-links span { white-space:nowrap; }
-/* terracotta CTA */
-.xt-cta { display:inline-flex; align-items:center; white-space:nowrap; background: var(--xt-accent); color:#fff; font-weight:800;
+/* declutter to match the design: drop wishlist / inbox / register from the header cluster */
+.xt-headbar__actions .header-links .ico-wishlist, .xt-headbar__actions .header-links .ico-inbox, .xt-headbar__actions .header-links .ico-register { display:none; }
+/* remaining links (account/login/logout/cart) → circular icon buttons (label text hidden, SVG mask shown) */
+.xt-headbar__actions .header-links > ul > li > a {
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border-radius:50%; border:1px solid var(--xt-line);
+  background: var(--xt-surface); color: var(--xt-ink); font-size:0; white-space:nowrap;
+}
+.xt-headbar__actions .header-links > ul > li > a:hover { border-color: var(--xt-brand); color: var(--xt-brand); text-decoration:none; }
+.xt-headbar__actions .header-links > ul > li > a::before {
+  content:""; width:20px; height:20px; background: currentColor;
+  -webkit-mask: var(--xt-ico) center / 20px 20px no-repeat; mask: var(--xt-ico) center / 20px 20px no-repeat;
+}
+.xt-headbar__actions .ico-account, .xt-headbar__actions .ico-login { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjgiIHI9IjMuNiIvPjxwYXRoIGQ9Ik01LjUgMjBhNi41IDYuNSAwIDAgMSAxMyAwIi8+PC9zdmc+"); }
+.xt-headbar__actions .ico-logout { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOS41IDRINS41QTEuNSAxLjUgMCAwIDAgNCA1LjV2MTNBMS41IDEuNSAwIDAgMCA1LjUgMjBoNCIvPjxwYXRoIGQ9Ik0xNS41IDE2LjUgMjAgMTJsLTQuNS00LjVNMjAgMTJIOS41Ii8+PC9zdmc+"); }
+.xt-headbar__actions .ico-cart   { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSI5IiBjeT0iMjAiIHI9IjEuMyIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMjAiIHI9IjEuMyIvPjxwYXRoIGQ9Ik0yLjUgNEg1bDIuMiAxMC45YTEgMSAwIDAgMCAxIC44aDguNWExIDEgMCAwIDAgMS0uNzhMMjAuNiA4SDYiLz48L3N2Zz4="); }
+.xt-headbar__actions .ico-cart .cart-label { display:none; }
+.xt-headbar__actions .ico-cart .cart-qty { position:absolute; top:-4px; right:-4px; }
+/* terracotta header CTA — unique class so it never collides with the homepage's .xt-cta button
+   GROUP container (§9), which the HomepageText topic uses to wrap the hero / CTA-band buttons. */
+.xt-headcta { display:inline-flex; align-items:center; white-space:nowrap; background: var(--xt-accent); color:#fff; font-weight:800;
   border-radius: var(--xt-r-pill); padding:10px 18px; text-decoration:none; box-shadow:0 6px 18px -8px rgba(217,119,87,.7); }
-.xt-cta:hover { background: var(--xt-accent-600); color:#fff; text-decoration:none; }
+.xt-headcta:hover { background: var(--xt-accent-600); color:#fff; text-decoration:none; }
 
 @media (max-width: 1000px) {
   .xt-utility__msg { display:none; }
@@ -678,5 +750,5 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
   .xt-headbar__actions .search-box-text { width:120px; }
 }
 @media (max-width: 560px) {
-  .xt-headbar__actions .header-links .ico-account, .xt-headbar__actions .header-links .ico-wishlist { display:none; } /* keep cart + CTA on small screens */
+  .xt-headbar__actions .header-links > ul > li > a.ico-account { display:none; } /* compact: keep cart + CTA on small screens */
 }
