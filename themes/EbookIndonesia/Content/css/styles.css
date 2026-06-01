@@ -959,3 +959,16 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
   .xt-stepper { grid-auto-flow:column; grid-auto-columns:78%; grid-template-columns:none; overflow-x:auto; scroll-snap-type:x mandatory; }
   .xt-stepper__item { scroll-snap-align:start; }
 }
+
+/* the "not sure?" helper card (last cell in #programs) reuses .xt-prog for layout but is meant to read
+   as the inverted teal accent. .xt-prog's own surface background is declared later in the cascade, so it
+   would win over .xt-why__c--invert and leave the card's cream inline text on a cream card (invisible in
+   light mode). A compound selector (higher specificity) restores the intended teal in both modes. */
+.xt-prog.xt-why__c--invert { background: var(--xt-brand); border-color: var(--xt-brand); }
+
+/* faculty: 4 teachers read best as a single row on desktop. The topic markup sets an inline 2-col grid
+   (sensible on phones/tablets); widen it to 4-up on desktop so the portrait cards aren't oversized.
+   Scoped to #faculty; !important is required only because it overrides the element's inline style. */
+@media (min-width:992px){
+  #faculty .xt-cardgrid { grid-template-columns:repeat(4,1fr) !important; }
+}
