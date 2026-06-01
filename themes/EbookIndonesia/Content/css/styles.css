@@ -789,7 +789,12 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 /* section rhythm + tinted "paper" band */
 .xt-home .xt-s { padding: clamp(52px,7vw,100px) 0; }
 .xt-home .xt-s:first-child { padding-top: var(--xt-s6); }
-.xt-s--band { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); padding-left: clamp(18px,4vw,44px); padding-right: clamp(18px,4vw,44px); }
+.xt-s--band { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); }
+/* Inner side gutters for the beige panels. These must out-specify `.xt-home .xt-s { padding: … 0 }`
+   above — that shorthand sets left/right to 0 and (being more specific than a bare `.xt-s--band`)
+   was zeroing these out, so the panel content hugged the rounded edges. Scope under .xt-home to match
+   its specificity and win by source order; generous gutters give the panels real breathing room. */
+.xt-home .xt-s--band { padding-left: clamp(24px,5vw,64px); padding-right: clamp(24px,5vw,64px); }
 
 /* section header: mono kicker + big Fraunces heading + side lead + optional link */
 .xt-kicker { font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.18em; font-size:.72rem; color: var(--xt-accent-600); }
