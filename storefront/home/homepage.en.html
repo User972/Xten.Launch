@@ -1,130 +1,310 @@
 <!--
-  Home page (English) — paste into the HomepageText topic (English locale).
-  HOW: Admin → Content management → Topics → "HomepageText" → Edit → toggle the body editor to
-  HTML source view (the “<>” / “Tools → Source code” button) → paste ALL of this → Save.
-  The EbookIndonesia theme styles every .xt-* class (light + dark) — no extra CSS needed.
+  "Check" home page (English) — paste into the HomepageText topic (English locale).
+  HOW: Admin → Content management → Topics → "HomepageText" → Edit → HTML source view (the "<>" /
+  Tools → Source code button) → paste ALL of this → Save. The EbookIndonesia theme styles every
+  .xt-* class (light + dark) — no extra CSS needed.
 
-  WhatsApp number is already set (61457068647) in the "Chat on WhatsApp" link below, which also
-  powers the floating WhatsApp button. To change it, edit that wa.me number.
-  (Catalogue buttons point at /search — change to a specific category URL if you prefer.)
+  Reproduces the "Check Homepage" design. Course sections (programs/faculty/results/branches) are
+  marketing content; trial buttons go to WhatsApp (61457068647). The ebook section is a showcase —
+  its buttons point to the catalogue /search; repoint them to your real ebook product URLs so the
+  real cart & Midtrans handle checkout. Numbers, names, prices, phone & addresses are PLACEHOLDERS
+  from the design — replace with real data before launch.
 -->
 <div class="xt-home">
   <div class="xt-wrap">
 
     <!-- HERO -->
-    <section class="xt-hero">
-      <span class="xt-eyebrow">New titles · updated weekly</span>
-      <h1 style="margin:18px auto 0;">Read further. <span class="xt-em">Go deeper.</span><br>Premium eBooks, instant download.</h1>
-      <p style="max-width:580px;margin:18px auto 0;font-size:1.15rem;">Curated eBooks you can buy in seconds and start reading on any device. Pay with QRIS, bank transfer, or your favourite e-wallet.</p>
-      <div class="xt-cta" style="margin-top:28px;">
-        <a class="xt-btn xt-btn-primary" href="/search">Browse eBooks</a>
-        <a class="xt-btn xt-btn-ghost" href="#how-it-works">How it works</a>
+    <section class="xt-hero xt-hero--editorial" id="about">
+      <div class="xt-herowrap">
+        <div>
+          <span class="xt-eyebrow">Intake May–June 2026 · Limited seats</span>
+          <h1>Reach <span class="xt-em">band&nbsp;7+</span> for university, work, or moving abroad.</h1>
+          <p style="max-width:560px;">CELTA &amp; TESOL-certified teachers, classes capped at 1:8, and weekly mock tests in the real exam format — so you walk into exam day calm, not guessing.</p>
+          <div class="xt-cta" style="justify-content:flex-start;margin-top:28px;">
+            <a class="xt-btn xt-btn-primary" href="https://wa.me/61457068647?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20trial" target="_blank" rel="noopener">Book a Free Trial</a>
+            <a class="xt-btn xt-btn-ghost" href="#programs">See Programs</a>
+          </div>
+          <p style="margin-top:12px;font-size:.85rem;color:var(--xt-muted);">1 hour · no cost · no commitment. We reply on WhatsApp within 30 minutes during business hours.</p>
+
+          <div class="xt-stats">
+            <div><div class="xt-stat__n">2,400<span>+</span></div><div class="xt-stat__l">students passed<br>band 7 or higher</div></div>
+            <div><div class="xt-stat__n">93<span>%</span></div><div class="xt-stat__l">hit their target<br>on attempt 1 or 2</div></div>
+            <div><div class="xt-stat__n">1:8</div><div class="xt-stat__l">teacher ratio<br>per class, max.</div></div>
+            <div><div class="xt-stat__n">10<span>yrs</span></div><div class="xt-stat__l">teaching<br>IELTS / TOEFL / PTE</div></div>
+          </div>
+
+          <div class="xt-partner-inline">
+            <span class="xt-mono">Official partner —</span>
+            <b>British Council</b><span>·</span><b>IDP Education</b><span>·</span><b>Cambridge English</b>
+          </div>
+        </div>
+
+        <!-- lead card (CTA, not a mock form) -->
+        <div class="xt-lead-card" id="trial">
+          <span class="xt-lead-card__stub">FREE · 60 MIN</span>
+          <h3>Book a free trial</h3>
+          <p>A quick message on WhatsApp — our team replies within 30 minutes during business hours.</p>
+          <ul class="xt-lead-card__list">
+            <li>60-minute diagnostic test, no cost</li>
+            <li>Realistic program &amp; target-band recommendation</li>
+            <li>No commitment — you decide</li>
+          </ul>
+          <a class="xt-btn xt-btn-primary" href="https://wa.me/61457068647?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20IELTS%20trial" target="_blank" rel="noopener">Book via WhatsApp →</a>
+          <p class="xt-lead-card__alt">Or call <a href="tel:+622150999000">(021) 5099-9000</a></p>
+          <div class="xt-lead-card__proof"><span class="xt-avas"><span></span><span></span><span></span></span> 42 students enrolled this week</div>
+        </div>
       </div>
-      <p style="margin-top:12px;font-size:.85rem;color:var(--xt-muted);">Instant access after payment · lifetime re-downloads · secure checkout.</p>
-      <div class="xt-stats">
-        <div><div class="xt-stat__n">10k<span>+</span></div><div class="xt-stat__l">readers<br>and counting</div></div>
-        <div><div class="xt-stat__n">4.9<span>★</span></div><div class="xt-stat__l">average<br>reader rating</div></div>
-        <div><div class="xt-stat__n">3<span>×</span></div><div class="xt-stat__l">formats<br>PDF · EPUB · MOBI</div></div>
-        <div><div class="xt-stat__n">60<span>s</span></div><div class="xt-stat__l">from checkout<br>to reading</div></div>
-      </div>
-      <p class="xt-mono" style="margin-top:26px;">Secure payment — QRIS · Virtual Account · GoPay · OVO · Dana</p>
     </section>
 
-    <!-- DIFFERENTIATORS -->
-    <section class="xt-section" id="why">
-      <div style="text-align:center;"><span class="xt-eyebrow">Why buy here</span></div>
-      <h2 style="margin-top:12px;">Everything you need, nothing you don't</h2>
-      <p class="xt-sub">A fast, secure way to own great books digitally.</p>
-      <div class="xt-diff">
-        <div class="xt-diff__item"><h3>Instant download</h3><p>Your eBook unlocks the moment your payment is confirmed — no waiting.</p></div>
-        <div class="xt-diff__item"><h3>Every device</h3><p>Most titles include PDF, EPUB and MOBI in a single purchase.</p></div>
-        <div class="xt-diff__item"><h3>Secure &amp; licensed</h3><p>Delivered only through your account — a genuine copy that's yours to keep.</p></div>
-        <div class="xt-diff__item xt-diff__item--invert"><h3>Lifetime access</h3><p>Re-download anytime from <strong>My eBooks</strong>, within your download limit.</p></div>
+    <!-- PARTNER STRIP -->
+    <section style="padding-top:var(--xt-s8);">
+      <div class="xt-partners">
+        <span class="xt-partners__label">Trusted by &amp; partner with</span>
+        <span class="xt-partners__logo">British&nbsp;Council</span>
+        <span class="xt-partners__logo">IDP Education</span>
+        <span class="xt-partners__logo">Cambridge</span>
+        <span class="xt-partners__logo">ETS · TOEFL</span>
+        <span class="xt-partners__logo">Pearson PTE</span>
       </div>
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="xt-section" id="how-it-works">
-      <h2>How it works</h2>
-      <p class="xt-sub">Three simple steps from cart to reading.</p>
-      <div class="xt-steps">
-        <div class="xt-step"><h3>Choose your eBook</h3><p>Pick a title and preview a free sample before you buy.</p></div>
-        <div class="xt-step"><h3>Pay with QRIS or transfer</h3><p>Scan QRIS, use a Virtual Account, or pay by e-wallet — securely via Midtrans.</p></div>
-        <div class="xt-step"><h3>Download &amp; read</h3><p>Your eBook appears in “My eBooks” instantly. Keep it forever.</p></div>
+    <!-- WHY CHOOSE -->
+    <section class="xt-s">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Why choose Check</div>
+          <h2 class="xt-h2">Not a big cram school. A small studio serious about <em>band scores</em>.</h2>
+        </div>
+        <p class="xt-lead">We don't sell empty promises — we sell hours of practice, deep correction, and classes small enough that every student actually speaks every session.</p>
+      </div>
+      <div class="xt-why">
+        <div class="xt-why__c xt-lift"><div class="xt-why__n">01</div><h3>Small 1:8 classes</h3><p>Max 8 students. Lots of speaking time and live correction — not a one-way lecture.</p><div class="xt-why__foot">Average 5 students per class</div></div>
+        <div class="xt-why__c xt-lift"><div class="xt-why__n">02</div><h3>Certified teachers</h3><p>CELTA / TESOL trained with IELTS, TOEFL, PTE experience — local and native speakers.</p><div class="xt-why__foot">Every teacher audited each term</div></div>
+        <div class="xt-why__c xt-lift"><div class="xt-why__n">03</div><h3>Weekly mock tests</h3><p>Real exam format — Listening, Reading, Writing, Speaking. Plus written feedback.</p><div class="xt-why__foot">Every Saturday, 09.00–13.00</div></div>
+        <div class="xt-why__c xt-why__c--invert"><div class="xt-why__n">04</div><h3>Study-abroad path</h3><p>After you pass IELTS, we help with university choice, essays, and visa consultation.</p><div class="xt-why__foot">Included for Check students</div></div>
       </div>
     </section>
 
-    <!-- WHO IT'S FOR -->
-    <section class="xt-section">
-      <div style="text-align:center;"><span class="xt-eyebrow">Who it's for</span></div>
-      <h2 style="margin-top:12px;">Made for curious, busy readers</h2>
-      <p class="xt-sub">Practical knowledge you can apply — on any device, wherever you are.</p>
-      <div class="xt-grid xt-grid-3">
-        <div class="xt-card"><h3>Professionals &amp; founders</h3><p>Level up in business, finance, marketing and productivity — without the fluff.</p></div>
-        <div class="xt-card"><h3>Students &amp; lifelong learners</h3><p>Affordable, well-structured guides you can read on your phone between classes or commutes.</p></div>
-        <div class="xt-card"><h3>Teams</h3><p>Shareable playbooks your whole team can learn from — one licence per reader.</p></div>
+    <!-- PROGRAMS -->
+    <section class="xt-s xt-s--band" id="programs">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Our programs</div>
+          <h2 class="xt-h2">Choose the path that fits your goal.</h2>
+        </div>
+        <a class="xt-headlink" href="#trial">Get help choosing a program →</a>
+      </div>
+      <div class="xt-cardgrid">
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__badge">Most popular</span>
+          <span class="xt-prog__tag">university</span>
+          <h3>IELTS Academic</h3>
+          <p>To enter universities in Australia, UK, Canada, NZ, US.</p>
+          <dl class="xt-prog__dl"><dt>Target band</dt><dd>6.5 – 8.0</dd><dt>Duration</dt><dd>8 / 12 / 16 weeks</dd><dt>Format</dt><dd>Hybrid · max 1:8</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">From</div><div class="xt-prog__price">Rp&nbsp;1,850k<small>/mo</small></div><div class="xt-prog__meta">0% installment · 6 months</div></div><a class="xt-headlink" href="#trial">See details →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">work · immigration</span>
+          <h3>IELTS General</h3>
+          <p>For PR, working visas, and overseas training.</p>
+          <dl class="xt-prog__dl"><dt>Target band</dt><dd>6.0 – 8.0</dd><dt>Duration</dt><dd>8 / 12 weeks</dd><dt>Format</dt><dd>Hybrid · max 1:8</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">From</div><div class="xt-prog__price">Rp&nbsp;1,650k<small>/mo</small></div><div class="xt-prog__meta">0% installment · 6 months</div></div><a class="xt-headlink" href="#trial">See details →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">US university · work</span>
+          <h3>TOEFL iBT</h3>
+          <p>Computer-based, integrated skills — a favorite for US universities.</p>
+          <dl class="xt-prog__dl"><dt>Target score</dt><dd>90 – 110</dd><dt>Duration</dt><dd>10 / 14 weeks</dd><dt>Format</dt><dd>Online / hybrid</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">From</div><div class="xt-prog__price">Rp&nbsp;1,950k<small>/mo</small></div><div class="xt-prog__meta">0% installment · 6 months</div></div><a class="xt-headlink" href="#trial">See details →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">fast · australia/nz</span>
+          <h3>PTE Academic</h3>
+          <p>Fast results (48h), AI scoring — for Australia / NZ applicants.</p>
+          <dl class="xt-prog__dl"><dt>Target score</dt><dd>65 – 85</dd><dt>Duration</dt><dd>6 / 10 weeks</dd><dt>Format</dt><dd>Online / hybrid</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">From</div><div class="xt-prog__price">Rp&nbsp;1,750k<small>/mo</small></div><div class="xt-prog__meta">0% installment · 6 months</div></div><a class="xt-headlink" href="#trial">See details →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">career · professional</span>
+          <h3>Business English</h3>
+          <p>Meetings, negotiation, email &amp; presentation for Indonesian professionals.</p>
+          <dl class="xt-prog__dl"><dt>Level</dt><dd>B1 → C1 (CEFR)</dd><dt>Duration</dt><dd>12 weeks (rolling)</dd><dt>Format</dt><dd>Evening · max 1:6</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">From</div><div class="xt-prog__price">Rp&nbsp;1,450k<small>/mo</small></div><div class="xt-prog__meta">0% installment · 6 months</div></div><a class="xt-headlink" href="#trial">See details →</a></div>
+        </article>
+        <article class="xt-prog xt-why__c--invert" style="justify-content:space-between;">
+          <div><div class="xt-prog__tag" style="color:var(--xt-accent);">→ not sure?</div><h3 style="color:var(--xt-parch);">Free 30-minute diagnostic test.</h3><p style="color:rgba(250,246,238,.78);">We understand your current level first — then recommend a realistic program and timeline.</p></div>
+          <a class="xt-btn" style="background:var(--xt-parch);color:var(--xt-brand-deep);margin-top:24px;" href="#trial">Start the diagnostic →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section class="xt-s">
+      <div class="xt-headrow xt-headrow--split">
+        <div>
+          <div class="xt-kicker">— How we teach</div>
+          <h2 class="xt-h2">Five steps, no <em>drama</em>.</h2>
+        </div>
+        <p class="xt-lead">Every Check student goes through the same five stages — from initial diagnosis to help booking the exam and applying to universities.</p>
+      </div>
+      <ol class="xt-stepper">
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">1</span><span class="xt-stepper__tag">DAY 0</span></div><h3>Free diagnostic test</h3><p>Speaking, listening, reading, writing — so we know your starting point.</p></li>
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">2</span><span class="xt-stepper__tag">WEEK 1</span></div><h3>Personal study plan</h3><p>Target band, schedule, and a realistic timeline based on your exam.</p></li>
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">3</span><span class="xt-stepper__tag">WEEK 2–10</span></div><h3>Classes + 1-on-1 speaking</h3><p>Structured classes plus weekly speaking sessions with live correction.</p></li>
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">4</span><span class="xt-stepper__tag">EVERY SAT</span></div><h3>Mock test + feedback</h3><p>Real IELTS format plus written feedback from examiner-style raters.</p></li>
+        <li class="xt-stepper__item xt-stepper__item--invert"><div class="xt-stepper__top"><span class="xt-stepper__n">5</span><span class="xt-stepper__tag">EXAM DAY+</span></div><h3>Exam booking + visa</h3><p>Help booking British Council / IDP, plus university and visa consultation.</p></li>
+      </ol>
+    </section>
+
+    <!-- FACULTY -->
+    <section class="xt-s xt-s--band" id="faculty">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Our teachers</div>
+          <h2 class="xt-h2">A team that has <em>sat in the exam seat</em> as many times as you're about to.</h2>
+        </div>
+        <a class="xt-headlink" href="#trial">Ask a teacher →</a>
+      </div>
+      <div class="xt-cardgrid" style="grid-template-columns:repeat(2,1fr);">
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">8.5 IELTS</span><span class="xt-stripe__cap">photo · adit</span></div><div class="xt-fac__body"><h3>Aditya Pranata</h3><p class="xt-fac__role">Lead Trainer · Speaking &amp; Writing</p><div class="xt-tags"><span class="xt-tag">CELTA</span><span class="xt-tag">DELTA M2</span><span class="xt-tag xt-tag--muted">9 yrs</span></div></div></article>
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">9.0 IELTS</span><span class="xt-stripe__cap">photo · sarah</span></div><div class="xt-fac__body"><h3>Sarah Whitmore</h3><p class="xt-fac__role">Native (UK) · Writing &amp; Test Strategy</p><div class="xt-tags"><span class="xt-tag">CELTA</span><span class="xt-tag">Cambridge TKT</span><span class="xt-tag xt-tag--muted">12 yrs</span></div></div></article>
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">8.0 IELTS</span><span class="xt-stripe__cap">photo · maya</span></div><div class="xt-fac__body"><h3>Maya Setiawan</h3><p class="xt-fac__role">Trainer · Listening &amp; Reading</p><div class="xt-tags"><span class="xt-tag">TESOL</span><span class="xt-tag">PTE Expert</span><span class="xt-tag xt-tag--muted">7 yrs</span></div></div></article>
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">TOEFL 118</span><span class="xt-stripe__cap">photo · james</span></div><div class="xt-fac__body"><h3>James O'Connor</h3><p class="xt-fac__role">Native (AU) · TOEFL &amp; Business English</p><div class="xt-tags"><span class="xt-tag">CELTA</span><span class="xt-tag">MA TESOL</span><span class="xt-tag xt-tag--muted">14 yrs</span></div></div></article>
+      </div>
+    </section>
+
+    <!-- STUDENT RESULTS -->
+    <section class="xt-s">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Our students' results</div>
+          <h2 class="xt-h2">Latest results, <em>as they are</em>.</h2>
+        </div>
+        <p class="xt-lead">Updated April 2026. Re-published at the end of each month, with written permission from each student.</p>
+      </div>
+      <div class="xt-cardgrid">
+        <article class="xt-result xt-lift"><div class="xt-result__who"><span class="xt-result__ava xt-stripe"></span><div><div class="xt-result__name">Putri Ramadhani</div><div class="xt-result__sub">IELTS Academic · 14 weeks</div></div></div><div class="xt-result__score">7.5<small>overall</small></div><div class="xt-result__bands"><span><i>L</i><b>8.0</b></span><span><i>R</i><b>7.5</b></span><span><i>W</i><b>7.0</b></span><span><i>S</i><b>7.5</b></span></div><div class="xt-result__foot">Accepted at <strong>University of Melbourne</strong></div></article>
+        <article class="xt-result xt-lift"><div class="xt-result__who"><span class="xt-result__ava xt-stripe"></span><div><div class="xt-result__name">Bagas Wirawan</div><div class="xt-result__sub">PTE Academic · 8 weeks</div></div></div><div class="xt-result__score">82<small>/ 90 PTE</small></div><div class="xt-result__bands"><span><i>L</i><b>85</b></span><span><i>R</i><b>79</b></span><span><i>W</i><b>81</b></span><span><i>S</i><b>84</b></span></div><div class="xt-result__foot">Skilled Migration → <strong>Sydney, Australia</strong></div></article>
+        <article class="xt-result xt-result--teal"><div class="xt-result__who"><span class="xt-result__ava" style="background:rgba(250,246,238,.15);"></span><div><div class="xt-result__name">Aisyah Nurhaliza</div><div class="xt-result__sub">IELTS General · 12 weeks</div></div></div><div class="xt-result__score">8.0<small>overall</small></div><div class="xt-result__bands"><span><i>L</i><b>8.5</b></span><span><i>R</i><b>8.0</b></span><span><i>W</i><b>7.5</b></span><span><i>S</i><b>8.0</b></span></div><div class="xt-result__foot">PR application → <strong>Vancouver, Canada</strong></div></article>
       </div>
     </section>
 
     <!-- TESTIMONIALS -->
     <section class="xt-section">
       <div class="xt-quote-band">
-        <h2 class="xt-section__title" style="text-align:center;">Readers love it</h2>
-        <p class="xt-sub" style="margin-bottom:28px;">Honest words from people who bought and read.</p>
-        <div class="xt-grid xt-grid-3">
-          <div class="xt-quote"><p>“Bought, paid with QRIS, and was reading on my phone a minute later. Effortless.”</p><cite>— Putri, Jakarta</cite></div>
-          <div class="xt-quote"><p>“Clear, practical, and great value. The EPUB looked perfect on my e-reader.”</p><cite>— Andi, Surabaya</cite></div>
-          <div class="xt-quote"><p>“Re-downloaded on my new laptop with zero fuss. Exactly how it should work.”</p><cite>— Maya, Bandung</cite></div>
+        <div class="xt-kicker" style="text-align:center;color:var(--xt-accent);">— What our students say</div>
+        <h2 class="xt-section__title" style="color:var(--xt-parch);margin-top:8px;">Stories that keep us teaching on Saturday mornings.</h2>
+        <div class="xt-grid xt-grid-3" style="margin-top:28px;">
+          <div class="xt-quote"><p>"My speaking went from 5.5 to 7.5 in 10 weeks. Pak Adit corrects gently, so I wasn't afraid to make mistakes."</p><cite>— Rizky Pratama · IELTS 7.5 → Monash</cite></div>
+          <div class="xt-quote"><p>"The weekly mock tests made real exam day feel like 'another Saturday'. I knew exactly what to do."</p><cite>— Dewi Anggraini · IELTS 8.0 → Auckland</cite></div>
+          <div class="xt-quote"><p>"The class is small, so you can't hide. Every session you speak — that was a game changer for me."</p><cite>— Farhan Maulana · TOEFL 108 → NYU Stern</cite></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EBOOK STORE -->
+    <section class="xt-s xt-s--band" id="ebooks">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Ebook store</div>
+          <h2 class="xt-h2">Keep learning at home, at an <em>affordable price</em>.</h2>
+        </div>
+        <p class="xt-lead">Guides, practice questions, and strategies straight from Check teachers — PDF &amp; EPUB, readable on any device.</p>
+      </div>
+      <div class="xt-cta" style="justify-content:flex-start;margin-bottom:24px;gap:8px;">
+        <a class="xt-chip is-active" href="/search">All</a>
+        <a class="xt-chip" href="/search?q=IELTS">IELTS</a>
+        <a class="xt-chip" href="/search?q=TOEFL">TOEFL</a>
+        <a class="xt-chip" href="/search?q=PTE">PTE</a>
+        <a class="xt-chip" href="/search?q=General">General</a>
+      </div>
+      <div class="xt-bookgrid">
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><span class="xt-bookcard__tag">Bestseller</span><div class="xt-jacket xt-jacket--teal"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">IELTS · Writing</span><span class="xt-jacket__title">The IELTS Writing Playbook</span><span class="xt-jacket__by">Aditya Pranata</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">IELTS</span><span>248 pages · PDF + EPUB</span></div><h3>The IELTS Writing Playbook</h3><p>Answer frameworks for Task 1 &amp; 2 to stay consistent at band 7+.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.9</b><span style="color:var(--xt-muted);">(128 reviews)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 149,000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">View →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><div class="xt-jacket xt-jacket--terra"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">IELTS · Speaking</span><span class="xt-jacket__title">Speaking Without Fear</span><span class="xt-jacket__by">Sarah Whitmore</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">IELTS</span><span>180 pages · PDF</span></div><h3>Speaking Without Fear</h3><p>Fluency drills and natural sample answers for Parts 1–3.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.8</b><span style="color:var(--xt-muted);">(96 reviews)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 129,000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">View →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><span class="xt-bookcard__tag xt-bookcard__tag--new">New</span><div class="xt-jacket xt-jacket--ink"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">TOEFL · iBT</span><span class="xt-jacket__title">TOEFL iBT: The Integrated Method</span><span class="xt-jacket__by">James O'Connor</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">TOEFL</span><span>312 pages · PDF + EPUB</span></div><h3>TOEFL iBT: The Integrated Method</h3><p>Integrated-task strategy for reading, listening &amp; speaking.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.7</b><span style="color:var(--xt-muted);">(74 reviews)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 179,000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">View →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><div class="xt-jacket xt-jacket--deep"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">PTE · Academic</span><span class="xt-jacket__title">PTE Academic Rapid Score</span><span class="xt-jacket__by">Maya Setiawan</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">PTE</span><span>156 pages · PDF</span></div><h3>PTE Academic Rapid Score</h3><p>Techniques to break 79+ with the PTE AI scoring format.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.8</b><span style="color:var(--xt-muted);">(61 reviews)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 139,000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">View →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><span class="xt-bookcard__tag">Bestseller</span><div class="xt-jacket xt-jacket--gold"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">General · Vocabulary</span><span class="xt-jacket__title">Academic Vocabulary Builder</span><span class="xt-jacket__by">Check Team</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">General</span><span>210 pages · PDF + EPUB</span></div><h3>Academic Vocabulary Builder</h3><p>The 1,200 most common academic words, with example sentences.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.9</b><span style="color:var(--xt-muted);">(203 reviews)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 99,000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">View →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><div class="xt-jacket xt-jacket--sand"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">IELTS · Reading</span><span class="xt-jacket__title">Reading Speed &amp; Skimming</span><span class="xt-jacket__by">Aditya Pranata</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">IELTS</span><span>132 pages · PDF</span></div><h3>Reading Speed &amp; Skimming</h3><p>Skimming &amp; scanning techniques to save time in the exam.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.6</b><span style="color:var(--xt-muted);">(54 reviews)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 89,000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">View →</a></div></article>
+      </div>
+      <div class="xt-bundle" style="margin-top:20px;">
+        <div class="xt-kicker" style="color:var(--xt-accent);">— Save bundle</div>
+        <h3>Complete Band 8 Pack — 6 ebooks at once.</h3>
+        <p>All IELTS, TOEFL, PTE, and vocabulary guides in one pack. Save Rp 185,000 vs buying separately.</p>
+        <p style="margin-top:14px;color:var(--xt-parch);font-family:var(--xt-font-display);font-size:1.8rem;"><span style="opacity:.55;text-decoration:line-through;font-size:1rem;">Rp 784,000</span> &nbsp; Rp 599,000</p>
+        <a class="xt-btn xt-btn-primary" href="/search">See the bundle →</a>
+      </div>
+    </section>
+
+    <!-- BRANCHES -->
+    <section class="xt-s" id="locations">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Our locations</div>
+          <h2 class="xt-h2">In Jakarta, Bandung, &amp; Surabaya.</h2>
+        </div>
+        <p class="xt-lead">Come in person for a demo, or join online via Zoom from anywhere in Indonesia.</p>
+      </div>
+      <div class="xt-cardgrid">
+        <article class="xt-branch xt-lift"><div class="xt-branch__photo xt-stripe"><span class="xt-pill xt-pill--open" style="position:absolute;top:12px;left:12px;">Open now</span><span class="xt-stripe__cap">branch photo · kemang</span></div><div class="xt-branch__body"><h3>Jakarta — Kemang</h3><p class="xt-branch__addr">Jl. Kemang Raya No. 14, Mampang Prapatan, South Jakarta 12730</p><div class="xt-branch__hours"><div><div class="k">Mon–Sat</div><div class="v">09.00 — 21.00</div></div><div><div class="k">Sunday</div><div class="v">10.00 — 17.00</div></div></div><div class="xt-branch__foot"><a href="tel:+622150999000">(021) 5099-9000</a><a class="xt-headlink" href="#">Open in Maps →</a></div></div></article>
+        <article class="xt-branch xt-lift"><div class="xt-branch__photo xt-stripe"><span class="xt-pill xt-pill--open" style="position:absolute;top:12px;left:12px;">Open now</span><span class="xt-stripe__cap">branch photo · dago</span></div><div class="xt-branch__body"><h3>Bandung — Dago</h3><p class="xt-branch__addr">Jl. Ir. H. Djuanda No. 168, Coblong, Bandung 40132</p><div class="xt-branch__hours"><div><div class="k">Mon–Sat</div><div class="v">09.00 — 20.00</div></div><div><div class="k">Sunday</div><div class="v">10.00 — 16.00</div></div></div><div class="xt-branch__foot"><a href="tel:+62225099111">(022) 509-9111</a><a class="xt-headlink" href="#">Open in Maps →</a></div></div></article>
+        <article class="xt-branch xt-lift"><div class="xt-branch__photo xt-stripe"><span class="xt-pill xt-pill--soon" style="position:absolute;top:12px;left:12px;">Soon · June 2026</span><span class="xt-stripe__cap">branch photo · pakuwon</span></div><div class="xt-branch__body"><h3>Surabaya — Pakuwon</h3><p class="xt-branch__addr">Pakuwon Mall, UG Floor Unit 27, Surabaya 60216</p><div class="xt-branch__hours"><div><div class="k">Pre-launch</div><div class="v">Join waitlist</div></div><div><div class="k">Online intake</div><div class="v">Already open</div></div></div><div class="xt-branch__foot"><a href="#trial">Join waitlist</a><a class="xt-headlink" href="#">See location →</a></div></div></article>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS / PAYMENT -->
+    <section class="xt-s xt-s--band">
+      <div class="xt-certrow">
+        <div>
+          <div class="xt-kicker" style="margin-bottom:12px;">— Certifications &amp; affiliations</div>
+          <div class="xt-inline-list">
+            <span class="xt-cert">British Council Partner</span>
+            <span class="xt-cert">IDP IELTS Test Centre</span>
+            <span class="xt-cert">Cambridge English</span>
+            <span class="xt-cert">ETS · TOEFL iBT</span>
+            <span class="xt-cert">Pearson PTE</span>
+          </div>
+        </div>
+        <div>
+          <div class="xt-kicker" style="margin-bottom:12px;">— Payment &amp; 0% installment</div>
+          <div class="xt-pay"><span>BCA</span><span>Mandiri</span><span>BRI</span><span>QRIS</span><span>OVO</span><span>GoPay</span><span>DANA</span><span>0% installment</span></div>
+          <p style="margin-top:12px;font-size:.8rem;color:var(--xt-muted);">0% installment up to 12 months with BCA, Mandiri, and BRI credit cards. Virtual account and QRIS also available.</p>
         </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="xt-section" id="faq">
-      <h2>Frequently asked questions</h2>
-      <p class="xt-sub">Everything you need to know before you buy.</p>
+    <section class="xt-s" id="faq">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Frequently asked questions</div>
+          <h2 class="xt-h2">Honest answers, no <em>spin</em>.</h2>
+        </div>
+        <p class="xt-lead">Not answered? <a href="https://wa.me/61457068647?text=Hi%2C%20I%20have%20a%20question" target="_blank" rel="noopener">WhatsApp our team</a> — usually answered within 30 minutes during business hours.</p>
+      </div>
       <div class="xt-faq">
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">How do I receive my eBook?</p>
-          <div class="xt-faq__a">As soon as your payment is confirmed, your eBook unlocks automatically in <strong>My account → Downloadable products</strong>, and we email you the link.</div>
-        </div>
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">Which payment methods can I use?</p>
-          <div class="xt-faq__a">QRIS, bank transfer / Virtual Account, and popular e-wallets — securely via Midtrans.</div>
-        </div>
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">What formats are included?</p>
-          <div class="xt-faq__a">Most titles include PDF, EPUB and MOBI in a single purchase, so you can read on any device.</div>
-        </div>
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">Can I re-download later?</p>
-          <div class="xt-faq__a">Yes — your purchases stay in your account, so you can re-download within your download limit.</div>
-        </div>
+        <div class="xt-faq__item"><p class="xt-faq__q">How long does it take to reach band 7?</p><div class="xt-faq__a">It depends on your starting level. From band 5.5, usually 8–12 intensive weeks. We give a firm estimate after the free diagnostic test — including which skill to strengthen first.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Is there a band-score guarantee?</p><div class="xt-faq__a">We don't sell empty promises. But &gt;90% of our students reach their target band on the first or second attempt. If you don't, we give free extra classes — not an unrealistic refund.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Are the teachers native speakers?</p><div class="xt-faq__a">Some are. We also have Indonesian teachers certified in CELTA / TESOL — many students prefer to start with a local teacher and move to a native one once their speaking is fluent.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">What if I can't attend a class?</p><div class="xt-faq__a">Every class is recorded — you can re-watch anytime in the student portal. We also schedule make-up classes with a group at your level.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Can you help book the official IELTS exam?</p><div class="xt-faq__a">Yes — we partner with British Council and IDP. We help you choose the centre, date, and exam type (Computer-based or Paper-based) to fit your timeline.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Are there online classes?</p><div class="xt-faq__a">Yes, we run hybrid classes — choose offline at our centre or live online via Zoom. Many students use both interchangeably.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">What's the difference between IELTS Academic and General Training?</p><div class="xt-faq__a">Academic is for university; General is for work, immigration, or training. We help you pick the right one in your consultation session.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Can I pay in installments?</p><div class="xt-faq__a">Yes — we accept 0% installments with several banks (BCA, Mandiri, BRI), plus QRIS and virtual account payments.</div></div>
       </div>
     </section>
 
     <!-- FINAL CTA -->
     <section class="xt-section">
       <div class="xt-cta-band">
-        <h2>Find your next read.<br><span class="xt-em">Start in seconds.</span></h2>
-        <p class="xt-sub" style="margin:14px auto 24px;">Browse the catalogue or chat with us — we're happy to help you choose.</p>
+        <div class="xt-kicker" style="text-align:center;color:var(--xt-accent);">— Ready to start?</div>
+        <h2 style="margin-top:8px;">Free 1-hour trial.<br><span class="xt-em">No cost, no commitment.</span></h2>
+        <p class="xt-sub" style="margin:14px auto 24px;">Come to one of our branches or join online. We assess your level, make a plan, then you decide whether to continue.</p>
         <div class="xt-cta">
-          <a class="xt-btn xt-btn-primary" href="/search">Browse eBooks</a>
-          <a class="xt-btn xt-btn-wa" href="https://wa.me/61457068647?text=Hi%2C%20I%20have%20a%20question%20about%20an%20eBook" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+          <a class="xt-btn xt-btn-primary" href="https://wa.me/61457068647?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20trial" target="_blank" rel="noopener">Book a Free Trial</a>
+          <a class="xt-btn xt-btn-wa" href="https://wa.me/61457068647?text=Hi%2C%20I%20have%20a%20question" target="_blank" rel="noopener">💬 WhatsApp our team</a>
         </div>
+        <p style="margin-top:14px;font-size:.82rem;color:rgba(250,246,238,.6);">Or call (021) 5099-9000 · Mon–Sat 09.00–21.00 WIB</p>
       </div>
-    </section>
-
-    <!-- PAYMENT / TRUST STRIP -->
-    <section class="xt-section" style="padding-top:0;">
-      <div class="xt-pay">
-        <span>QRIS</span><span>Virtual Account</span><span>GoPay</span><span>OVO</span><span>Dana</span><span>ShopeePay</span><span>Cards</span>
-      </div>
-      <p class="xt-legal">By purchasing you agree to our
-        <a href="/conditions-of-use">Terms</a>,
-        <a href="/privacy-policy">Privacy Policy</a> and
-        <a href="/refund-policy">Refund Policy</a>.
-      </p>
     </section>
 
   </div>

@@ -1,130 +1,309 @@
 <!--
-  Halaman Beranda (Bahasa Indonesia) — tempel ke topic HomepageText (locale Indonesia).
-  CARA: Admin → Content management → Topics → "HomepageText" → Edit → ubah editor ke tampilan
-  HTML source (tombol “<>” / “Tools → Source code”) → tempel SEMUA ini → Simpan.
-  Tema EbookIndonesia menata semua kelas .xt-* (terang + gelap) — tanpa CSS tambahan.
+  Beranda "Check" (Bahasa Indonesia) — tempel ke topic HomepageText (locale Indonesia).
+  CARA: Admin → Content management → Topics → "HomepageText" → Edit → tampilan HTML source (tombol
+  "<>" / Tools → Source code) → tempel SEMUA ini → Simpan. Tema EbookIndonesia menata semua kelas
+  .xt-* (terang + gelap) — tanpa CSS tambahan.
 
-  Nomor WhatsApp sudah diisi (61457068647) pada tautan "Chat via WhatsApp" di bawah, yang juga
-  mengaktifkan tombol mengambang WhatsApp. Untuk mengubah, edit nomor wa.me tersebut.
-  (Tombol katalog mengarah ke /search — ubah ke URL kategori tertentu bila perlu.)
+  Reproduksi desain "Check Homepage". Bagian kursus (program/pengajar/hasil/cabang) = konten marketing;
+  tombol trial mengarah ke WhatsApp (61457068647). Bagian ebook tampil sebagai etalase — tombolnya
+  mengarah ke katalog /search; arahkan ke URL produk ebook asli Anda agar checkout & Midtrans berjalan.
+  Angka, nama, harga, telepon, & alamat adalah PLACEHOLDER dari desain — ganti dengan data asli.
 -->
 <div class="xt-home">
   <div class="xt-wrap">
 
     <!-- HERO -->
-    <section class="xt-hero">
-      <span class="xt-eyebrow">Judul baru · diperbarui tiap minggu</span>
-      <h1 style="margin:18px auto 0;">Baca lebih jauh. <span class="xt-em">Pahami lebih dalam.</span><br>eBook premium, unduh seketika.</h1>
-      <p style="max-width:580px;margin:18px auto 0;font-size:1.15rem;">eBook pilihan yang bisa Anda beli dalam hitungan detik dan langsung baca di perangkat apa pun. Bayar dengan QRIS, transfer bank, atau e-wallet favorit Anda.</p>
-      <div class="xt-cta" style="margin-top:28px;">
-        <a class="xt-btn xt-btn-primary" href="/search">Jelajahi eBook</a>
-        <a class="xt-btn xt-btn-ghost" href="#how-it-works">Cara kerja</a>
-      </div>
-      <p style="margin-top:12px;font-size:.85rem;color:var(--xt-muted);">Akses langsung setelah bayar · unduh ulang selamanya · checkout aman.</p>
-      <div class="xt-stats">
-        <div><div class="xt-stat__n">10rb<span>+</span></div><div class="xt-stat__l">pembaca<br>dan terus bertambah</div></div>
-        <div><div class="xt-stat__n">4.9<span>★</span></div><div class="xt-stat__l">rata-rata<br>penilaian pembaca</div></div>
-        <div><div class="xt-stat__n">3<span>×</span></div><div class="xt-stat__l">format<br>PDF · EPUB · MOBI</div></div>
-        <div><div class="xt-stat__n">60<span>dtk</span></div><div class="xt-stat__l">dari bayar<br>ke membaca</div></div>
-      </div>
-      <p class="xt-mono" style="margin-top:26px;">Pembayaran aman — QRIS · Virtual Account · GoPay · OVO · Dana</p>
-    </section>
+    <section class="xt-hero xt-hero--editorial" id="about">
+      <div class="xt-herowrap">
+        <div>
+          <span class="xt-eyebrow">Intake Mei–Juni 2026 · Slot terbatas</span>
+          <h1>Capai <span class="xt-em">band&nbsp;7+</span> untuk kuliah, kerja, atau imigrasi ke luar negeri.</h1>
+          <p style="max-width:560px;">Pengajar bersertifikat CELTA &amp; TESOL, kelas maksimal 1:8, dan mock test mingguan dengan format ujian asli — supaya kamu masuk hari ujian dengan tenang, bukan tebak-tebakan.</p>
+          <div class="xt-cta" style="justify-content:flex-start;margin-top:28px;">
+            <a class="xt-btn xt-btn-primary" href="https://wa.me/61457068647?text=Halo%2C%20saya%20ingin%20daftar%20trial%20gratis" target="_blank" rel="noopener">Daftar Trial Gratis</a>
+            <a class="xt-btn xt-btn-ghost" href="#programs">Lihat Program</a>
+          </div>
+          <p style="margin-top:12px;font-size:.85rem;color:var(--xt-muted);">1 jam · tanpa biaya · tanpa keterikatan. Kami WA dalam 30 menit di jam kerja.</p>
 
-    <!-- KEUNGGULAN -->
-    <section class="xt-section" id="why">
-      <div style="text-align:center;"><span class="xt-eyebrow">Kenapa beli di sini</span></div>
-      <h2 style="margin-top:12px;">Semua yang Anda butuhkan, tanpa yang tidak perlu</h2>
-      <p class="xt-sub">Cara cepat dan aman untuk memiliki buku digital favorit.</p>
-      <div class="xt-diff">
-        <div class="xt-diff__item"><h3>Unduh seketika</h3><p>eBook terbuka begitu pembayaran Anda dikonfirmasi — tanpa menunggu.</p></div>
-        <div class="xt-diff__item"><h3>Semua perangkat</h3><p>Sebagian besar judul mencakup PDF, EPUB, dan MOBI dalam satu pembelian.</p></div>
-        <div class="xt-diff__item"><h3>Aman &amp; berlisensi</h3><p>Dikirim hanya melalui akun Anda — salinan resmi yang menjadi milik Anda.</p></div>
-        <div class="xt-diff__item xt-diff__item--invert"><h3>Akses selamanya</h3><p>Unduh ulang kapan saja dari <strong>eBook Saya</strong>, sesuai batas unduhan.</p></div>
-      </div>
-    </section>
+          <div class="xt-stats">
+            <div><div class="xt-stat__n">2.400<span>+</span></div><div class="xt-stat__l">siswa lulus<br>band 7 atau lebih</div></div>
+            <div><div class="xt-stat__n">93<span>%</span></div><div class="xt-stat__l">capai target<br>di percobaan ke-1/2</div></div>
+            <div><div class="xt-stat__n">1:8</div><div class="xt-stat__l">rasio guru<br>per kelas, maks.</div></div>
+            <div><div class="xt-stat__n">10<span>th</span></div><div class="xt-stat__l">mengajar<br>IELTS / TOEFL / PTE</div></div>
+          </div>
 
-    <!-- CARA KERJA -->
-    <section class="xt-section" id="how-it-works">
-      <h2>Cara kerja</h2>
-      <p class="xt-sub">Tiga langkah mudah dari keranjang ke membaca.</p>
-      <div class="xt-steps">
-        <div class="xt-step"><h3>Pilih eBook</h3><p>Pilih judul dan coba contoh gratis sebelum membeli.</p></div>
-        <div class="xt-step"><h3>Bayar dengan QRIS atau transfer</h3><p>Pindai QRIS, gunakan Virtual Account, atau bayar lewat e-wallet — aman melalui Midtrans.</p></div>
-        <div class="xt-step"><h3>Unduh &amp; baca</h3><p>eBook langsung muncul di “eBook Saya”. Simpan selamanya.</p></div>
-      </div>
-    </section>
+          <div class="xt-partner-inline">
+            <span class="xt-mono">Partner resmi —</span>
+            <b>British Council</b><span>·</span><b>IDP Education</b><span>·</span><b>Cambridge English</b>
+          </div>
+        </div>
 
-    <!-- UNTUK SIAPA -->
-    <section class="xt-section">
-      <div style="text-align:center;"><span class="xt-eyebrow">Untuk siapa</span></div>
-      <h2 style="margin-top:12px;">Dibuat untuk pembaca yang sibuk &amp; ingin tahu</h2>
-      <p class="xt-sub">Ilmu praktis yang bisa langsung diterapkan — di perangkat apa pun, di mana saja.</p>
-      <div class="xt-grid xt-grid-3">
-        <div class="xt-card"><h3>Profesional &amp; pemilik usaha</h3><p>Tingkatkan keterampilan bisnis, keuangan, pemasaran, dan produktivitas tanpa bertele-tele.</p></div>
-        <div class="xt-card"><h3>Pelajar &amp; pembelajar seumur hidup</h3><p>Panduan terjangkau dan terstruktur yang bisa dibaca di ponsel kapan saja.</p></div>
-        <div class="xt-card"><h3>Tim</h3><p>Playbook yang bisa dipelajari seluruh tim — satu lisensi per pembaca.</p></div>
+        <!-- lead card (CTA, bukan form mock) -->
+        <div class="xt-lead-card" id="trial">
+          <span class="xt-lead-card__stub">GRATIS · 60 MENIT</span>
+          <h3>Daftar trial gratis</h3>
+          <p>Isi sebentar lewat WhatsApp — tim kami balas dalam 30 menit di jam kerja.</p>
+          <ul class="xt-lead-card__list">
+            <li>Tes diagnostik 60 menit, tanpa biaya</li>
+            <li>Rekomendasi program &amp; target band yang realistis</li>
+            <li>Tanpa keterikatan — kamu yang putuskan</li>
+          </ul>
+          <a class="xt-btn xt-btn-primary" href="https://wa.me/61457068647?text=Halo%2C%20saya%20ingin%20daftar%20trial%20gratis%20IELTS" target="_blank" rel="noopener">Daftar via WhatsApp →</a>
+          <p class="xt-lead-card__alt">Atau telepon <a href="tel:+622150999000">(021) 5099-9000</a></p>
+          <div class="xt-lead-card__proof"><span class="xt-avas"><span></span><span></span><span></span></span> 42 siswa daftar minggu ini</div>
+        </div>
       </div>
     </section>
 
-    <!-- TESTIMONI -->
+    <!-- PARTNER STRIP -->
+    <section style="padding-top:var(--xt-s8);">
+      <div class="xt-partners">
+        <span class="xt-partners__label">Dipercaya &amp; partner dengan</span>
+        <span class="xt-partners__logo">British&nbsp;Council</span>
+        <span class="xt-partners__logo">IDP Education</span>
+        <span class="xt-partners__logo">Cambridge</span>
+        <span class="xt-partners__logo">ETS · TOEFL</span>
+        <span class="xt-partners__logo">Pearson PTE</span>
+      </div>
+    </section>
+
+    <!-- KENAPA PILIH -->
+    <section class="xt-s">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Kenapa pilih Check</div>
+          <h2 class="xt-h2">Bukan bimbel besar. Studio kecil yang serius soal <em>band score</em>.</h2>
+        </div>
+        <p class="xt-lead">Kami tidak menjual janji palsu — kami menjual jam terbang, koreksi mendalam, dan kelas yang cukup kecil sehingga setiap siswa benar-benar bicara setiap sesi.</p>
+      </div>
+      <div class="xt-why">
+        <div class="xt-why__c xt-lift"><div class="xt-why__n">01</div><h3>Kelas kecil 1:8</h3><p>Maksimal 8 siswa. Banyak waktu speaking dan koreksi langsung — bukan kuliah satu arah.</p><div class="xt-why__foot">Rata-rata 5 siswa per kelas</div></div>
+        <div class="xt-why__c xt-lift"><div class="xt-why__n">02</div><h3>Pengajar bersertifikat</h3><p>CELTA / TESOL trained dengan jam terbang IELTS, TOEFL, PTE — lokal dan native speaker.</p><div class="xt-why__foot">Setiap pengajar diaudit per term</div></div>
+        <div class="xt-why__c xt-lift"><div class="xt-why__n">03</div><h3>Mock test mingguan</h3><p>Format ujian asli — Listening, Reading, Writing, Speaking. Plus feedback tertulis.</p><div class="xt-why__foot">Setiap Sabtu, 09.00–13.00</div></div>
+        <div class="xt-why__c xt-why__c--invert"><div class="xt-why__n">04</div><h3>Path study-abroad</h3><p>Setelah lulus IELTS, kami bantu pemilihan kampus, esai, dan konsultasi visa.</p><div class="xt-why__foot">Termasuk untuk siswa Check</div></div>
+      </div>
+    </section>
+
+    <!-- PROGRAMS -->
+    <section class="xt-s xt-s--band" id="programs">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Program kami</div>
+          <h2 class="xt-h2">Pilih jalur sesuai tujuanmu.</h2>
+        </div>
+        <a class="xt-headlink" href="#trial">Konsultasi pilihan program →</a>
+      </div>
+      <div class="xt-cardgrid">
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__badge">Paling populer</span>
+          <span class="xt-prog__tag">kuliah</span>
+          <h3>IELTS Academic</h3>
+          <p>Untuk masuk universitas di Australia, UK, Kanada, NZ, US.</p>
+          <dl class="xt-prog__dl"><dt>Target band</dt><dd>6.5 – 8.0</dd><dt>Durasi</dt><dd>8 / 12 / 16 minggu</dd><dt>Format</dt><dd>Hybrid · maks 1:8</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">Mulai dari</div><div class="xt-prog__price">Rp&nbsp;1.850k<small>/bln</small></div><div class="xt-prog__meta">Cicilan 0% · 6 bulan</div></div><a class="xt-headlink" href="#trial">Lihat detail →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">kerja · imigrasi</span>
+          <h3>IELTS General</h3>
+          <p>Untuk PR, working visa, dan training di luar negeri.</p>
+          <dl class="xt-prog__dl"><dt>Target band</dt><dd>6.0 – 8.0</dd><dt>Durasi</dt><dd>8 / 12 minggu</dd><dt>Format</dt><dd>Hybrid · maks 1:8</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">Mulai dari</div><div class="xt-prog__price">Rp&nbsp;1.650k<small>/bln</small></div><div class="xt-prog__meta">Cicilan 0% · 6 bulan</div></div><a class="xt-headlink" href="#trial">Lihat detail →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">kuliah US · kerja</span>
+          <h3>TOEFL iBT</h3>
+          <p>Computer-based, integrated skills — favorit untuk universitas US.</p>
+          <dl class="xt-prog__dl"><dt>Target skor</dt><dd>90 – 110</dd><dt>Durasi</dt><dd>10 / 14 minggu</dd><dt>Format</dt><dd>Online / hybrid</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">Mulai dari</div><div class="xt-prog__price">Rp&nbsp;1.950k<small>/bln</small></div><div class="xt-prog__meta">Cicilan 0% · 6 bulan</div></div><a class="xt-headlink" href="#trial">Lihat detail →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">cepat · australia/nz</span>
+          <h3>PTE Academic</h3>
+          <p>Hasil cepat (48 jam), AI scoring — pilihan untuk applicant Australia / NZ.</p>
+          <dl class="xt-prog__dl"><dt>Target skor</dt><dd>65 – 85</dd><dt>Durasi</dt><dd>6 / 10 minggu</dd><dt>Format</dt><dd>Online / hybrid</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">Mulai dari</div><div class="xt-prog__price">Rp&nbsp;1.750k<small>/bln</small></div><div class="xt-prog__meta">Cicilan 0% · 6 bulan</div></div><a class="xt-headlink" href="#trial">Lihat detail →</a></div>
+        </article>
+        <article class="xt-prog xt-lift">
+          <span class="xt-prog__tag">karir · profesional</span>
+          <h3>Business English</h3>
+          <p>Meeting, negotiation, email &amp; presentation untuk profesional Indonesia.</p>
+          <dl class="xt-prog__dl"><dt>Level</dt><dd>B1 → C1 (CEFR)</dd><dt>Durasi</dt><dd>12 minggu (rolling)</dd><dt>Format</dt><dd>Evening · maks 1:6</dd></dl>
+          <div class="xt-prog__foot"><div><div class="xt-prog__tag">Mulai dari</div><div class="xt-prog__price">Rp&nbsp;1.450k<small>/bln</small></div><div class="xt-prog__meta">Cicilan 0% · 6 bulan</div></div><a class="xt-headlink" href="#trial">Lihat detail →</a></div>
+        </article>
+        <article class="xt-prog xt-why__c--invert" style="justify-content:space-between;">
+          <div><div class="xt-prog__tag" style="color:var(--xt-accent);">→ tidak yakin?</div><h3 style="color:var(--xt-parch);">Tes diagnostik gratis, 30 menit.</h3><p style="color:rgba(250,246,238,.78);">Kami pahami level kamu sekarang dulu — baru rekomendasikan program dan timeline yang realistis.</p></div>
+          <a class="xt-btn" style="background:var(--xt-parch);color:var(--xt-brand-deep);margin-top:24px;" href="#trial">Mulai tes diagnostik →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section class="xt-s">
+      <div class="xt-headrow xt-headrow--split">
+        <div>
+          <div class="xt-kicker">— Cara kami mengajar</div>
+          <h2 class="xt-h2">Lima langkah, tanpa <em>drama</em>.</h2>
+        </div>
+        <p class="xt-lead">Setiap siswa Check melewati lima tahap yang sama — dari diagnosa awal sampai bantuan booking ujian dan pendaftaran kampus.</p>
+      </div>
+      <ol class="xt-stepper">
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">1</span><span class="xt-stepper__tag">DAY 0</span></div><h3>Tes diagnostik gratis</h3><p>Speaking, listening, reading, writing — supaya kami tahu titik mulaimu.</p></li>
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">2</span><span class="xt-stepper__tag">WEEK 1</span></div><h3>Rencana belajar personal</h3><p>Target band, jadwal, dan timeline yang realistis berdasarkan ujian kamu.</p></li>
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">3</span><span class="xt-stepper__tag">WEEK 2–10</span></div><h3>Kelas + speaking 1-on-1</h3><p>Kelas struktural plus sesi speaking mingguan dengan koreksi langsung.</p></li>
+        <li class="xt-stepper__item"><div class="xt-stepper__top"><span class="xt-stepper__n">4</span><span class="xt-stepper__tag">EVERY SAT</span></div><h3>Mock test + feedback</h3><p>Format IELTS asli plus feedback tertulis dari examiner-style rater.</p></li>
+        <li class="xt-stepper__item xt-stepper__item--invert"><div class="xt-stepper__top"><span class="xt-stepper__n">5</span><span class="xt-stepper__tag">EXAM DAY+</span></div><h3>Booking ujian + visa</h3><p>Bantu booking British Council / IDP, plus konsultasi kampus dan visa.</p></li>
+      </ol>
+    </section>
+
+    <!-- FACULTY -->
+    <section class="xt-s xt-s--band" id="faculty">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Pengajar kami</div>
+          <h2 class="xt-h2">Tim yang sudah <em>duduk di kursi ujian</em> sebanyak kamu akan duduk.</h2>
+        </div>
+        <a class="xt-headlink" href="#trial">Tanya pengajar →</a>
+      </div>
+      <div class="xt-cardgrid" style="grid-template-columns:repeat(2,1fr);">
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">8.5 IELTS</span><span class="xt-stripe__cap">foto · pak adit</span></div><div class="xt-fac__body"><h3>Aditya Pranata</h3><p class="xt-fac__role">Lead Trainer · Speaking &amp; Writing</p><div class="xt-tags"><span class="xt-tag">CELTA</span><span class="xt-tag">DELTA M2</span><span class="xt-tag xt-tag--muted">9 thn</span></div></div></article>
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">9.0 IELTS</span><span class="xt-stripe__cap">foto · ms. sarah</span></div><div class="xt-fac__body"><h3>Sarah Whitmore</h3><p class="xt-fac__role">Native (UK) · Writing &amp; Test Strategy</p><div class="xt-tags"><span class="xt-tag">CELTA</span><span class="xt-tag">Cambridge TKT</span><span class="xt-tag xt-tag--muted">12 thn</span></div></div></article>
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">8.0 IELTS</span><span class="xt-stripe__cap">foto · bu maya</span></div><div class="xt-fac__body"><h3>Maya Setiawan</h3><p class="xt-fac__role">Trainer · Listening &amp; Reading</p><div class="xt-tags"><span class="xt-tag">TESOL</span><span class="xt-tag">PTE Expert</span><span class="xt-tag xt-tag--muted">7 thn</span></div></div></article>
+        <article class="xt-fac xt-lift"><div class="xt-fac__photo xt-stripe"><span class="xt-fac__badge">TOEFL 118</span><span class="xt-stripe__cap">foto · mr. james</span></div><div class="xt-fac__body"><h3>James O'Connor</h3><p class="xt-fac__role">Native (AU) · TOEFL &amp; Business English</p><div class="xt-tags"><span class="xt-tag">CELTA</span><span class="xt-tag">MA TESOL</span><span class="xt-tag xt-tag--muted">14 thn</span></div></div></article>
+      </div>
+    </section>
+
+    <!-- STUDENT RESULTS -->
+    <section class="xt-s">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Hasil siswa kami</div>
+          <h2 class="xt-h2">Hasil terbaru, <em>apa adanya</em>.</h2>
+        </div>
+        <p class="xt-lead">Update April 2026. Dipublikasikan ulang setiap akhir bulan, dengan izin tertulis dari masing-masing siswa.</p>
+      </div>
+      <div class="xt-cardgrid">
+        <article class="xt-result xt-lift"><div class="xt-result__who"><span class="xt-result__ava xt-stripe"></span><div><div class="xt-result__name">Putri Ramadhani</div><div class="xt-result__sub">IELTS Academic · 14 minggu</div></div></div><div class="xt-result__score">7.5<small>overall</small></div><div class="xt-result__bands"><span><i>L</i><b>8.0</b></span><span><i>R</i><b>7.5</b></span><span><i>W</i><b>7.0</b></span><span><i>S</i><b>7.5</b></span></div><div class="xt-result__foot">Diterima di <strong>University of Melbourne</strong></div></article>
+        <article class="xt-result xt-lift"><div class="xt-result__who"><span class="xt-result__ava xt-stripe"></span><div><div class="xt-result__name">Bagas Wirawan</div><div class="xt-result__sub">PTE Academic · 8 minggu</div></div></div><div class="xt-result__score">82<small>/ 90 PTE</small></div><div class="xt-result__bands"><span><i>L</i><b>85</b></span><span><i>R</i><b>79</b></span><span><i>W</i><b>81</b></span><span><i>S</i><b>84</b></span></div><div class="xt-result__foot">Skilled Migration → <strong>Sydney, Australia</strong></div></article>
+        <article class="xt-result xt-result--teal"><div class="xt-result__who"><span class="xt-result__ava" style="background:rgba(250,246,238,.15);"></span><div><div class="xt-result__name">Aisyah Nurhaliza</div><div class="xt-result__sub">IELTS General · 12 minggu</div></div></div><div class="xt-result__score">8.0<small>overall</small></div><div class="xt-result__bands"><span><i>L</i><b>8.5</b></span><span><i>R</i><b>8.0</b></span><span><i>W</i><b>7.5</b></span><span><i>S</i><b>8.0</b></span></div><div class="xt-result__foot">PR application → <strong>Vancouver, Canada</strong></div></article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
     <section class="xt-section">
       <div class="xt-quote-band">
-        <h2 class="xt-section__title" style="text-align:center;">Disukai pembaca</h2>
-        <p class="xt-sub" style="margin-bottom:28px;">Kata-kata jujur dari mereka yang sudah membeli dan membaca.</p>
-        <div class="xt-grid xt-grid-3">
-          <div class="xt-quote"><p>“Beli, bayar pakai QRIS, semenit kemudian sudah baca di ponsel. Praktis banget.”</p><cite>— Putri, Jakarta</cite></div>
-          <div class="xt-quote"><p>“Jelas, praktis, dan worth it. EPUB-nya tampil sempurna di e-reader saya.”</p><cite>— Andi, Surabaya</cite></div>
-          <div class="xt-quote"><p>“Unduh ulang di laptop baru tanpa ribet. Persis seperti seharusnya.”</p><cite>— Maya, Bandung</cite></div>
+        <div class="xt-kicker" style="text-align:center;color:var(--xt-accent);">— Apa kata siswa kami</div>
+        <h2 class="xt-section__title" style="color:var(--xt-parch);margin-top:8px;">Cerita yang membuat kami tetap mengajar di hari Sabtu pagi.</h2>
+        <div class="xt-grid xt-grid-3" style="margin-top:28px;">
+          <div class="xt-quote"><p>"Speaking saya naik dari 5.5 ke 7.5 dalam 10 minggu. Pak Adit koreksi pelan-pelan, jadi enggak takut salah."</p><cite>— Rizky Pratama · IELTS 7.5 → Monash</cite></div>
+          <div class="xt-quote"><p>"Mock test mingguan bikin hari ujian asli rasanya cuma 'another Saturday'. Tahu persis mau ngapain."</p><cite>— Dewi Anggraini · IELTS 8.0 → Auckland</cite></div>
+          <div class="xt-quote"><p>"Kelasnya kecil, jadi enggak bisa ngumpet. Setiap sesi pasti speaking — itu game changer buat saya."</p><cite>— Farhan Maulana · TOEFL 108 → NYU Stern</cite></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EBOOK STORE -->
+    <section class="xt-s xt-s--band" id="ebooks">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Toko ebook</div>
+          <h2 class="xt-h2">Lanjutkan belajar di rumah, dengan <em>harga terjangkau</em>.</h2>
+        </div>
+        <p class="xt-lead">Panduan, latihan soal, dan strategi langsung dari pengajar Check — format PDF &amp; EPUB, bisa dibaca di perangkat apa saja.</p>
+      </div>
+      <div class="xt-cta" style="justify-content:flex-start;margin-bottom:24px;gap:8px;">
+        <a class="xt-chip is-active" href="/search">Semua</a>
+        <a class="xt-chip" href="/search?q=IELTS">IELTS</a>
+        <a class="xt-chip" href="/search?q=TOEFL">TOEFL</a>
+        <a class="xt-chip" href="/search?q=PTE">PTE</a>
+        <a class="xt-chip" href="/search?q=Umum">Umum</a>
+      </div>
+      <div class="xt-bookgrid">
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><span class="xt-bookcard__tag">Terlaris</span><div class="xt-jacket xt-jacket--teal"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">IELTS · Writing</span><span class="xt-jacket__title">The IELTS Writing Playbook</span><span class="xt-jacket__by">Aditya Pranata</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">IELTS</span><span>248 hal · PDF + EPUB</span></div><h3>The IELTS Writing Playbook</h3><p>Kerangka jawaban Task 1 &amp; 2 untuk konsisten di band 7+.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.9</b><span style="color:var(--xt-muted);">(128 ulasan)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 149.000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">Lihat →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><div class="xt-jacket xt-jacket--terra"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">IELTS · Speaking</span><span class="xt-jacket__title">Speaking Without Fear</span><span class="xt-jacket__by">Sarah Whitmore</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">IELTS</span><span>180 hal · PDF</span></div><h3>Speaking Without Fear</h3><p>Latihan fluency dan contoh jawaban Part 1–3 yang natural.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.8</b><span style="color:var(--xt-muted);">(96 ulasan)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 129.000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">Lihat →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><span class="xt-bookcard__tag xt-bookcard__tag--new">Baru</span><div class="xt-jacket xt-jacket--ink"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">TOEFL · iBT</span><span class="xt-jacket__title">TOEFL iBT: The Integrated Method</span><span class="xt-jacket__by">James O'Connor</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">TOEFL</span><span>312 hal · PDF + EPUB</span></div><h3>TOEFL iBT: The Integrated Method</h3><p>Strategi integrated tasks untuk reading, listening &amp; speaking.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.7</b><span style="color:var(--xt-muted);">(74 ulasan)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 179.000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">Lihat →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><div class="xt-jacket xt-jacket--deep"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">PTE · Academic</span><span class="xt-jacket__title">PTE Academic Rapid Score</span><span class="xt-jacket__by">Maya Setiawan</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">PTE</span><span>156 hal · PDF</span></div><h3>PTE Academic Rapid Score</h3><p>Teknik menembus skor 79+ dengan format AI scoring PTE.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.8</b><span style="color:var(--xt-muted);">(61 ulasan)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 139.000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">Lihat →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><span class="xt-bookcard__tag">Terlaris</span><div class="xt-jacket xt-jacket--gold"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">Umum · Vocabulary</span><span class="xt-jacket__title">Academic Vocabulary Builder</span><span class="xt-jacket__by">Tim Check</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">Umum</span><span>210 hal · PDF + EPUB</span></div><h3>Academic Vocabulary Builder</h3><p>1.200 kata akademik tersering, lengkap dengan contoh kalimat.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.9</b><span style="color:var(--xt-muted);">(203 ulasan)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 99.000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">Lihat →</a></div></article>
+        <article class="xt-bookcard xt-lift"><div class="xt-bookcard__rel"><div class="xt-jacket xt-jacket--sand"><span class="xt-jacket__spine"></span><span class="xt-jacket__frame"></span><span class="xt-jacket__in"><span class="xt-jacket__imprint">Check Press</span><span style="flex:1"></span><span class="xt-jacket__rule"></span><span class="xt-jacket__series">IELTS · Reading</span><span class="xt-jacket__title">Reading Speed &amp; Skimming</span><span class="xt-jacket__by">Aditya Pranata</span></span></div></div><div class="xt-bookcard__meta"><span class="xt-tag">IELTS</span><span>132 hal · PDF</span></div><h3>Reading Speed &amp; Skimming</h3><p>Teknik skimming &amp; scanning untuk hemat waktu di ujian.</p><div class="xt-bookcard__rate"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><b>4.6</b><span style="color:var(--xt-muted);">(54 ulasan)</span></div><div class="xt-bookcard__foot"><div class="xt-bookcard__price">Rp 89.000</div><a class="xt-btn xt-btn-ghost" href="/search" style="padding:8px 16px;">Lihat →</a></div></article>
+      </div>
+      <div class="xt-bundle" style="margin-top:20px;">
+        <div class="xt-kicker" style="color:var(--xt-accent);">— Paket hemat</div>
+        <h3>Paket Lengkap Band 8 — 6 ebook sekaligus.</h3>
+        <p>Semua panduan IELTS, TOEFL, PTE, dan vocabulary dalam satu paket. Hemat Rp 185.000 dibanding beli satuan.</p>
+        <p style="margin-top:14px;color:var(--xt-parch);font-family:var(--xt-font-display);font-size:1.8rem;"><span style="opacity:.55;text-decoration:line-through;font-size:1rem;">Rp 784.000</span> &nbsp; Rp 599.000</p>
+        <a class="xt-btn xt-btn-primary" href="/search">Lihat paket →</a>
+      </div>
+    </section>
+
+    <!-- BRANCHES -->
+    <section class="xt-s" id="locations">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Cabang kami</div>
+          <h2 class="xt-h2">Hadir di Jakarta, Bandung, &amp; Surabaya.</h2>
+        </div>
+        <p class="xt-lead">Datang langsung untuk demo, atau ikut kelas online via Zoom dari mana saja di Indonesia.</p>
+      </div>
+      <div class="xt-cardgrid">
+        <article class="xt-branch xt-lift"><div class="xt-branch__photo xt-stripe"><span class="xt-pill xt-pill--open" style="position:absolute;top:12px;left:12px;">Buka sekarang</span><span class="xt-stripe__cap">foto cabang · kemang</span></div><div class="xt-branch__body"><h3>Jakarta — Kemang</h3><p class="xt-branch__addr">Jl. Kemang Raya No. 14, Mampang Prapatan, Jakarta Selatan 12730</p><div class="xt-branch__hours"><div><div class="k">Senin–Sabtu</div><div class="v">09.00 — 21.00</div></div><div><div class="k">Minggu</div><div class="v">10.00 — 17.00</div></div></div><div class="xt-branch__foot"><a href="tel:+622150999000">(021) 5099-9000</a><a class="xt-headlink" href="#">Buka di Maps →</a></div></div></article>
+        <article class="xt-branch xt-lift"><div class="xt-branch__photo xt-stripe"><span class="xt-pill xt-pill--open" style="position:absolute;top:12px;left:12px;">Buka sekarang</span><span class="xt-stripe__cap">foto cabang · dago</span></div><div class="xt-branch__body"><h3>Bandung — Dago</h3><p class="xt-branch__addr">Jl. Ir. H. Djuanda No. 168, Coblong, Kota Bandung 40132</p><div class="xt-branch__hours"><div><div class="k">Senin–Sabtu</div><div class="v">09.00 — 20.00</div></div><div><div class="k">Minggu</div><div class="v">10.00 — 16.00</div></div></div><div class="xt-branch__foot"><a href="tel:+62225099111">(022) 509-9111</a><a class="xt-headlink" href="#">Buka di Maps →</a></div></div></article>
+        <article class="xt-branch xt-lift"><div class="xt-branch__photo xt-stripe"><span class="xt-pill xt-pill--soon" style="position:absolute;top:12px;left:12px;">Soon · Juni 2026</span><span class="xt-stripe__cap">foto cabang · pakuwon</span></div><div class="xt-branch__body"><h3>Surabaya — Pakuwon</h3><p class="xt-branch__addr">Pakuwon Mall, Lantai UG Unit 27, Surabaya 60216</p><div class="xt-branch__hours"><div><div class="k">Pre-launch</div><div class="v">Daftar waitlist</div></div><div><div class="k">Online intake</div><div class="v">Sudah buka</div></div></div><div class="xt-branch__foot"><a href="#trial">Daftar waitlist</a><a class="xt-headlink" href="#">Lihat lokasi →</a></div></div></article>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS / PAYMENT -->
+    <section class="xt-s xt-s--band">
+      <div class="xt-certrow">
+        <div>
+          <div class="xt-kicker" style="margin-bottom:12px;">— Sertifikasi &amp; afiliasi</div>
+          <div class="xt-inline-list">
+            <span class="xt-cert">British Council Partner</span>
+            <span class="xt-cert">IDP IELTS Test Centre</span>
+            <span class="xt-cert">Cambridge English</span>
+            <span class="xt-cert">ETS · TOEFL iBT</span>
+            <span class="xt-cert">Pearson PTE</span>
+          </div>
+        </div>
+        <div>
+          <div class="xt-kicker" style="margin-bottom:12px;">— Pembayaran &amp; cicilan 0%</div>
+          <div class="xt-pay"><span>BCA</span><span>Mandiri</span><span>BRI</span><span>QRIS</span><span>OVO</span><span>GoPay</span><span>DANA</span><span>Cicilan 0%</span></div>
+          <p style="margin-top:12px;font-size:.8rem;color:var(--xt-muted);">Cicilan 0% hingga 12 bulan dengan kartu kredit BCA, Mandiri, dan BRI. Virtual account dan QRIS juga tersedia.</p>
         </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="xt-section" id="faq">
-      <h2>Pertanyaan yang sering diajukan</h2>
-      <p class="xt-sub">Hal-hal penting sebelum Anda membeli.</p>
+    <section class="xt-s" id="faq">
+      <div class="xt-headrow xt-headrow--split xt-headrow--end">
+        <div>
+          <div class="xt-kicker">— Pertanyaan yang sering ditanyakan</div>
+          <h2 class="xt-h2">Jawaban jujur, tanpa <em>spin</em>.</h2>
+        </div>
+        <p class="xt-lead">Belum terjawab? <a href="https://wa.me/61457068647?text=Halo%2C%20saya%20mau%20bertanya" target="_blank" rel="noopener">WhatsApp tim kami</a> — biasanya dijawab dalam 30 menit di jam kerja.</p>
+      </div>
       <div class="xt-faq">
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">Bagaimana saya menerima eBook?</p>
-          <div class="xt-faq__a">Begitu pembayaran dikonfirmasi, eBook otomatis terbuka di <strong>Akun saya → Produk yang dapat diunduh</strong>, dan kami kirim tautannya via email.</div>
-        </div>
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">Metode pembayaran apa saja yang bisa dipakai?</p>
-          <div class="xt-faq__a">QRIS, transfer bank / Virtual Account, dan e-wallet populer — aman melalui Midtrans.</div>
-        </div>
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">Format apa saja yang disertakan?</p>
-          <div class="xt-faq__a">Sebagian besar judul mencakup PDF, EPUB, dan MOBI dalam satu pembelian, jadi bisa dibaca di perangkat apa pun.</div>
-        </div>
-        <div class="xt-faq__item">
-          <p class="xt-faq__q">Bisakah saya mengunduh ulang nanti?</p>
-          <div class="xt-faq__a">Bisa — pembelian Anda tersimpan di akun sehingga dapat diunduh ulang sesuai batas unduhan.</div>
-        </div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Berapa lama waktu untuk mencapai band 7?</p><div class="xt-faq__a">Tergantung level awal. Dari band 5.5, biasanya 8–12 minggu intensif. Kami beri estimasi pasti setelah tes diagnostik gratis — termasuk skill mana yang harus diperkuat lebih dulu.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Apakah ada jaminan band score?</p><div class="xt-faq__a">Kami tidak menjual janji palsu. Tapi &gt;90% siswa kami mencapai target band score mereka di percobaan pertama atau kedua. Kalau belum tercapai, kami beri kelas tambahan gratis — bukan refund yang tidak realistis.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Apakah pengajar native speaker?</p><div class="xt-faq__a">Sebagian iya. Kami juga punya pengajar Indonesia bersertifikat CELTA / TESOL — banyak siswa lebih nyaman mulai dengan pengajar lokal lalu pindah ke native saat speaking sudah lancar.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Bagaimana jika saya tidak bisa hadir di kelas?</p><div class="xt-faq__a">Setiap kelas direkam — kamu bisa tonton ulang kapan saja di portal siswa. Kami juga jadwalkan kelas pengganti dengan grup level setara.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Bisakah dibantu booking ujian IELTS resmi?</p><div class="xt-faq__a">Ya — kami partner dengan British Council dan IDP. Kami bantu pilih center, tanggal, dan jenis ujian (Computer-based atau Paper-based) sesuai timeline kamu.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Apakah ada kelas online?</p><div class="xt-faq__a">Iya, kami punya kelas hybrid — kamu bisa pilih offline di centre kami atau live online via Zoom. Banyak siswa kami pakai keduanya bergantian.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Apa beda IELTS Academic dan General Training?</p><div class="xt-faq__a">Academic untuk kuliah; General untuk kerja, imigrasi, atau training. Kami bantu memilih yang sesuai dengan tujuan kamu di sesi konsultasi.</div></div>
+        <div class="xt-faq__item"><p class="xt-faq__q">Apakah pembayaran bisa dicicil?</p><div class="xt-faq__a">Iya — kami terima cicilan 0% dengan beberapa bank (BCA, Mandiri, BRI), serta pembayaran QRIS dan virtual account.</div></div>
       </div>
     </section>
 
-    <!-- CTA AKHIR -->
+    <!-- FINAL CTA -->
     <section class="xt-section">
       <div class="xt-cta-band">
-        <h2>Temukan bacaan berikutnya.<br><span class="xt-em">Mulai dalam hitungan detik.</span></h2>
-        <p class="xt-sub" style="margin:14px auto 24px;">Telusuri katalog atau chat dengan kami — dengan senang hati kami bantu memilih.</p>
+        <div class="xt-kicker" style="text-align:center;color:var(--xt-accent);">— Siap mulai?</div>
+        <h2 style="margin-top:8px;">Trial gratis 1 jam.<br><span class="xt-em">Tanpa biaya, tanpa keterikatan.</span></h2>
+        <p class="xt-sub" style="margin:14px auto 24px;">Datang ke salah satu cabang kami atau ikut online. Kami pelajari level kamu, buat plan, baru kamu putuskan mau lanjut atau tidak.</p>
         <div class="xt-cta">
-          <a class="xt-btn xt-btn-primary" href="/search">Jelajahi eBook</a>
-          <a class="xt-btn xt-btn-wa" href="https://wa.me/61457068647?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20eBook" target="_blank" rel="noopener">💬 Chat via WhatsApp</a>
+          <a class="xt-btn xt-btn-primary" href="https://wa.me/61457068647?text=Halo%2C%20saya%20ingin%20daftar%20trial%20gratis" target="_blank" rel="noopener">Daftar Trial Gratis</a>
+          <a class="xt-btn xt-btn-wa" href="https://wa.me/61457068647?text=Halo%2C%20saya%20mau%20bertanya" target="_blank" rel="noopener">💬 WhatsApp tim kami</a>
         </div>
+        <p style="margin-top:14px;font-size:.82rem;color:rgba(250,246,238,.6);">Atau telepon (021) 5099-9000 · Senin–Sabtu 09.00–21.00 WIB</p>
       </div>
-    </section>
-
-    <!-- STRIP PEMBAYARAN / KEPERCAYAAN -->
-    <section class="xt-section" style="padding-top:0;">
-      <div class="xt-pay">
-        <span>QRIS</span><span>Virtual Account</span><span>GoPay</span><span>OVO</span><span>Dana</span><span>ShopeePay</span><span>Kartu</span>
-      </div>
-      <p class="xt-legal">Dengan membeli, Anda menyetujui
-        <a href="/conditions-of-use">Syarat &amp; Ketentuan</a>,
-        <a href="/privacy-policy">Kebijakan Privasi</a>, dan
-        <a href="/refund-policy">Kebijakan Pengembalian Dana</a> kami.
-      </p>
     </section>
 
   </div>

@@ -6,6 +6,34 @@ widget zone and dynamic component is preserved → upgrade-safe, plugin-safe, no
 
 Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pending) · ⬜ not started
 
+## Session log — Full "Check Homepage" build from the REAL design bundle — ✅ (branch `claude/modest-tesla-BvVLM`)
+Fetched the actual Claude Design handoff (`xten-customer-portal` tar.gz via the design API), read its
+README + chat transcript, and rebuilt the design understanding from the real `Check Homepage.html` (not a
+secondhand description). Key facts: **"Check" is an IELTS/TOEFL/PTE tutoring brand** (Bahasa Indonesia)
+whose homepage includes ONE ebook-store section; the design's cart/checkout is a front-end **mock** (the
+chat itself says wiring a real gateway is "beyond this prototype" — that is this project). Per user
+decision (**Full Check homepage**): reproduce the whole homepage; eBooks use the **real nopCommerce cart**;
+course/trial CTAs → **WhatsApp/contact**.
+- **`storefront/home/homepage.{id,en}.html` fully rewritten** to the Check structure: hero (band 7+) +
+  lead-CTA card (replaces the mock signup form — real WhatsApp/phone, no dead inputs), partner strip,
+  why-choose (4 numbered, last inverted), programs (5 + diagnostic helper), 5-step methodology stepper,
+  faculty (4), student results (3), testimonials (teal band), **ebook showcase** (6 designed `.xt-jacket`
+  covers + bundle; cards link to `/search` → real product pages/cart), branches (3), certifications/payment
+  strip, 8-Q FAQ, final CTA. ID = the design's real copy; EN = translation.
+- **Theme CSS §24** (`styles.css`): new components (`.xt-s/.xt-kicker/.xt-h2/.xt-headrow/.xt-lift/.xt-why/
+  .xt-prog/.xt-stepper/.xt-fac/.xt-result/.xt-branch/.xt-partners/.xt-cert/.xt-lead-card/.xt-bookcard/
+  .xt-stripe/.xt-tag/.xt-pill`) on the existing §21 tokens; reuses `.xt-hero/.xt-stats/.xt-quote-band/
+  .xt-cta-band/.xt-pay/.xt-faq/.xt-jacket/.xt-chip/.xt-bundle`. Contained rounded panels (topic content
+  sits inside the centered container — no full-bleed bands).
+- **WhatsApp float now ALWAYS-ON** (`theme.js`): prefers an on-page `wa.me` link, else falls back to the
+  merchant number (`61457068647`) so the pulsing button shows site-wide — fixes "no WhatsApp icon".
+- **Header** (`_Header.cshtml`): nav → Program/Pengajar/Tentang/Lokasi/Ebook/FAQ (homepage anchors +
+  `/search`); CTA → "Daftar Trial Gratis" (`/#trial`); utility strip → hours + phone.
+- `static-checks` green. ⚠️ NEEDS a deployed **screenshot pass** to tune spacing/visuals. All stats, names,
+  prices, the phone `(021)…`, addresses and the `+61` WhatsApp number are **design placeholders** — replace
+  with real data before launch. Order note: the single HomepageText topic renders the whole page; keep
+  nopCommerce's homepage product/category/news components empty (or they appear after the final CTA).
+
 ## Session log — EN/ID toggle + footer social icons + cart-flow verification — ✅ (branch `claude/modest-tesla-BvVLM`)
 Continues the (now-merged) `epic-sagan` line — this branch contains all of it. Every view built against
 real `release-4.90.4` source; `deploy/qa/static-checks.sh` green.
