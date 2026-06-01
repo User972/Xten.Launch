@@ -11,7 +11,7 @@ ARG NOP_VERSION=release-4.90.4
 # ---------- build ----------
 # Pinned to .NET 9: nopCommerce 4.90.4 targets net9.0. Do NOT bump to 10.x (Dependabot tried) until
 # nopCommerce itself moves to .NET 10 — the published app is framework-dependent on the 9.0 runtime.
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG NOP_VERSION
 WORKDIR /src
 RUN git clone --depth 1 --branch "${NOP_VERSION}" https://github.com/nopSolutions/nopCommerce.git .
