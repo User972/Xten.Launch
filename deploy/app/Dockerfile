@@ -32,7 +32,7 @@ RUN dotnet build   src/NopCommerce.sln -c Release
 RUN dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release -o /app/published --no-restore
 
 # ---------- runtime ----------
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 RUN apt-get update \
  && apt-get install -y --no-install-recommends gettext-base curl \
