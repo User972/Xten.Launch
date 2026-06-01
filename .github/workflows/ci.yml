@@ -50,3 +50,23 @@ jobs:
           [ -n "${CATEGORY_PATH:-}" ] && args+=(--category "$CATEGORY_PATH")
           echo "Running: deploy/qa/smoke.sh ${args[*]}"
           deploy/qa/smoke.sh "${args[@]}"
+
+  security-scan:
+    name: Security scan (Trivy)
+    runs-on: ubuntu-latest
+    # Advisory by design: it never blocks merges (the deterministic gate is static-checks). It scans
+    # the repo for known CVEs, leaked secrets, and Dockerfile/compose misconfig. Tighten to a gate by
+    # setting `exit-code: '1'` (and removing continue-on-error) once the baseline is clean.
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy scan (vuln + secret + misconfig)
+        uses: aquasecurity/trivy-action@0.28.0
+        continue-on-error: true
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '0'
+          format: table

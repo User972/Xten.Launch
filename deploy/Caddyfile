@@ -26,8 +26,10 @@
 
 	# --- Rate-limit the paid download endpoint (§9.3) ---
 	# NOTE: rate_limit is a community Caddy module (needs a custom build via xcaddy).
-	# On stock Caddy this directive is unavailable -> enforce download rate-limiting at
-	# Cloudflare (rate-limiting rule on /download/*) instead. Example if you build it in:
+	# On stock Caddy this directive is unavailable -> enforce rate-limiting at Cloudflare
+	# (rules on /download/* AND /Plugins/PaymentMidtrans/Notify) instead. The webhook already
+	# logs signature rejects to stdout (not the DB), so it can't flood storage, but an edge
+	# rule still blunts abuse of the public endpoint. Example if you build the module in:
 	#
 	#   rate_limit {
 	#       zone downloads {
