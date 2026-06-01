@@ -1,0 +1,28 @@
+# Dependabot keeps CI actions and the Docker base images patched, opening PRs when a newer
+# (or security-fixed) version is available.
+#
+# NuGet is intentionally omitted: the Midtrans plugin has no committed package manifest to
+# restore (it ProjectReferences the nopCommerce source at build time), so .NET dependency
+# advisories are surfaced by the `dotnet list package --vulnerable` step in build-nopcommerce.yml
+# instead.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  # Base images in deploy/app/Dockerfile (dotnet sdk + aspnet).
+  - package-ecosystem: docker
+    directory: /deploy/app
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  # Service images in deploy/docker-compose.yml (postgres / redis / caddy / backup).
+  - package-ecosystem: docker
+    directory: /deploy
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

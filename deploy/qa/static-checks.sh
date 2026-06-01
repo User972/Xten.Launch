@@ -81,8 +81,15 @@ PY
 then ok "storefront HTML well-formed"; else no "storefront HTML not well-formed"; fi
 
 sec "No secrets / no committed .env"
-if grep -rInE '(BEGIN [A-Z ]*PRIVATE KEY|xnd_[A-Za-z0-9]|(SB-)?Mid-server-[A-Za-z0-9]|(SB-)?Mid-client-[A-Za-z0-9])' \
-     --include='*.cs' --include='*.cshtml' --include='*.json' --include='*.yml' --include='*.yaml' . ; then
+# Broadened coverage: more file types + common third-party key formats. The scanner excludes
+# itself (it contains these patterns as literals) so it never self-matches. NOTE: this is a fast
+# deterministic gate — the Trivy job in CI (ci.yml) adds defense-in-depth secret/vuln scanning.
+if grep -rInE \
+     '(BEGIN [A-Z ]*PRIVATE KEY|xnd_[A-Za-z0-9]|(SB-)?Mid-server-[A-Za-z0-9]|(SB-)?Mid-client-[A-Za-z0-9]|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|gh[pousr]_[0-9A-Za-z]{20,}|xox[baprs]-[0-9A-Za-z-]{10,}|sk_(live|test)_[0-9A-Za-z]{16,})' \
+     --include='*.cs' --include='*.cshtml' --include='*.json' --include='*.yml' --include='*.yaml' \
+     --include='*.sh' --include='*.html' --include='*.sql' --include='*.example' \
+     --include='Dockerfile' --include='Caddyfile' \
+     --exclude='static-checks.sh' . ; then
   no "potential secret/key literal found above"
 else
   ok "no key literals in code/config"

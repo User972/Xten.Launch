@@ -46,6 +46,17 @@ jobs:
       - name: Restore
         run: dotnet restore _nop/src/NopCommerce.sln
 
+      - name: Audit NuGet packages for known vulnerabilities
+        run: |
+          dotnet list _nop/src/NopCommerce.sln package --vulnerable --include-transitive 2>&1 | tee vuln-audit.txt || true
+          # nopCommerce's transitive dependencies are upstream-controlled, so this is INFORMATIONAL:
+          # it surfaces advisories in the build log without failing the on-demand build. Flip to a
+          # hard fail (uncomment the `exit 1`) once you have triaged the baseline.
+          if grep -q 'has the following vulnerable' vuln-audit.txt; then
+            echo "::warning title=Vulnerable NuGet packages::Known-vulnerable packages detected — see the audit output above."
+            # exit 1
+          fi
+
       - name: Build solution (Release) — compiles the Midtrans plugin against Nop.Web
         run: dotnet build _nop/src/NopCommerce.sln -c Release --no-restore
 
