@@ -19,6 +19,15 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Pin the .NET MAJOR version. nopCommerce 4.90.4 targets net9.0 and the published app is
+    # framework-dependent, so a 9 -> 10 base-image bump breaks build/runtime (a net9.0 app will
+    # not start on a .NET-10-only runtime). Only move .NET majors when nopCommerce itself does;
+    # minor/patch within the channel stays allowed.
+    ignore:
+      - dependency-name: "mcr.microsoft.com/dotnet/sdk"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "mcr.microsoft.com/dotnet/aspnet"
+        update-types: ["version-update:semver-major"]
 
   # Service images in deploy/docker-compose.yml (postgres / redis / caddy / backup).
   - package-ecosystem: docker

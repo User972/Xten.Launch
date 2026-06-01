@@ -112,55 +112,54 @@ pulsing **WhatsApp float**.
 | `Views/Catalog/CategoryTemplate.ProductsInGridOrLines.cshtml` | category editorial hero. |
 | `IMPLEMENTATION-PROGRESS.md`, `README.md`, `docs/default-elements-decision-table.md` | read these. |
 
-**Design source:** a Claude Design handoff (the "Check" bundle — originally an IELTS/tutoring brand).
-We applied its **visual system + homepage/eBook-store/cart structure** to this eBook shop; we did NOT
-copy the tutoring content or its mock cart/checkout.
+**Design source:** the real Claude Design bundle (`xten-customer-portal` / `Check Homepage.html`, fetched
+from the design API; the original brand is an IELTS/TOEFL/PTE tutoring studio, "Check"). Per the user's
+decision we implemented the **full Check homepage** (course marketing + an integrated eBook showcase) as
+this store's homepage. eBooks use the **real nopCommerce cart**; the design's mock signup form became a real
+**WhatsApp/contact** CTA, and its mock cart/checkout was NOT copied.
 
 ## Current state / open thread (start here)
 
-The storefront **renders correctly** (header, body, footer) and we've been aligning it to the "Check"
-reference the user supplied (the original IELTS/tutoring design — match the LOOK, not the words). Work
-this session (branch `claude/epic-sagan-qINMg`):
+Branch `claude/modest-tesla-BvVLM`; **PR #11 → `main` is OPEN** (CI green: Static checks ✅, Trivy ✅, smoke
+skipped — no STAGING_URL; `mergeable_state: clean`; no review comments). **Pushing to this branch updates
+PR #11 — do NOT open new PRs.** `main` has been merged in; the Docker base images were re-pinned to **.NET 9**.
 
-- **Footer FIXED** (`664438b`, `6c2e1f6`) — it had styled legacy `.footer-block` classes; retargeted to
-  4.90's real `.footer-menu__*` and scoped every footer rule under `.xt-footer` so it beats DefaultClean.
-  Footer is now the deep-teal editorial panel (terracotta mono labels, readable parchment links, styled
-  newsletter + outlined social chips, copyright/powered-by row), columns in an even row. Dropped the dead
-  §5 legacy nav rules.
-- **`.xt-cta` collision FIXED + body widened** (`4bf2f93`) — the header CTA reused `.xt-cta` (the
-  homepage's button-GROUP container) and boxed the hero buttons in terracotta; renamed it `.xt-headcta`.
-  Widened the page body to `--xt-wrap` (~1160) to match header/footer, inside DefaultClean's
-  `min-width:1001px` breakpoint via `body .master-wrapper-content`.
-- **Header action cluster cleaned** (`df7d686`) — hid wishlist/inbox/register; account + cart are now
-  **circular icon buttons** (SVG embedded as base64 masks; cart count badge kept); light/dark toggle
-  moved next to the cart. ⚠️ icons render (valid base64) but were NOT visually verified — eyeball them.
-- **Homepage hero made paste-ready** (`b713fe3`) — `storefront/home/homepage.{en,id}.html` finalized:
-  catalogue → `/search`, `[STORE_NAME]` reworded out, **one** placeholder left (`[WHATSAPP_E164]`).
+Work done across recent sessions (all on this branch):
+- **Full "Check" homepage built** (`655c7ff`) from the real design bundle. `storefront/home/homepage.{id,en}.html`
+  rewritten to the whole Check structure: hero (band 7+) + lead-CTA card (real WhatsApp/phone — replaces the
+  design's mock form), partner strip, why-choose (4 numbered, last inverted), 5 programs + diagnostic helper,
+  5-step methodology stepper, faculty (4), student results (3), testimonials, **eBook showcase** (6 `.xt-jacket`
+  covers + bundle; cards link to `/search` → real product pages/cart), branches (3), certs/payment strip, 8-Q
+  FAQ, final CTA. ID = the design's native copy; EN = translation. New theme components live in **styles.css §24**.
+- **WhatsApp float now always-on** (`theme.js`) — prefers an on-page `wa.me` link, else falls back to the
+  merchant number `61457068647`; fixes the previously-missing float.
+- **Header aligned to the brand** (`_Header.cshtml`) — nav → Program/Pengajar/Tentang/Lokasi/Ebook/FAQ
+  (homepage anchors + `/search`), CTA "Daftar Trial Gratis" (`/#trial`), utility strip with hours + phone.
+- **Docker re-pinned to .NET 9** (`39725ec`) — Dependabot had bumped sdk+aspnet base images to 10; nopCommerce
+  4.90.4 is a net9.0 app that won't start on a .NET-10-only runtime. ⚠️ `main` still carries the bump (merging
+  PR #11 — which has the pin — resolves it; otherwise the next merge re-introduces it).
+- Earlier this arc: **EN/ID toggle** (`LanguageSelector/Default.cshtml`), **footer social icon-circles** (CSS §6),
+  **cart flow verified** at code level, **WhatsApp number filled** into the homepage content.
 
 **What still needs the USER (admin, not code):**
-- **Render the hero:** paste `homepage.en.html` / `homepage.id.html` into the `HomepageText` topic (HTML
-  source view), per language, and fill `[WHATSAPP_E164]`. Takes effect on save — **no rebuild**.
-- **Curate the footer** (it shows nopCommerce defaults incl. compare/recently-viewed/vendor): disable
-  product comparison + recently-viewed + vendors; place Terms/Privacy/Refund/About/Contact topics into the
-  footer columns; create a `FooterInfo` topic (per language) with the brand blurb + a `wa.me` link (also
-  powers the WhatsApp float); set the real Store name + social URLs.
-- Rebuild on `b713fe3` and confirm footer / header icons / width render.
+- **Paste the homepage:** `homepage.id.html` → Indonesian, `homepage.en.html` → English (or into the **Standard**
+  tab for whichever language is the store default) in the `HomepageText` topic via HTML-source view. The topic now
+  holds the WHOLE page, so keep the homepage product/category/news components empty or they render after the final CTA.
+- **Replace the design placeholders** (NOT real data): stats (2,400+, 93%…), teacher/student names, course prices,
+  phone `(021) 5099-9000`, branch addresses, and confirm the `+61` WhatsApp number on an Indonesia-only store.
+- Curate the footer (disable compare/recently-viewed/vendor; place Terms/Privacy/Refund/About/Contact topics; create
+  a `FooterInfo` topic per language with the brand blurb + a `wa.me` link; set the real store name + social URLs).
 
-**Immediate next steps (code):**
-1. **Header nav links** (`_Header.cshtml`) are fixed hrefs: `/search`, `/free-resources`, `/blog`,
-   `/about-us`, `/contactus`. `/free-resources` + `/about-us` need topics created (or repoint them);
-   the rest are real routes. (NOT done — offered.)
-2. ✅ **EN/ID text toggle** — DONE. Added `Views/Shared/Components/LanguageSelector/Default.cshtml`
-   (allowed override): a compact "EN / ID" segmented pill instead of the stock `<select>`/flags; each
-   option still links to the real `CHANGE_LANGUAGE` route + returnUrl (behaviour unchanged). Styled in §23.
-3. ✅ **Footer social as icon-circles** — DONE (CSS-only, no view override). §6 turns SocialButtons'
-   `ul.networks > li.<network> > a` into circular icon buttons via CSS masks keyed on the per-network
-   class. (Still optional: spot-check account/checkout/blog CSS vs real 4.90 markup — low-risk no-ops.)
-4. ✅ **Cart flow VERIFIED at code level** against real 4.90.4 markup (FlyoutShoppingCart classes, the
-   `.header-links .ico-cart`/`.cart-qty` badge, `AjaxCart.init` → MutationObserver, real /cart + /checkout
-   buttons, no DefaultClean specificity fight). STILL needs a deployed smoke test for the live slide-in +
-   Midtrans redirect; enable the "mini shopping cart" admin setting first.
-5. After deploy, run `deploy/qa/smoke.sh` + the QA checklist.
+**Immediate next steps:**
+1. **Visual tuning from a screenshot** — the homepage is a faithful but UNVERIFIED first pass (CSS/HTML are
+   static-checks-clean, but nothing was rendered). Get a deployed screenshot (light+dark, desktop+mobile) and tighten
+   spacing/responsive details of the §24 components.
+2. (Optional, offered, NOT done) Add `.github/dependabot.yml` to ignore major Docker `dotnet` base-image bumps so the
+   .NET 9→10 break can't recur; it rides into `main` via PR #11.
+3. (Optional) Make the eBook showcase a LIVE grid (real `HomepageProductsViewComponent` styled as book-cards) instead
+   of static cards linking to `/search` — needs `Index.cshtml` ordering work (split the topic before/after products).
+4. Confirm the cart end-to-end on a deployed instance (badge → right-drawer → /checkout → Midtrans); run
+   `deploy/qa/smoke.sh` + the QA checklist.
 
 ## How to build / verify
 
@@ -168,9 +167,9 @@ this session (branch `claude/epic-sagan-qINMg`):
   --no-cache nopcommerce && docker compose up -d` (first run: nopCommerce install wizard → PostgreSQL).
 - **Enable theme:** Admin → Configuration → Settings → General → Theme → **eBook Indonesia**. Also
   enable the **"mini shopping cart"** (Shopping cart settings) for the drawer.
-- **Homepage hero (no rebuild):** paste `storefront/home/homepage.{en,id}.html` into the **HomepageText**
-  topic per language via the editor's **HTML source view**; fill `[WHATSAPP_E164]`. These `.html` files are
-  admin-paste content, not served directly — editing them doesn't change the live site until pasted.
+- **Homepage (no rebuild):** paste `storefront/home/homepage.{id,en}.html` into the **HomepageText** topic
+  per language via the editor's **HTML source view** (WhatsApp number already filled). These `.html` files
+  are admin-paste content, not served directly — editing them doesn't change the live site until pasted.
 - **Static checks (before every commit):** `bash deploy/qa/static-checks.sh`
 - **Runtime smoke (after deploy):** `deploy/qa/smoke.sh https://YOUR_DOMAIN --product /seo --category /c/x`
 - **Compile plugin+theme against real nop:** run `.github/workflows/build-nopcommerce.yml`
@@ -178,7 +177,7 @@ this session (branch `claude/epic-sagan-qINMg`):
 
 ## Working agreements
 
-- Branch `claude/epic-sagan-qINMg`; clear commits; push; no PR unless asked.
+- Branch `claude/modest-tesla-BvVLM`; clear commits; push (updates **PR #11 → main**); don't open new PRs.
 - Validate with `deploy/qa/static-checks.sh` before committing (JSON/CSS/JS/Razor balance, storefront
   HTML, no secrets, download-security guardrail).
 - Never commit nopCommerce core or secrets. Don't weaken download security or the Midtrans webhook.
@@ -187,8 +186,10 @@ this session (branch `claude/epic-sagan-qINMg`):
 - Tax (PPN) and legal/refund text are **drafts** to be confirmed with the customer's accountant/lawyer.
 - Explain changes to the user in plain, non-jargon language.
 
-**START HERE:** read `README.md`, `themes/EbookIndonesia/README.md` and `IMPLEMENTATION-PROGRESS.md`,
-then the theme files (`Views/Shared/Head.cshtml` + `_Header.cshtml` + `Content/css/styles.css` +
-`Content/js/theme.js`) and the "Current state" section above. The build renders; the open work is
-design-alignment + the admin content steps. Ask the user for a fresh screenshot (and whether they've
-pasted the `HomepageText` topic) before changing anything, then continue from "Immediate next steps".
+**START HERE:** read `README.md`, `themes/EbookIndonesia/IMPLEMENTATION-PROGRESS.md`, this file's
+"Current state" section, and the design (`Check Homepage.html` — fetch the `xten-customer-portal` bundle
+from the design API). Then the theme files (`Views/Shared/Head.cshtml` + `_Header.cshtml` +
+`Content/css/styles.css` §21–§24 + `Content/js/theme.js` + `Views/Home/Index.cshtml`). The homepage is the
+full Check design — built but NOT visually verified. Ask the user for a fresh screenshot (and whether
+they've pasted the `HomepageText` topic) before changing anything, then continue from "Immediate next
+steps" (start with visual tuning).

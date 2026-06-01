@@ -6,6 +6,19 @@ widget zone and dynamic component is preserved → upgrade-safe, plugin-safe, no
 
 Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pending) · ⬜ not started
 
+## Session log — Merge main + pin .NET 9 + Dependabot guard + PR #11 — ✅ (branch `claude/modest-tesla-BvVLM`)
+- Merged latest `main` (Dependabot updates + GitHub Actions bumps: checkout v6, setup-dotnet v5, trivy 0.36).
+- **Re-pinned Docker base images to .NET 9** (`39725ec`): Dependabot had bumped sdk+aspnet to 10; nopCommerce
+  4.90.4 is a net9.0 app and won't start on a .NET-10-only runtime (and it breaks the .NET 9 constraint).
+  Added Dockerfile comments to deter re-bumping.
+- **`.github/dependabot.yml`**: added an `ignore` for `version-update:semver-major` on
+  `mcr.microsoft.com/dotnet/{sdk,aspnet}` so the 9→10 bump can't recur (minor/patch stays allowed). Rides into
+  `main` when PR #11 merges. ⚠️ `main` still carries the 10.x Dockerfile until PR #11 (which has the pin) merges.
+- **PR #11 → `main` is OPEN** (created from the Claude Code UI; this session is subscribed to its activity).
+  CI green: Static checks ✅, Trivy ✅, smoke skipped (no STAGING_URL); no review comments; `mergeable_state:
+  clean`. Pushing to this branch updates PR #11.
+- Docs refreshed: `docs/AGENT-HANDOFF.md` (current state / next steps / design source / branch) + this log.
+
 ## Session log — Full "Check Homepage" build from the REAL design bundle — ✅ (branch `claude/modest-tesla-BvVLM`)
 Fetched the actual Claude Design handoff (`xten-customer-portal` tar.gz via the design API), read its
 README + chat transcript, and rebuilt the design understanding from the real `Check Homepage.html` (not a
