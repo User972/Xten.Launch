@@ -9,7 +9,7 @@
 ARG NOP_VERSION=release-4.90.4
 
 # ---------- build ----------
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG NOP_VERSION
 WORKDIR /src
 RUN git clone --depth 1 --branch "${NOP_VERSION}" https://github.com/nopSolutions/nopCommerce.git .
@@ -32,7 +32,7 @@ RUN dotnet build   src/NopCommerce.sln -c Release
 RUN dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release -o /app/published --no-restore
 
 # ---------- runtime ----------
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 RUN apt-get update \
  && apt-get install -y --no-install-recommends gettext-base curl \
