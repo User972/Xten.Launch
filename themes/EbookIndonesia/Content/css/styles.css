@@ -118,12 +118,30 @@ img { max-width: 100%; height: auto; }
 /* brand column */
 .xt-foot-title { color:#fff; font-family: var(--xt-font-display); font-weight:600; font-size:1.4rem; letter-spacing:-.01em; margin-bottom: var(--xt-s3); }
 .xt-foot-brand .topic-block, .xt-foot-brand p { color: rgba(250,246,238,.7); max-width:340px; }
+/* social as icon-circles. nopCommerce's SocialButtons emits `ul.networks > li.<network> > a` with the
+   label as text; we keep that stock view and turn each link into a circular icon button — the glyph is
+   a CSS mask keyed on the per-network class (.facebook/.twitter/.rss/.youtube/.instagram), so NO view
+   override is needed and it no-ops for any network the admin leaves blank. Outline glyphs match the
+   header's account/cart icons. */
 .xt-foot-social { margin-top: var(--xt-s5); }
-.xt-foot-social ul { display:flex; flex-wrap:wrap; gap:10px 16px; margin:0; padding:0; list-style:none; }
+.xt-foot-social ul { display:flex; flex-wrap:wrap; gap:12px; margin:0; padding:0; list-style:none; }
 .xt-foot-social li { display:inline-flex; margin:0; }
-.xt-foot-social a { display:inline-flex; align-items:center; color: rgba(250,246,238,.85); font-weight:600; font-size:.82rem;
-  border:1px solid rgba(250,246,238,.28); border-radius: var(--xt-r-pill); padding:6px 14px; }
-.xt-foot-social a:hover { color:#fff; border-color: var(--xt-accent); background: rgba(217,119,87,.12); text-decoration:none; }
+.xt-foot-social a {
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; border-radius:50%; font-size:0; line-height:0; text-decoration:none;
+  color: rgba(250,246,238,.85); border:1px solid rgba(250,246,238,.28); background:transparent;
+  transition: color .2s, border-color .2s, background-color .2s;
+}
+.xt-foot-social a::before {
+  content:""; width:18px; height:18px; background: currentColor;
+  -webkit-mask: var(--xt-ico) center / 18px 18px no-repeat; mask: var(--xt-ico) center / 18px 18px no-repeat;
+}
+.xt-foot-social a:hover { color:#fff; border-color: var(--xt-accent); background: rgba(217,119,87,.14); text-decoration:none; }
+.xt-foot-social .facebook a { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE4IDJoLTNhNSA1IDAgMCAwLTUgNXYzSDd2NGgzdjhoNHYtOGgzbDEtNGgtNFY3YTEgMSAwIDAgMSAxLTFoM3oiLz48L3N2Zz4="); }
+.xt-foot-social .twitter a { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIzIDNhMTAuOSAxMC45IDAgMCAxLTMuMTQgMS41MyA0LjQ4IDQuNDggMCAwIDAtNy44NiAzdjFBMTAuNjYgMTAuNjYgMCAwIDEgMyA0cy00IDkgNSAxM2ExMS42NCAxMS42NCAwIDAgMS03IDJjOSA1IDIwIDAgMjAtMTEuNWE0LjUgNC41IDAgMCAwLS4wOC0uODNBNy43MiA3LjcyIDAgMCAwIDIzIDN6Ii8+PC9zdmc+"); }
+.xt-foot-social .rss a { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgMTFhOSA5IDAgMCAxIDkgOSIvPjxwYXRoIGQ9Ik00IDRhMTYgMTYgMCAwIDEgMTYgMTYiLz48Y2lyY2xlIGN4PSI1IiBjeT0iMTkiIHI9IjEiLz48L3N2Zz4="); }
+.xt-foot-social .youtube a { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIyLjU0IDYuNDJhMi43OCAyLjc4IDAgMCAwLTEuOTQtMkMxOC44OCA0IDEyIDQgMTIgNHMtNi44OCAwLTguNi40NmEyLjc4IDIuNzggMCAwIDAtMS45NCAyQTI5IDI5IDAgMCAwIDEgMTEuNzVhMjkgMjkgMCAwIDAgLjQ2IDUuMzNBMi43OCAyLjc4IDAgMCAwIDMuNCAxOWMxLjcyLjQ2IDguNi40NiA4LjYuNDZzNi44OCAwIDguNi0uNDZhMi43OCAyLjc4IDAgMCAwIDEuOTQtMiAyOSAyOSAwIDAgMCAuNDYtNS4yNSAyOSAyOSAwIDAgMC0uNDYtNS4zM3oiLz48cG9seWdvbiBwb2ludHM9IjkuNzUgMTUuMDIgMTUuNSAxMS43NSA5Ljc1IDguNDggOS43NSAxNS4wMiIvPjwvc3ZnPg=="); }
+.xt-foot-social .instagram a { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMiIgeT0iMiIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiByeD0iNSIgcnk9IjUiLz48cGF0aCBkPSJNMTYgMTEuMzdBNCA0IDAgMSAxIDEyLjYzIDggNCA0IDAgMCAxIDE2IDExLjM3eiIvPjxsaW5lIHgxPSIxNy41IiB5MT0iNi41IiB4Mj0iMTcuNTEiIHkyPSI2LjUiLz48L3N2Zz4="); }
 
 /* link columns — kill DefaultClean's white list box + blue toggle pill; mono terracotta labels.
    Mobile-first: stacked. Desktop: EQUAL columns in one row (flex:1 1 0) so a 3rd menu never wraps
@@ -697,11 +715,20 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .xt-utility__in { max-width: var(--xt-wrap); margin:0 auto; padding:8px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .xt-utility__msg { color: rgba(250,246,238,.85); }
 .xt-utility__right { display:flex; align-items:center; gap:14px; }
-.xt-utility a, .xt-utility .language-selector .selector-title, .xt-utility .language-list a { color: rgba(250,246,238,.9); }
+.xt-utility a { color: rgba(250,246,238,.9); }
 .xt-utility a:hover { color:#fff; }
-.xt-utility .language-selector, .xt-utility .language-list { display:flex; align-items:center; gap:8px; margin:0; padding:0; border:0; }
-.xt-utility .language-list li { display:inline-flex; list-style:none; margin:0; }
-.xt-utility select { background: transparent; color: var(--xt-parch); border:1px solid rgba(250,246,238,.3); border-radius: var(--xt-r-sm); padding:4px 8px; min-height:auto; }
+/* EN/ID language toggle — markup is our LanguageSelector override (.xt-lang > a.xt-lang__opt). A compact
+   segmented pill in the teal utility strip; the active code is filled terracotta. Every option still
+   posts to nopCommerce's real ChangeLanguage route (only the look changes). Scoped under .xt-utility so
+   it out-ranks the generic `.xt-utility a` colour and any base `.language-selector` rule. */
+.xt-utility .language-selector.xt-lang { display:inline-flex; align-items:center; gap:2px; margin:0; padding:2px;
+  border:1px solid rgba(250,246,238,.28); border-radius: var(--xt-r-pill); }
+.xt-utility .xt-lang__opt { display:inline-flex; align-items:center; justify-content:center; min-width:32px; padding:3px 10px;
+  border-radius: var(--xt-r-pill); font-family: var(--xt-font-mono); font-size:.72rem; font-weight:500; letter-spacing:.08em;
+  color: rgba(250,246,238,.72); text-decoration:none; line-height:1.45; transition: color .2s, background-color .2s; }
+.xt-utility .xt-lang__opt:hover { color:#fff; background: rgba(250,246,238,.08); text-decoration:none; }
+.xt-utility .xt-lang__opt.is-active { background: var(--xt-accent); color:#fff; }
+.xt-utility .xt-lang__opt.is-active:hover { background: var(--xt-accent-600); }
 
 /* sticky main bar */
 .xt-headbar { position:sticky; top:0; z-index:1000; background: var(--xt-page); border-bottom:1px solid var(--xt-line); }

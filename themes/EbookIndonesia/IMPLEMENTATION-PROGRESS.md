@@ -6,6 +6,32 @@ widget zone and dynamic component is preserved → upgrade-safe, plugin-safe, no
 
 Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pending) · ⬜ not started
 
+## Session log — EN/ID toggle + footer social icons + cart-flow verification — ✅ (branch `claude/modest-tesla-BvVLM`)
+Continues the (now-merged) `epic-sagan` line — this branch contains all of it. Every view built against
+real `release-4.90.4` source; `deploy/qa/static-checks.sh` green.
+- **EN/ID language toggle** — added `Views/Shared/Components/LanguageSelector/Default.cshtml` (an ALLOWED
+  override; not in the forbidden Download/Checkout/Customer/Order set, and static-checks confirms it).
+  Renders the switch as a compact "EN / ID" segmented pill instead of stock `<select>`/flags; each option
+  still links to the real `CHANGE_LANGUAGE` route + returnUrl, so localisation behaviour is unchanged.
+  The 2-letter code is derived from the language Name (nopCommerce's public `LanguageModel` exposes only
+  `Name`/`FlagImageFileName`, no ISO code) with a first-two-letters fallback. Styled in §23 under
+  `.xt-utility` (active code = terracotta); dropped the now-dead `.language-list`/`select`/`.selector-title`
+  rules it replaced.
+- **Footer social → icon-circles** — CSS-only, NO view override. SocialButtons already emits
+  `ul.networks > li.<network> > a`; §6 now turns each link into a 40px circle with an outline glyph via a
+  CSS mask keyed on the per-network class (facebook/twitter/rss/youtube/instagram), matching the header's
+  account/cart icons. No-ops for any network left blank in admin.
+- **Cart flow — verified at code level against real 4.90.4 markup.** FlyoutShoppingCart emits
+  `#flyout-cart .mini-shopping-cart > .count/.items/.item/.totals/.buttons`, and its View-cart/Checkout
+  buttons are nopCommerce's OWN (→ CART route / CHECKOUT-or-login-as-guest route) — no mock cart. Header
+  cart is `.header-links .ico-cart` with `.cart-qty`; stock JS runs `AjaxCart.init(..., '.header-links
+  .cart-qty', ..., '#flyout-cart', ...)`, so our MutationObserver bumps the badge + opens the drawer on
+  add. DefaultClean's only flyout rule is `.flyout-cart{display:none}` (no `.active` positioning), so our
+  later `display:flex` + `html.xt-cart-open` transform win — no specificity fight. STILL NEEDS a deployed
+  smoke test for the live slide-in + Midtrans redirect (`deploy/qa/smoke.sh`); admin must enable "mini
+  shopping cart". (Optional admin nicety: set the `ShoppingCart.HeaderQuantity` string to `{0}` so the
+  badge reads "2" not "(2)".)
+
 ## Session log — Check-reference alignment + nopCommerce 4.90 markup fixes — ✅ (branch `claude/epic-sagan-qINMg`)
 After the custom header landed, a clean rebuild surfaced real issues, fixed in order:
 - `664438b` **Footer** — re-skin had styled **legacy** `.footer-block .title/.list`; 4.90's FooterMenu

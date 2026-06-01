@@ -4,9 +4,10 @@
 > project, the hard constraints, the repo layout, the theme architecture (including the non-obvious
 > gotchas), the exact current state, and how to continue.
 >
-> **Branch:** `claude/epic-sagan-qINMg` · **Latest commit:** `b713fe3` · commit + push here;
-> don't open a PR unless asked. The user prefers **plain-language** explanations.
-> (Older docs say `claude/zen-bell-G2jyN`; that same line of work now continues on `claude/epic-sagan-qINMg`.)
+> **Branch:** `claude/modest-tesla-BvVLM` · commit + push here; don't open a PR unless asked.
+> The user prefers **plain-language** explanations.
+> (Earlier docs say `claude/zen-bell-G2jyN` then `claude/epic-sagan-qINMg`; both were merged to `main`
+> and that same line of work now continues on `claude/modest-tesla-BvVLM`, which contains all of it.)
 
 ## Project
 
@@ -149,12 +150,16 @@ this session (branch `claude/epic-sagan-qINMg`):
 1. **Header nav links** (`_Header.cshtml`) are fixed hrefs: `/search`, `/free-resources`, `/blog`,
    `/about-us`, `/contactus`. `/free-resources` + `/about-us` need topics created (or repoint them);
    the rest are real routes. (NOT done — offered.)
-2. Optional **EN/ID text toggle**: nopCommerce's LanguageSelector renders a `<select>` (or flag images),
-   not the reference's "EN / ID" text toggle — needs a small `LanguageSelector` view override (allowed;
-   not in the forbidden Download/Checkout/Customer/Order list). Held off per "don't override unless needed".
-3. Optional: footer social as true icon-circles (currently text chips); verify account/checkout/blog page
-   CSS against real 4.90 markup (low-risk — no-ops if renamed, nothing fights them like the footer did).
-4. Confirm **cart**: add-to-cart → badge bump → flyout opens as the right drawer → Checkout → Midtrans.
+2. ✅ **EN/ID text toggle** — DONE. Added `Views/Shared/Components/LanguageSelector/Default.cshtml`
+   (allowed override): a compact "EN / ID" segmented pill instead of the stock `<select>`/flags; each
+   option still links to the real `CHANGE_LANGUAGE` route + returnUrl (behaviour unchanged). Styled in §23.
+3. ✅ **Footer social as icon-circles** — DONE (CSS-only, no view override). §6 turns SocialButtons'
+   `ul.networks > li.<network> > a` into circular icon buttons via CSS masks keyed on the per-network
+   class. (Still optional: spot-check account/checkout/blog CSS vs real 4.90 markup — low-risk no-ops.)
+4. ✅ **Cart flow VERIFIED at code level** against real 4.90.4 markup (FlyoutShoppingCart classes, the
+   `.header-links .ico-cart`/`.cart-qty` badge, `AjaxCart.init` → MutationObserver, real /cart + /checkout
+   buttons, no DefaultClean specificity fight). STILL needs a deployed smoke test for the live slide-in +
+   Midtrans redirect; enable the "mini shopping cart" admin setting first.
 5. After deploy, run `deploy/qa/smoke.sh` + the QA checklist.
 
 ## How to build / verify
