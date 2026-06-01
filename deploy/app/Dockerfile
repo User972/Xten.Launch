@@ -43,6 +43,20 @@ COPY deploy/config/dataSettings.template.json /app/config/dataSettings.template.
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENV ASPNETCORE_URLS=http://+:8080 \
     DOTNET_RUNNING_IN_CONTAINER=true
+
+# --- Drop root: run as the aspnet image's built-in non-root user (UID $APP_UID = 1654) ---
+# nopCommerce writes at runtime to App_Data (dataSettings/appsettings/data-protection keys,
+# install state), Plugins, wwwroot/images, and wwwroot/bundles. Hand the whole /app tree to the
+# app user so those writes (and on-disk bundling) succeed. Named volumes mounted on these paths
+# inherit this ownership when first created.
+# UPGRADE NOTE: volumes first created by an OLDER root-based image are root-owned, so a fresh
+# non-root container cannot write them. Recreate those volumes, or chown their mountpoints to
+# 1654:1654 once (e.g. `docker compose run --rm --user 0 nopcommerce chown -R 1654:1654 \
+# /app/App_Data /app/Plugins /app/wwwroot/images`).
+RUN mkdir -p /app/App_Data /app/Plugins /app/wwwroot/images /app/wwwroot/files \
+ && chown -R $APP_UID:$APP_UID /app
+USER $APP_UID
+
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=5 \
   CMD curl -fsS http://localhost:8080/ >/dev/null || exit 1

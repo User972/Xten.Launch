@@ -3,8 +3,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Nop.Core;
+using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Common;
+using Nop.Services.Directory;
 
 namespace Nop.Plugin.Payments.Midtrans.Services;
 
@@ -17,6 +19,8 @@ public class MidtransService
 
     protected readonly HttpClient _httpClient;
     protected readonly IAddressService _addressService;
+    protected readonly ICurrencyService _currencyService;
+    protected readonly CurrencySettings _currencySettings;
     protected readonly MidtransPaymentSettings _settings;
 
     #endregion
@@ -25,10 +29,14 @@ public class MidtransService
 
     public MidtransService(HttpClient httpClient,
         IAddressService addressService,
+        ICurrencyService currencyService,
+        CurrencySettings currencySettings,
         MidtransPaymentSettings settings)
     {
         _httpClient = httpClient;
         _addressService = addressService;
+        _currencyService = currencyService;
+        _currencySettings = currencySettings;
         _settings = settings;
     }
 
@@ -48,6 +56,14 @@ public class MidtransService
 
         if (string.IsNullOrEmpty(_settings.ServerKey))
             throw new NopException("Midtrans Server Key is not configured.");
+
+        // Midtrans settles only in IDR, and order monetary fields are stored in the PRIMARY store
+        // currency — so that currency must be IDR or the gross_amount below would be wrong.
+        var primaryCurrency = await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId);
+        if (!string.Equals(primaryCurrency?.CurrencyCode, "IDR", StringComparison.OrdinalIgnoreCase))
+            throw new NopException(
+                $"Midtrans only accepts IDR, but the primary store currency is '{primaryCurrency?.CurrencyCode ?? "unset"}'. " +
+                "Set IDR as the primary store currency (Configuration → Currencies) before accepting Midtrans payments.");
 
         // IDR has no minor units -> gross_amount must be an integer
         var grossAmount = (long)Math.Round(order.OrderTotal, MidpointRounding.AwayFromZero);
@@ -110,10 +126,33 @@ public class MidtransService
             return false;
 
         var raw = $"{notification.OrderId}{notification.StatusCode}{notification.GrossAmount}{_settings.ServerKey}";
-        var hashBytes = SHA512.HashData(Encoding.UTF8.GetBytes(raw));
-        var hash = Convert.ToHexString(hashBytes).ToLowerInvariant();
+        var expected = SHA512.HashData(Encoding.UTF8.GetBytes(raw));
 
-        return string.Equals(hash, notification.SignatureKey, StringComparison.OrdinalIgnoreCase);
+        // Compare in constant time: this check gates marking orders Paid, so the public webhook
+        // must not be probe-able for a valid signature byte-by-byte via a timing side-channel.
+        if (!TryParseHex(notification.SignatureKey, out var provided) || provided.Length != expected.Length)
+            return false;
+
+        return CryptographicOperations.FixedTimeEquals(provided, expected);
+    }
+
+    /// <summary>
+    /// Parses a hex string to bytes without throwing on attacker-supplied malformed input.
+    /// </summary>
+    private static bool TryParseHex(string hex, out byte[] bytes)
+    {
+        bytes = Array.Empty<byte>();
+        if (string.IsNullOrEmpty(hex) || hex.Length % 2 != 0)
+            return false;
+        try
+        {
+            bytes = Convert.FromHexString(hex);
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
     }
 
     #endregion

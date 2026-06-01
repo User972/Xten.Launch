@@ -1,8 +1,9 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Nop.Core;
 using Nop.Core.Domain.Orders;
 using Nop.Plugin.Payments.Midtrans.Services;
-using Nop.Services.Logging;
 using Nop.Services.Orders;
 
 namespace Nop.Plugin.Payments.Midtrans.Controllers;
@@ -16,7 +17,7 @@ public class PaymentMidtransWebhookController : Controller
 {
     #region Fields
 
-    protected readonly ILogger _logger;
+    protected readonly ILogger<PaymentMidtransWebhookController> _logger;
     protected readonly IOrderProcessingService _orderProcessingService;
     protected readonly IOrderService _orderService;
     protected readonly IWebHelper _webHelper;
@@ -27,7 +28,7 @@ public class PaymentMidtransWebhookController : Controller
 
     #region Ctor
 
-    public PaymentMidtransWebhookController(ILogger logger,
+    public PaymentMidtransWebhookController(ILogger<PaymentMidtransWebhookController> logger,
         IOrderProcessingService orderProcessingService,
         IOrderService orderService,
         IWebHelper webHelper,
@@ -57,10 +58,12 @@ public class PaymentMidtransWebhookController : Controller
         if (notification == null || string.IsNullOrEmpty(notification.OrderId))
             return BadRequest();
 
-        // Reject anything we cannot cryptographically attribute to our Server Key.
+        // Reject anything we cannot cryptographically attribute to our Server Key. This logs to the
+        // framework logger (container stdout, bounded/rotated) rather than the nopCommerce DB log,
+        // so a flood of unsigned POSTs to this public endpoint can't grow the Log table unbounded.
         if (string.IsNullOrEmpty(_settings.ServerKey) || !_midtransService.IsValidSignature(notification))
         {
-            await _logger.WarningAsync($"Midtrans: rejected notification with invalid signature for order_id '{notification.OrderId}'.");
+            _logger.LogWarning("Midtrans: rejected notification with invalid signature for order_id '{OrderId}'.", notification.OrderId);
             return BadRequest();
         }
 
@@ -70,6 +73,24 @@ public class PaymentMidtransWebhookController : Controller
         var order = await _orderService.GetOrderByGuidAsync(orderGuid);
         if (order == null)
             return NotFound();
+
+        // Defense in depth (the signature already authenticates these fields): only act on orders
+        // that actually used Midtrans, and only when the notified amount matches what we charged.
+        if (!string.Equals(order.PaymentMethodSystemName, MidtransDefaults.SystemName, StringComparison.OrdinalIgnoreCase))
+        {
+            await InsertNoteAsync(order, $"Midtrans: ignored notification — order uses payment method '{order.PaymentMethodSystemName}', not '{MidtransDefaults.SystemName}'.");
+            return Ok();
+        }
+
+        var expectedAmount = (long)Math.Round(order.OrderTotal, MidpointRounding.AwayFromZero);
+        if (!decimal.TryParse(notification.GrossAmount, NumberStyles.Number, CultureInfo.InvariantCulture, out var notifiedAmount)
+            || (long)Math.Round(notifiedAmount, MidpointRounding.AwayFromZero) != expectedAmount)
+        {
+            _logger.LogWarning("Midtrans: amount mismatch for order {OrderId} — notified gross_amount '{Notified}' != order total {Expected}.",
+                notification.OrderId, notification.GrossAmount, expectedAmount);
+            await InsertNoteAsync(order, $"Midtrans: amount mismatch — notified gross_amount '{notification.GrossAmount}' != order total {expectedAmount}. NOT marked paid; review manually.");
+            return Ok();
+        }
 
         var status = notification.TransactionStatus?.ToLowerInvariant();
         var fraud = notification.FraudStatus?.ToLowerInvariant();
