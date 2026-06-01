@@ -9,7 +9,9 @@
 ARG NOP_VERSION=release-4.90.4
 
 # ---------- build ----------
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+# Pinned to .NET 9: nopCommerce 4.90.4 targets net9.0. Do NOT bump to 10.x (Dependabot tried) until
+# nopCommerce itself moves to .NET 10 — the published app is framework-dependent on the 9.0 runtime.
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG NOP_VERSION
 WORKDIR /src
 RUN git clone --depth 1 --branch "${NOP_VERSION}" https://github.com/nopSolutions/nopCommerce.git .
@@ -32,7 +34,9 @@ RUN dotnet build   src/NopCommerce.sln -c Release
 RUN dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release -o /app/published --no-restore
 
 # ---------- runtime ----------
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+# Pinned to .NET 9 to match the build SDK and the net9.0 app (see note above). An aspnet:10 runtime
+# image ships only the .NET 10 shared framework, so a net9.0 app would fail to start here.
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 RUN apt-get update \
  && apt-get install -y --no-install-recommends gettext-base curl \

@@ -1,0 +1,56 @@
+@model LanguageSelectorModel
+
+@inject Nop.Core.IWebHelper webHelper
+
+@*
+    eBook Indonesia theme — language switch rendered as a compact "EN / ID" text toggle (to match the
+    "Check" design reference) instead of nopCommerce's stock <select> dropdown / flag images.
+
+    BEHAVIOUR IS UNCHANGED from stock: each option still links to the real ChangeLanguage route
+    (NopRouteNames.Standard.CHANGE_LANGUAGE) with the current returnUrl, so localisation works exactly
+    as before. Renders nothing when the store has a single active language (parity with the stock view).
+
+    The 2-letter code is derived from the language name (English -> EN, Bahasa Indonesia -> ID) with a
+    first-two-letters fallback, because nopCommerce's public LanguageModel only exposes Name and
+    FlagImageFileName (no ISO/culture code). Adjust the language NAME in admin to change the label.
+*@
+@if (Model.AvailableLanguages.Count > 1)
+{
+    var returnUrl = webHelper.GetRawUrl(Context.Request);
+    <div class="language-selector xt-lang" role="group" aria-label="@T("Languages.Selector.Label")">
+        @foreach (var lang in Model.AvailableLanguages)
+        {
+            var isCurrent = lang.Id == Model.CurrentLanguageId;
+            var code = GetShortCode(lang.Name);
+            <a class="xt-lang__opt@(isCurrent ? " is-active" : null)"
+               href="@Url.RouteUrl(NopRouteNames.Standard.CHANGE_LANGUAGE, new { langid = lang.Id, returnUrl }, webHelper.GetCurrentRequestProtocol())"
+               hreflang="@code.ToLowerInvariant()"
+               title="@lang.Name"
+               aria-current="@(isCurrent ? "true" : null)">@code</a>
+        }
+    </div>
+}
+@functions {
+    // Short display code for a language name. Kept dependency-free (basic string/char only).
+    static string GetShortCode(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return "??";
+        var lower = name.Trim().ToLowerInvariant();
+        if (lower.Contains("indonesia") || lower.StartsWith("bahasa"))
+            return "ID";
+        if (lower.Contains("english"))
+            return "EN";
+        var code = "";
+        foreach (var ch in name)
+        {
+            if (char.IsLetter(ch))
+            {
+                code += char.ToUpperInvariant(ch);
+                if (code.Length == 2)
+                    break;
+            }
+        }
+        return code.Length > 0 ? code : "??";
+    }
+}

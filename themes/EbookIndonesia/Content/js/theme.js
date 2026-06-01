@@ -133,10 +133,14 @@
   function initWaFloat() {
     if (document.querySelector(".xt-wa-float")) return;
     var link = document.querySelector('a[href*="wa.me/"], a[href*="api.whatsapp.com"]');
-    if (!link) return;
+    // Merchant WhatsApp number (international format, digits only). The float PREFERS an on-page
+    // wa.me link if one exists (so the homepage/footer can override it), otherwise it falls back to
+    // this number so the button is always present site-wide — not only where a wa.me link was pasted.
+    var WA_FALLBACK = "61457068647";
+    var href = link ? link.href : ("https://wa.me/" + WA_FALLBACK + "?text=" + encodeURIComponent("Halo, saya ingin bertanya"));
     var f = document.createElement("a");
     f.className = "xt-wa-float";
-    f.href = link.href;
+    f.href = href;
     f.target = "_blank";
     f.rel = "noopener";
     f.setAttribute("aria-label", "Chat on WhatsApp");
