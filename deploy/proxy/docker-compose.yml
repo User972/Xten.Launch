@@ -1,0 +1,57 @@
+# Shared reverse proxy for the multi-tenant nopCommerce platform.
+#
+# ONE instance of this runs per VM. It owns ports 80/443 and routes by Host header to each
+# tenant's nginx container (discovered via the VIRTUAL_HOST env var those containers set), and
+# acme-companion auto-provisions/renews a Let's Encrypt cert per tenant (LETSENCRYPT_HOST).
+#
+# Tenants attach to the external `webproxy` network that THIS stack creates.
+#
+#   1) cp .env.example .env   # set ACME_EMAIL
+#   2) docker compose up -d
+#   3) add tenants with deploy/scripts/new-customer.sh   (see deploy/README.md)
+name: nop-proxy
+
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.6
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro   # read-only: discover tenant containers
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    labels:
+      # acme-companion locates the proxy it must reconfigure via this label.
+      - "com.github.nginx-proxy.nginx-proxy=true"
+    networks: [webproxy]
+
+  acme-companion:
+    image: nginxproxy/acme-companion:2.4
+    container_name: nginx-proxy-acme
+    restart: unless-stopped
+    environment:
+      DEFAULT_EMAIL: ${ACME_EMAIL}        # fallback email if a tenant omits LETSENCRYPT_EMAIL
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
+    depends_on:
+      - nginx-proxy
+    networks: [webproxy]
+
+volumes:
+  certs:
+  vhost:
+  html:
+  acme:
+
+networks:
+  # Created by this stack; tenant stacks join it as `external`.
+  webproxy:
+    name: webproxy
