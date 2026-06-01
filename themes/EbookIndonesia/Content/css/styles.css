@@ -977,3 +977,19 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 @media (min-width:992px){
   #faculty .xt-cardgrid { grid-template-columns:repeat(4,1fr) !important; }
 }
+
+/* Dark mode: the "inverted teal" accent surfaces (testimonial band, bundle, why-choose #04, methodology
+   step #5, the teal results card, the programs "not sure?" card, hero proof pill, active filter chip)
+   all use var(--xt-brand) as a BACKGROUND. In dark mode that token intentionally lightens (#6FB7AE) so
+   teal links/text stay legible — but as a panel behind cream text it goes low-contrast. Keep these
+   accent panels a deep teal in dark mode so their cream text reads crisply, matching their light-mode
+   look and the deep-teal final-CTA band. */
+[data-theme="dark"] .xt-quote-band,
+[data-theme="dark"] .xt-bundle,
+[data-theme="dark"] .xt-lead-card__proof,
+[data-theme="dark"] .xt-why__c--invert,
+[data-theme="dark"] .xt-stepper__item--invert,
+[data-theme="dark"] .xt-result--teal,
+[data-theme="dark"] .xt-prog.xt-why__c--invert,
+[data-theme="dark"] .xt-diff__item--invert,
+[data-theme="dark"] .xt-chip.is-active { background: #0F3D3E; border-color: #0F3D3E; }
