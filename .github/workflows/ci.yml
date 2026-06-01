@@ -24,7 +24,7 @@ jobs:
     name: Static checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run repo static checks
         run: bash deploy/qa/static-checks.sh
 
@@ -35,7 +35,7 @@ jobs:
     # Skipped unless a staging URL is configured as a repository variable.
     if: ${{ vars.STAGING_URL != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Smoke test against staging
         env:
           STAGING_URL:   ${{ vars.STAGING_URL }}
@@ -58,7 +58,7 @@ jobs:
     # the repo for known CVEs, leaked secrets, and Dockerfile/compose misconfig. Tighten to a gate by
     # setting `exit-code: '1'` (and removing continue-on-error) once the baseline is clean.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Trivy scan (vuln + secret + misconfig)
         uses: aquasecurity/trivy-action@v0.36.0
         continue-on-error: true
