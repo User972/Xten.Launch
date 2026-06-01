@@ -1,0 +1,145 @@
+# nopCommerce eBook store — Docker Compose (MVP / single VPS)
+# Reference: docs/nopcommerce-ebook-indonesia-blueprint.md  (§1 architecture, §3 config, §11 backup)
+#
+# Quick start:
+#   1) cp .env.example .env   &&  edit .env with strong secrets   (NEVER commit .env)
+#   2) docker compose up -d --build
+#   3) Browse https://$DOMAIN  -> run the nopCommerce install wizard once (choose PostgreSQL)
+#   4) Edit App_Data/appsettings.json (Redis block, see config/appsettings.redis-snippet.json) & restart
+#
+# Only the reverse proxy publishes ports. App/DB/Redis are reachable only on the internal network.
+name: nop-ebook
+
+services:
+  reverse-proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"        # HTTP/3
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - nopcommerce
+    networks: [nopnet]
+
+  nopcommerce:
+    build:
+      # Build context is the REPOSITORY ROOT so the image includes themes/ and plugins/.
+      # Dockerfile COPY paths are repo-root-relative.
+      context: ..
+      dockerfile: deploy/app/Dockerfile
+      args:
+        NOP_VERSION: ${NOP_VERSION:-release-4.90.4}
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      # --- Override appsettings.json values via the ASP.NET Core "__" delimiter ---
+      # (keeps the Redis password out of any committed file; it comes from .env at runtime)
+      HostingConfig__UseProxy: "true"
+      DistributedCacheConfig__Enabled: "${REDIS_ENABLED:-true}"
+      DistributedCacheConfig__DistributedCacheType: "${REDIS_CACHE_TYPE:-redis}"
+      DistributedCacheConfig__ConnectionString: "redis:6379,password=${REDIS_PASSWORD},ssl=False,abortConnect=False"
+      DistributedCacheConfig__InstanceName: "nop_"
+      # --- OPTIONAL headless seeding of App_Data/dataSettings.json (default OFF; prefer the wizard) ---
+      NOP_SEED_DATASETTINGS: "${NOP_SEED_DATASETTINGS:-false}"
+      NOP_DATA_PROVIDER: "${NOP_DATA_PROVIDER:-postgresql}"
+      NOP_DB_HOST: "${NOP_DB_HOST:-postgres}"
+      NOP_DB_PORT: "${NOP_DB_PORT:-5432}"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - nop_appdata:/app/App_Data          # dataSettings.json, appsettings.json, data-protection keys, install state
+      - nop_plugins:/app/Plugins           # installed plugin binaries
+      - nop_images:/app/wwwroot/images     # uploaded product/cover images & thumbnails
+      # Downloadable eBook files are stored in the DATABASE by default (recommended; see §9/§11),
+      # so no extra volume is needed. If you later move downloads to disk via a storage plugin,
+      # mount that directory here, e.g.:
+      #   - nop_downloads:/app/App_Data/Downloads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks: [nopnet]
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # Tuning below is sized for a ~4 GB box (MVP). Scale shared_buffers ~25% RAM,
+    # effective_cache_size ~70-75% RAM. See blueprint §10.2.
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=2560MB"
+      - "-c"
+      - "work_mem=24MB"
+      - "-c"
+      - "maintenance_work_mem=256MB"
+      - "-c"
+      - "max_connections=120"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./config/init-citext.sql:/docker-entrypoint-initdb.d/10-citext.sql:ro   # pre-create citext (§2.3/§2.5)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [nopnet]
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # Cache-only: password-protected, persistence OFF (cache loss is harmless; see §11.4).
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}", "--save", "", "--appendonly", "no"]
+    networks: [nopnet]
+
+  db-backup:
+    image: prodrigestivill/postgres-backup-local:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-7}
+      BACKUP_KEEP_WEEKS: ${BACKUP_KEEP_WEEKS:-4}
+      BACKUP_KEEP_MONTHS: ${BACKUP_KEEP_MONTHS:-6}
+      POSTGRES_EXTRA_OPTS: "-Fc"        # custom format -> pg_restore
+    volumes:
+      - pg_backups:/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [nopnet]
+    # IMPORTANT: also copy /backups OFF the VPS (object storage) and run a quarterly
+    # restore test (§11.5). A backup you have never restored does not exist.
+
+volumes:
+  nop_appdata:
+  nop_plugins:
+  nop_images:
+  pg_data:
+  pg_backups:
+  caddy_data:
+  caddy_config:
+
+networks:
+  nopnet:
+    driver: bridge

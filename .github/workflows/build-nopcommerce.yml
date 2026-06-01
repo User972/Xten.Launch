@@ -1,0 +1,62 @@
+name: Build nopCommerce (compile plugin + theme)
+
+# On-demand compile verification: clones nopCommerce, drops in the custom theme and the Midtrans
+# plugin, adds the plugin to the solution, builds it against Nop.Web, and publishes (which includes
+# the theme as content). This is the real compile the local/offline environment cannot do.
+#
+# Heavy (~10–20 min building the full solution), so it is MANUAL by default. To gate PRs that touch
+# the plugin/theme, add a `pull_request:` trigger with `paths: [plugins/**, themes/**]`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      nop_version:
+        description: "nopCommerce git tag to build against"
+        default: "release-4.90.4"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compile against nopCommerce ${{ github.event.inputs.nop_version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Clone nopCommerce ${{ github.event.inputs.nop_version }}
+        run: git clone --depth 1 --branch "${{ github.event.inputs.nop_version }}" https://github.com/nopSolutions/nopCommerce.git _nop
+
+      - name: Drop in theme + plugin and add the plugin to the solution
+        run: |
+          set -eu
+          cp -r themes/EbookIndonesia _nop/src/Presentation/Nop.Web/Themes/EbookIndonesia
+          cp -r plugins/Nop.Plugin.Payments.Midtrans _nop/src/Plugins/Nop.Plugin.Payments.Midtrans
+          # the plugin csproj uses $(SolutionDir) ProjectReferences, so it must build via the .sln
+          dotnet sln _nop/src/NopCommerce.sln add _nop/src/Plugins/Nop.Plugin.Payments.Midtrans/Nop.Plugin.Payments.Midtrans.csproj
+
+      - name: Restore
+        run: dotnet restore _nop/src/NopCommerce.sln
+
+      - name: Build solution (Release) — compiles the Midtrans plugin against Nop.Web
+        run: dotnet build _nop/src/NopCommerce.sln -c Release --no-restore
+
+      - name: Publish Nop.Web (includes the theme as content)
+        run: dotnet publish _nop/src/Presentation/Nop.Web/Nop.Web.csproj -c Release -o _nop/published --no-restore
+
+      - name: Assert plugin + theme are in the publish output
+        run: |
+          set -eu
+          test -d _nop/published/Plugins/Payments.Midtrans            && echo "✓ Midtrans plugin published"
+          test -f _nop/published/Plugins/Payments.Midtrans/Nop.Plugin.Payments.Midtrans.dll && echo "✓ plugin DLL present"
+          test -f _nop/published/Themes/EbookIndonesia/theme.json     && echo "✓ theme descriptor published"
+          test -f _nop/published/Themes/EbookIndonesia/Content/css/styles.css && echo "✓ theme CSS published"
+          test -f _nop/published/Themes/EbookIndonesia/Views/Home/Index.cshtml && echo "✓ theme views published"

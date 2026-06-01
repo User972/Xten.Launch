@@ -1,0 +1,754 @@
+/* ============================================================================
+   eBook Indonesia — publisher/editorial theme for nopCommerce 4.90
+   Loaded as ~/Themes/EbookIndonesia/Content/css/styles.css (via Views/Shared/Head.cshtml).
+   Strategy: a CSS design system that restyles nopCommerce's existing markup into a
+   modern content-led publisher site. Editorial blocks use the .xt- prefix (also used by
+   the admin-editable HomepageText topic). No nopCommerce core or view structure is required.
+   ----------------------------------------------------------------------------
+   TABLE OF CONTENTS
+   1. Design tokens            8.  Cards / badges / alerts / trust
+   2. Base & typography        9.  Editorial component library (.xt-*)
+   3. Layout containers        10. Homepage
+   4. Header                   11. Product details (landing-page feel)
+   5. Primary navigation       12. Category / topic pages
+   6. Footer                   13. Blog / news / articles
+   7. Buttons & forms          14. Account / My downloads / Checkout
+                               15. De-emphasis of generic-shop elements
+                               16. Sticky mobile Buy bar
+                               17. Responsive · 18. A11y · 19. Print
+   ========================================================================== */
+
+/* 1. DESIGN TOKENS ========================================================= */
+:root {
+  /* color */
+  --xt-ink:        #0f172a;
+  --xt-ink-soft:   #334155;
+  --xt-muted:      #64748b;
+  --xt-line:       #e2e8f0;
+  --xt-surface:    #ffffff;
+  --xt-surface-2:  #f8fafc;
+  --xt-accent:     #f59e0b;   /* warm CTA */
+  --xt-accent-ink: #1f2937;
+  --xt-brand:      #6366f1;   /* editorial indigo */
+  --xt-brand-deep: #1e1b4b;
+  --xt-success:    #10b981;
+  --xt-success-d:  #065f46;
+  --xt-wa:         #25D366;   /* WhatsApp */
+  --xt-danger:     #dc2626;
+  /* type */
+  --xt-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --xt-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  /* spacing */
+  --xt-s1:4px; --xt-s2:8px; --xt-s3:12px; --xt-s4:16px; --xt-s5:20px;
+  --xt-s6:24px; --xt-s8:32px; --xt-s10:40px; --xt-s12:48px; --xt-s16:64px;
+  /* radius / shadow */
+  --xt-r-sm:8px; --xt-r:12px; --xt-r-lg:16px; --xt-r-xl:20px; --xt-r-pill:999px;
+  --xt-sh-1:0 1px 2px rgba(15,23,42,.05);
+  --xt-sh-2:0 6px 20px rgba(15,23,42,.08);
+  --xt-sh-3:0 14px 40px rgba(15,23,42,.12);
+  --xt-wrap:1160px;
+}
+
+/* 2. BASE & TYPOGRAPHY ===================================================== */
+html { -webkit-text-size-adjust:100%; }
+body {
+  font-family: var(--xt-font);
+  color: var(--xt-ink);
+  background: var(--xt-surface);
+  line-height: 1.6;
+  font-size: 16px;
+}
+body, .master-wrapper-page, .master-wrapper-content { background: var(--xt-surface); }
+h1,h2,h3,h4 { color: var(--xt-ink); line-height: 1.2; font-weight: 800; letter-spacing:-.01em; }
+a { color: var(--xt-brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; height: auto; }
+.page-title h1, .page-title { color: var(--xt-ink); }
+
+/* 3. LAYOUT CONTAINERS ===================================================== */
+.master-wrapper-content { padding-bottom: var(--xt-s12); }
+/* Widen the page body to match the custom header/footer (~1160 = --xt-wrap). Scoped under `body` and
+   placed INSIDE DefaultClean's own desktop breakpoint so it cleanly overrides
+   `.master-wrapper-content{width:980px}` (and the 1200px bump at ≥1367) without refighting its
+   mobile-first cascade. To go wider/narrower everywhere, just change --xt-wrap. */
+@media (min-width: 1001px) {
+  body .master-wrapper-content { width:auto; max-width: var(--xt-wrap); padding-left: var(--xt-s4); padding-right: var(--xt-s4); }
+}
+.page:not(.home-page) { margin-top: var(--xt-s8); }
+.page:not(.home-page) > .page-title { margin: 0 0 var(--xt-s6); }
+.page:not(.home-page) > .page-title h1 { font-size: clamp(1.5rem,3.4vw,2.2rem); }
+
+/* 4. HEADER ================================================================ */
+.header { background: var(--xt-surface); }
+.header-upper { border-bottom: 1px solid var(--xt-line); }
+/* header width/positioning is left to DefaultClean's base layout (don't fight its desktop header) */
+.header-logo a, .header-logo img { max-height: 46px; }
+.header-links a, .header-selectors-wrapper a { color: var(--xt-ink-soft); font-weight: 600; }
+.search-box input.search-box-text {
+  border: 1px solid var(--xt-line); border-radius: var(--xt-r-pill);
+  padding: 10px 16px; min-height: 42px;
+}
+.search-box input.search-box-button {
+  border-radius: var(--xt-r-pill); background: var(--xt-ink); color:#fff; border:0;
+}
+/* cart: present but subtle (soft commerce) */
+.header-links .cart-qty, .flyout-cart .count a { color: var(--xt-muted); }
+.shopping-cart-link .cart-label { font-weight: 600; }
+
+/* 5. PRIMARY NAVIGATION ==================================================== */
+/* The storefront nav is OWNED by this theme's custom header (.xt-nav in _Header.cshtml), and the
+   stock nopCommerce MainMenu bar (.header-menu — inner .menu__* BEM markup in 4.90) is hidden in §23.
+   So no rules belong here. (Pre-4.90 this targeted legacy .top-menu/.menu-toggle/.sublist, which no
+   longer exist — that markup was replaced by .menu__item/.menu__link/.menu__toggle.) */
+
+/* 6. FOOTER — deep-teal editorial panel (markup: Views/Shared/Components/Footer/Default.cshtml).
+   Every rule is scoped under our own `.xt-footer` class so it reliably out-ranks DefaultClean's
+   shared `.footer` / `.footer-menu__*` rules (specificity beats stylesheet load order). nopCommerce
+   4.90's FooterMenu emits `.footer-navigation > .footer-menu > .footer-menu__title/__list/__link`
+   (NOT the legacy `.footer-block .title/.list`), so we target those real classes. */
+.footer.xt-footer { background: var(--xt-brand-deep); color: rgba(250,246,238,.78); margin-top: var(--xt-s16); text-align: left; }
+.xt-footer a { color: rgba(250,246,238,.82); }
+.xt-footer a:hover { color: #fff; }
+
+/* upper grid (brand · link columns · newsletter) and lower bar share the content width */
+.xt-foot.xt-foot-grid, .xt-footer .footer-lower { max-width: var(--xt-wrap); margin: 0 auto; padding: var(--xt-s10) var(--xt-s4); }
+.xt-foot-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s8); }
+@media (min-width: 768px) { .xt-foot-grid { grid-template-columns: 1.3fr 2.4fr 1.1fr; } }
+
+/* brand column */
+.xt-foot-title { color:#fff; font-family: var(--xt-font-display); font-weight:600; font-size:1.4rem; letter-spacing:-.01em; margin-bottom: var(--xt-s3); }
+.xt-foot-brand .topic-block, .xt-foot-brand p { color: rgba(250,246,238,.7); max-width:340px; }
+.xt-foot-social { margin-top: var(--xt-s5); }
+.xt-foot-social ul { display:flex; flex-wrap:wrap; gap:10px 16px; margin:0; padding:0; list-style:none; }
+.xt-foot-social li { display:inline-flex; margin:0; }
+.xt-foot-social a { display:inline-flex; align-items:center; color: rgba(250,246,238,.85); font-weight:600; font-size:.82rem;
+  border:1px solid rgba(250,246,238,.28); border-radius: var(--xt-r-pill); padding:6px 14px; }
+.xt-foot-social a:hover { color:#fff; border-color: var(--xt-accent); background: rgba(217,119,87,.12); text-decoration:none; }
+
+/* link columns — kill DefaultClean's white list box + blue toggle pill; mono terracotta labels.
+   Mobile-first: stacked. Desktop: EQUAL columns in one row (flex:1 1 0) so a 3rd menu never wraps
+   below the others; min-width:0 lets a long label wrap inside its column instead of breaking the row. */
+.xt-footer .footer-navigation { display:flex; flex-direction:column; gap: var(--xt-s5); width:100%; }
+.xt-footer .footer-menu { display:block; max-width:none; margin:0; }
+@media (min-width: 768px) {
+  .xt-footer .footer-navigation { flex-direction:row; gap: var(--xt-s6); }
+  .xt-footer .footer-menu { flex:1 1 0; min-width:0; }
+}
+.xt-footer .footer-menu__list { background:transparent; overflow:visible; }
+.xt-footer .footer-menu__item { display:block; padding:0; margin:0 0 var(--xt-s2); line-height:1.5; text-align:left; }
+.xt-footer .footer-menu__title, .xt-footer .footer-menu__toggle {
+  background:none; padding:0; margin:0 0 var(--xt-s3); cursor:auto;
+  font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; font-weight:500;
+  color: var(--xt-accent);
+}
+.xt-footer .footer-menu__link { color: rgba(250,246,238,.78); display:inline-flex; }
+.xt-footer .footer-menu__link:hover { color:#fff; }
+
+/* newsletter / follow column */
+.xt-foot-news .title, .xt-footer .newsletter .title {
+  font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; font-weight:500;
+  color: var(--xt-accent); margin:0 0 var(--xt-s3);
+}
+.xt-foot-news .newsletter .title { display:none; } /* avoid two stacked labels (keep "Follow us") */
+.xt-footer .newsletter-email { display:flex; max-width:320px; }
+.xt-footer .newsletter-subscribe-text {
+  flex:1; min-width:0; background: rgba(250,246,238,.95); color:#15201F; border:0;
+  border-radius: var(--xt-r-pill) 0 0 var(--xt-r-pill); min-height:44px;
+}
+.xt-footer .newsletter-subscribe-button {
+  border:0; border-radius: 0 var(--xt-r-pill) var(--xt-r-pill) 0; min-height:44px;
+  background: var(--xt-accent); color:#fff; box-shadow:none; padding:0 18px; white-space:nowrap;
+}
+.xt-footer .newsletter-subscribe-button:hover { background: var(--xt-accent-600); }
+.xt-footer .newsletter-validation, .xt-footer .newsletter-result { color: rgba(250,246,238,.7); }
+
+/* lower bar (copyright · powered-by · theme selector) */
+.xt-foot-lower.footer-lower { width:auto; border-top: 1px solid rgba(250,246,238,.14); display:flex; flex-wrap:wrap; align-items:center; gap: var(--xt-s4) var(--xt-s6); font-size:.85rem; }
+.xt-footer .footer-info { float:none; line-height:1.6; }
+.xt-footer .footer-disclaimer { color: rgba(250,246,238,.6); }
+.xt-footer .footer-powered-by { float:none; margin:0; font-size:.85rem; color: rgba(250,246,238,.6); }
+.xt-footer .footer-powered-by a { color: rgba(250,246,238,.85); font-weight:600; }
+.xt-footer .theme-selector { float:none; margin:0; }
+.xt-footer .theme-selector select { background: rgba(250,246,238,.08); color: var(--xt-parch); border:1px solid rgba(250,246,238,.25); border-radius: var(--xt-r-sm); }
+
+/* (mobile stacking of the link columns is the base style above; the row layout kicks in at 768px) */
+
+/* 7. BUTTONS & FORMS ======================================================= */
+.button-1, .button-2, input[type="button"].button-1, input[type="submit"].button-1,
+.add-to-cart-button, .product-box-add-to-cart-button, .buy-now-button, .checkout-button {
+  display: inline-flex; align-items:center; justify-content:center; gap:8px;
+  background: var(--xt-accent); color: var(--xt-accent-ink) !important;
+  border: 0; border-radius: var(--xt-r); font-weight: 800;
+  padding: 12px 22px; min-height: 46px; cursor: pointer;
+  box-shadow: 0 6px 18px rgba(245,158,11,.30);
+  transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+}
+.button-1:hover, .add-to-cart-button:hover, .checkout-button:hover { box-shadow: var(--xt-sh-3); text-decoration:none; }
+.button-1:active, .add-to-cart-button:active { transform: translateY(1px); }
+.button-2, input.button-2 { background: var(--xt-surface); color: var(--xt-ink) !important; border:1px solid var(--xt-line); box-shadow:none; }
+.button-2:hover { border-color: var(--xt-ink); }
+/* sample / preview download = secondary editorial action */
+.download-sample-button, a.download-sample-button {
+  background: var(--xt-surface) !important; color: var(--xt-brand) !important;
+  border:1px solid var(--xt-brand); box-shadow:none; border-radius: var(--xt-r);
+  padding:10px 18px; font-weight:700;
+}
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"],
+input[type="number"], select, textarea {
+  border:1px solid var(--xt-line); border-radius: var(--xt-r-sm);
+  padding:10px 12px; min-height:42px; font-size:1rem; color: var(--xt-ink);
+}
+input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-brand); box-shadow:0 0 0 3px rgba(99,102,241,.15); }
+
+/* 8. CARDS / BADGES / ALERTS / TRUST ====================================== */
+.xt-badge { display:inline-block; padding:3px 10px; border-radius: var(--xt-r-pill); font-size:.72rem; font-weight:800; letter-spacing:.02em; text-transform:uppercase; }
+.xt-badge--free { background:#ecfdf5; color: var(--xt-success-d); }
+.xt-badge--format { background:#eef2ff; color: var(--xt-brand); }
+.bar-notification.success, .note.note-success { border-left:4px solid var(--xt-success); }
+.bar-notification.error, .message-error, .field-validation-error { color: var(--xt-danger); }
+.message-error, .validation-summary-errors { border:1px solid #fecaca; background:#fef2f2; border-radius: var(--xt-r); padding: var(--xt-s3) var(--xt-s4); }
+
+/* 9. EDITORIAL COMPONENT LIBRARY (.xt-*) =================================== */
+/* Used by the theme views AND by content pasted into the HomepageText / topic editors. */
+.xt-home, .xt-section, .xt-wrap { font-family: inherit; }
+.xt-home *, .xt-section * { box-sizing: border-box; }
+.xt-wrap { max-width: var(--xt-wrap); margin:0 auto; padding:0 var(--xt-s4); }
+.xt-section { padding: var(--xt-s12) 0; }
+.xt-section > h2, .xt-section__title { font-size: clamp(1.4rem,3vw,2rem); text-align:center; margin:0 0 var(--xt-s2); }
+.xt-section .xt-sub, .xt-sub { text-align:center; color: var(--xt-muted); max-width:640px; margin:0 auto var(--xt-s8); }
+.xt-eyebrow { text-align:center; color: var(--xt-brand); font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem; margin-bottom: var(--xt-s2); }
+
+.xt-hero { background: linear-gradient(135deg, var(--xt-brand-deep) 0%, var(--xt-ink) 60%, #111827 100%); color:#fff; border-radius: var(--xt-r-xl); padding: clamp(32px,6vw,64px) var(--xt-s6); text-align:center; }
+.xt-hero h1 { color:#fff; font-size: clamp(1.8rem,5vw,3rem); margin:0 0 var(--xt-s3); }
+.xt-hero p { color:#cbd5e1; font-size: clamp(1rem,2.4vw,1.2rem); max-width:660px; margin:0 auto var(--xt-s6); }
+.xt-cta { display:inline-flex; gap:var(--xt-s3); flex-wrap:wrap; justify-content:center; }
+.xt-btn { display:inline-block; padding:13px 24px; border-radius: var(--xt-r); font-weight:800; text-decoration:none; transition:transform .08s ease, box-shadow .2s ease; }
+.xt-btn:hover { text-decoration:none; }
+.xt-btn:active { transform: translateY(1px); }
+.xt-btn-primary { background: var(--xt-accent); color: var(--xt-accent-ink); box-shadow:0 6px 20px rgba(245,158,11,.35); }
+.xt-btn-ghost { background: rgba(255,255,255,.08); color:#fff; border:1px solid rgba(255,255,255,.25); }
+.xt-btn-wa, .xt-wa { background: var(--xt-wa); color:#fff; box-shadow:0 6px 20px rgba(37,211,102,.35); }
+
+.xt-trust { display:flex; flex-wrap:wrap; gap:10px 22px; justify-content:center; margin-top: var(--xt-s5); color:#94a3b8; font-size:.92rem; }
+.xt-trust span { display:inline-flex; align-items:center; gap:6px; }
+
+.xt-grid { display:grid; gap: var(--xt-s4); grid-template-columns:1fr; }
+.xt-card { background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s6); box-shadow: var(--xt-sh-1); }
+.xt-card .xt-ic { font-size:1.8rem; }
+.xt-card h3 { margin: var(--xt-s2) 0 var(--xt-s1); font-size:1.1rem; }
+.xt-card p { margin:0; color: var(--xt-muted); }
+
+.xt-steps { counter-reset: step; display:grid; gap: var(--xt-s4); grid-template-columns:1fr; }
+.xt-step { position:relative; padding: var(--xt-s6) var(--xt-s6) var(--xt-s6) 64px; background: var(--xt-surface-2); border-radius: var(--xt-r-lg); }
+.xt-step::before { counter-increment: step; content: counter(step); position:absolute; left:18px; top:20px; width:34px; height:34px; border-radius:50%; background: var(--xt-brand); color:#fff; display:grid; place-items:center; font-weight:800; }
+.xt-step h3 { margin:0 0 var(--xt-s1); font-size:1.05rem; }
+.xt-step p { margin:0; color: var(--xt-muted); }
+
+.xt-support { background:#ecfdf5; border:1px solid #a7f3d0; border-radius: var(--xt-r-lg); padding: var(--xt-s8) var(--xt-s6); text-align:center; }
+.xt-support h2 { color: var(--xt-success-d); }
+
+/* FAQ accordion (enhanced by theme.js) */
+.xt-faq { max-width: 760px; margin: 0 auto; }
+.xt-faq__item { border:1px solid var(--xt-line); border-radius: var(--xt-r); margin-bottom: var(--xt-s3); overflow:hidden; background: var(--xt-surface); }
+.xt-faq__q { margin:0; padding: var(--xt-s4) var(--xt-s5); font-weight:700; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.xt-faq__q::after { content:"+"; font-weight:800; color: var(--xt-brand); }
+.xt-faq__q.is-open::after { content:"–"; }
+.xt-faq__a { padding: 0 var(--xt-s5) var(--xt-s4); color: var(--xt-ink-soft); }
+.xt-legal { text-align:center; color: var(--xt-muted); font-size:.88rem; margin-top: var(--xt-s6); }
+
+/* 10. HOMEPAGE ============================================================= */
+.html-home-page .master-wrapper-content { padding-top: var(--xt-s8); }
+.home-page .page-body > * { margin-bottom: var(--xt-s10); }
+.home-page .topic-block, .home-page .topic-html-content { max-width: var(--xt-wrap); margin: 0 auto; }
+/* featured products + categories rendered as editorial cards (see §11/§12 .item-box) */
+.home-page-product-grid .title strong, .home-page-category-grid .title strong { font-size: clamp(1.3rem,3vw,1.8rem); }
+.home-page-product-grid .title, .home-page-category-grid .title { text-align:center; margin-bottom: var(--xt-s6); border:0; }
+
+/* 11. PRODUCT DETAILS — landing-page feel ================================= */
+.product-details-page { }
+.product-essential { display:grid; grid-template-columns: 1fr; gap: var(--xt-s8); align-items:start; }
+.product-essential .gallery { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s6); }
+.product-essential .gallery .picture img { border-radius: var(--xt-r); box-shadow: var(--xt-sh-2); } /* eBook cover treatment */
+.product-essential .overview { padding: var(--xt-s2) 0; }
+.product-name h1 { font-size: clamp(1.6rem,3.6vw,2.4rem); margin:0 0 var(--xt-s3); }
+.short-description { font-size: 1.12rem; color: var(--xt-ink-soft); margin-bottom: var(--xt-s5); }
+.product-essential .prices { margin: var(--xt-s4) 0; }
+.product-essential .prices .product-price span, .product-essential .actual-price { font-size: 1.8rem; font-weight: 800; color: var(--xt-ink); }
+.add-to-cart-panel { display:flex; flex-wrap:wrap; align-items:center; gap: var(--xt-s3); margin: var(--xt-s4) 0; }
+.add-to-cart-panel .add-to-cart-button { padding: 14px 30px; font-size:1.05rem; }
+.overview .delivery, .availability { color: var(--xt-muted); }
+/* editorial long-form description: "what you'll learn / who it's for / TOC / FAQ" lives here (admin HTML) */
+.full-description { font-family: var(--xt-serif); font-size: 1.08rem; line-height: 1.75; color: var(--xt-ink-soft); max-width: 820px; margin: var(--xt-s10) auto 0; }
+.full-description h2 { font-family: var(--xt-font); font-size: 1.5rem; margin: var(--xt-s8) 0 var(--xt-s3); }
+.full-description h3 { font-family: var(--xt-font); font-size: 1.2rem; margin: var(--xt-s6) 0 var(--xt-s2); }
+.full-description ul, .full-description ol { padding-left: 1.3em; }
+.full-description li { margin: .35em 0; }
+.product-collateral { max-width: 820px; margin: var(--xt-s8) auto 0; }
+/* author (modelled as Manufacturer) kept and presented as credibility, not a "brand link" */
+.product-manufacturers { font-size:.95rem; }
+.product-manufacturers .manufacturer label { color: var(--xt-muted); }
+
+/* 12. CATEGORY / TOPIC PAGES — editorial ================================= */
+.category-page .category-description, .manufacturer-page .manufacturer-description {
+  font-family: var(--xt-serif); font-size: 1.08rem; line-height:1.75; color: var(--xt-ink-soft);
+  max-width: 820px; margin: 0 auto var(--xt-s10); text-align: left;
+}
+.category-page .category-description h2, .category-page .category-description h3 { font-family: var(--xt-font); }
+/* product cards = book cards */
+.product-grid .item-box, .product-list .item-box { margin-bottom: var(--xt-s6); }
+.item-box .product-item {
+  background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg);
+  overflow:hidden; box-shadow: var(--xt-sh-1); transition: transform .15s ease, box-shadow .2s ease; height:100%;
+  display:flex; flex-direction:column;
+}
+.item-box .product-item:hover { transform: translateY(-3px); box-shadow: var(--xt-sh-2); }
+.item-box .picture { background: var(--xt-surface-2); padding: var(--xt-s4); }
+.item-box .picture img { border-radius: var(--xt-r-sm); box-shadow: var(--xt-sh-1); }
+.item-box .details { padding: var(--xt-s4) var(--xt-s5) var(--xt-s5); display:flex; flex-direction:column; gap: var(--xt-s2); flex:1; }
+.item-box .product-title { min-height: auto; }
+.item-box .product-title a { color: var(--xt-ink); font-weight:800; font-size:1.05rem; }
+.item-box .description { color: var(--xt-muted); font-size:.92rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.item-box .prices { margin-top:auto; }
+.item-box .prices .actual-price { font-size:1.15rem; font-weight:800; color: var(--xt-ink); }
+.item-box .add-info .buttons { display:flex; gap:8px; flex-wrap:wrap; }
+.item-box .product-box-add-to-cart-button { width:100%; }
+
+/* 13. BLOG / NEWS / ARTICLES ============================================= */
+.blog-page .post, .news-items .news-item, .blogpost-page .post {
+  background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg);
+  padding: var(--xt-s6); margin-bottom: var(--xt-s6); box-shadow: var(--xt-sh-1);
+}
+.post-title a, .news-title a { color: var(--xt-ink); font-weight:800; }
+.post-date, .news-date { color: var(--xt-muted); font-size:.85rem; }
+.blogpost-page .post-body, .news-item .news-body {
+  font-family: var(--xt-serif); font-size:1.1rem; line-height:1.78; color: var(--xt-ink-soft);
+  max-width: 760px; margin: 0 auto;
+}
+.blogpost-page .post-body h2, .blogpost-page .post-body h3 { font-family: var(--xt-font); }
+/* natural in-article CTA toward a relevant eBook (admin pastes .xt-cta-inline into the post body) */
+.xt-cta-inline { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-left:4px solid var(--xt-accent);
+  border-radius: var(--xt-r); padding: var(--xt-s5) var(--xt-s6); margin: var(--xt-s8) 0; font-family: var(--xt-font); }
+.xt-cta-inline a.xt-btn { margin-top: var(--xt-s3); }
+
+/* 14. ACCOUNT / MY DOWNLOADS / CHECKOUT ================================== */
+.account-page .page-title h1, .downloadable-products-page .page-title h1 { font-size: clamp(1.4rem,3vw,2rem); }
+.block-account-navigation, .account-navigation { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s4); }
+.block-account-navigation .list a.active, .account-navigation .list a.active { color: var(--xt-brand); font-weight:800; }
+.downloadable-products-page .data-table, .order-details-page .data-table { border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); overflow:hidden; }
+.downloadable-products-page td a, .order-details-page .download a { font-weight:800; color: var(--xt-brand); }
+/* helpful guidance banner (admin adds .xt-note into the account/downloads widget zones or a topic) */
+.xt-note { background:#eff6ff; border:1px solid #bfdbfe; border-radius: var(--xt-r); padding: var(--xt-s4) var(--xt-s5); margin-bottom: var(--xt-s6); color: var(--xt-ink-soft); }
+
+/* checkout: simple, trustworthy, digital-first */
+.checkout-page, .opc, .order-summary-content { max-width: var(--xt-wrap); margin:0 auto; }
+.order-summary-content .cart .product .product-name a { color: var(--xt-ink); font-weight:700; }
+.checkout-data .section, .opc .step { background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s6); margin-bottom: var(--xt-s5); }
+.payment-info .info, .payment-method .method-list .method-name { font-weight:600; }
+.checkout-attributes, .selected-checkout-attributes { color: var(--xt-muted); }
+/* reassurance strip (admin can place .xt-reassure via a checkout widget zone or order-summary text) */
+.xt-reassure { display:flex; flex-wrap:wrap; gap:12px 20px; color: var(--xt-success-d); font-weight:600; font-size:.92rem; margin: var(--xt-s4) 0; }
+
+/* 15. DE-EMPHASIS OF GENERIC-SHOP ELEMENTS ============================== */
+/* Hide aggressive/irrelevant retail bits. Prefer also disabling in admin (see decision table).
+   NOTE: never CSS-hide "Powered by nopCommerce" without the official copyright-removal key. */
+.compare-products-button,
+.add-to-compare-list-button,
+.product-box-add-to-compare-list-button,
+.compare-products-page-link,
+.block.block-manufacturer-navigation,
+.block.block-popular-tags,
+.product-tags-box,
+.block.block-recently-viewed-products,
+.recently-viewed-products-block {
+  display: none !important;
+}
+/* keep wishlist but make it quiet/secondary, not a primary CTA */
+.add-to-wishlist-button, .product-box-add-to-wishlist-button {
+  background: transparent !important; color: var(--xt-muted) !important;
+  border:1px solid var(--xt-line) !important; box-shadow:none !important; font-weight:600;
+}
+
+/* 16. STICKY MOBILE BUY BAR (created by theme.js on product pages) ======= */
+.xt-buybar {
+  position: fixed; left:0; right:0; bottom:0; z-index: 1000;
+  display:none; align-items:center; justify-content:space-between; gap: var(--xt-s4);
+  background: var(--xt-surface); border-top:1px solid var(--xt-line);
+  box-shadow: 0 -8px 24px rgba(15,23,42,.12); padding: 10px 16px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.xt-buybar.is-visible { display:flex; }
+.xt-buybar__price { font-weight:800; font-size:1.1rem; color: var(--xt-ink); }
+.xt-buybar__btn { background: var(--xt-accent); color: var(--xt-accent-ink); border:0; border-radius: var(--xt-r); font-weight:800; padding: 12px 22px; font-size:1rem; }
+
+/* 17. RESPONSIVE ========================================================= */
+@media (min-width: 640px) {
+  .xt-grid-2 { grid-template-columns: repeat(2,1fr); }
+  .xt-grid-3 { grid-template-columns: repeat(3,1fr); }
+  .xt-grid-4 { grid-template-columns: repeat(2,1fr); }
+  .xt-steps  { grid-template-columns: repeat(3,1fr); }
+}
+@media (min-width: 992px) {
+  .product-essential { grid-template-columns: 0.95fr 1.05fr; gap: var(--xt-s12); }
+  .product-essential .gallery { position: sticky; top: var(--xt-s4); }
+  .xt-grid-4 { grid-template-columns: repeat(4,1fr); }
+  .xt-buybar { display:none !important; } /* sticky CTA is mobile-only */
+}
+
+/* 18. ACCESSIBILITY ====================================================== */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+.xt-btn:focus-visible, .add-to-cart-button:focus-visible, .top-menu a:focus-visible {
+  outline: 3px solid var(--xt-brand); outline-offset: 2px; border-radius: var(--xt-r-sm);
+}
+.xt-skip-link { position:absolute; left:-999px; top:0; background:#fff; padding:10px 16px; border-radius: var(--xt-r); }
+.xt-skip-link:focus { left: 12px; top: 12px; z-index: 2000; box-shadow: var(--xt-sh-2); }
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration:.001ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* 20. PRODUCT & CATEGORY LANDING (deeper view overrides) ================= */
+/* Product: 3-area grid — desktop = content left + sticky buy right; mobile = cover→buy→content */
+.product-essential.xt-pd { display:block; }
+.xt-pd-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s6); align-items:start; }
+.xt-pd-content { min-width:0; }
+.xt-pd-content .full-description { max-width:none; margin: var(--xt-s4) 0 0; }
+.xt-buybox { background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s6); box-shadow: var(--xt-sh-1); }
+.xt-buybox .product-name h1 { margin-top:0; }
+/* auto Table of Contents (built by theme.js; hidden until built) */
+.xt-toc { display:none; }
+.xt-toc.is-built { display:block; background: var(--xt-surface-2); border:1px solid var(--xt-line); border-left:4px solid var(--xt-brand); border-radius: var(--xt-r); padding: var(--xt-s4) var(--xt-s5); margin-bottom: var(--xt-s6); }
+.xt-toc.is-built ul { margin:0; padding-left:1.1em; }
+.xt-toc.is-built li { margin:.3em 0; }
+.xt-toc.is-built a { color: var(--xt-ink-soft); font-weight:600; }
+/* dedicated author / publisher block */
+.xt-author { margin: var(--xt-s8) 0 0; padding: var(--xt-s5) var(--xt-s6); background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); }
+.xt-author:empty { display:none; }
+.xt-author .manufacturers .label { display:block; color: var(--xt-muted); font-weight:700; margin-bottom: var(--xt-s1); }
+.xt-author .manufacturers .value a { font-weight:800; }
+/* Category: editorial hero band */
+.category-page .xt-cat-hero { background: linear-gradient(135deg, #eef2ff 0%, var(--xt-surface-2) 100%); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); padding: clamp(24px,4vw,44px); margin-bottom: var(--xt-s8); }
+.category-page .xt-cat-hero h1 { font-size: clamp(1.7rem,3.8vw,2.5rem); margin:0; }
+.category-page .xt-cat-hero .category-description { font-family: var(--xt-serif); font-size:1.08rem; line-height:1.75; color: var(--xt-ink-soft); margin: var(--xt-s3) 0 0; max-width:760px; text-align:left; }
+@media (min-width: 992px) {
+  .xt-pd-grid { grid-template-columns:1.05fr 0.95fr; column-gap: var(--xt-s12); grid-template-areas:"cover buy" "content buy"; }
+  .xt-pd-grid > .gallery { grid-area:cover; position:static; top:auto; }
+  .xt-pd-grid > .xt-pd-buy { grid-area:buy; }
+  .xt-pd-grid > .xt-pd-content { grid-area:content; }
+  .xt-pd-buy .xt-buybox { position:sticky; top: var(--xt-s4); }
+}
+
+/* 19. PRINT ============================================================== */
+@media print {
+  .header, .header-menu, .footer, .xt-buybar, .breadcrumb, .add-to-cart-panel { display:none !important; }
+  body { color:#000; }
+}
+
+/* 21. CHECK DESIGN SYSTEM (re-skin) ======================================
+   Applies the "Check" visual system (Claude Design handoff): deep teal + terracotta on cream,
+   Fraunces display + Plus Jakarta Sans body, with a light/dark toggle. Tokens are re-pointed here
+   (later cascade wins) so every .xt-* and nopCommerce element restyles at once; the
+   [data-theme="dark"] block flips the whole storefront. */
+:root, [data-theme="light"] {
+  --xt-page:#FAF6EE;          /* cream page */
+  --xt-surface:#FFFFFF;       /* card / elevated */
+  --xt-surface-2:#F3ECDD;     /* subtle paper band */
+  --xt-ink:#15201F;           /* primary text */
+  --xt-ink-soft:#3B4A48;      /* secondary text */
+  --xt-muted:#6B7A77;         /* muted text */
+  --xt-line:#E4DCC8;          /* hairline */
+  --xt-parch:#FAF6EE;         /* fixed light: text/elements on teal panels */
+  --xt-brand:#0F3D3E;         /* teal-600 (links, secondary, headings accents) */
+  --xt-brand-deep:#06201F;    /* teal-800 (footer, CTA band) */
+  --xt-teal-50:#E8F0EF;
+  --xt-accent:#D97757;        /* terracotta — primary CTA */
+  --xt-accent-2:#0F3D3E;      /* legacy alias -> teal */
+  --xt-accent-ink:#FFFFFF;    /* text on terracotta */
+  --xt-accent-600:#C0603F;    /* terracotta hover */
+  --xt-font:"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  --xt-font-display:"Fraunces", Georgia, "Times New Roman", serif;
+  --xt-font-mono:"JetBrains Mono", ui-monospace, monospace;
+  --xt-serif:var(--xt-font);  /* long-form reading uses the body sans, per the design */
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --xt-page:#0C1111;
+  --xt-surface:#161E1D;
+  --xt-surface-2:#1D2726;
+  --xt-ink:#E9E6DD;
+  --xt-ink-soft:#C7C8BF;
+  --xt-muted:#9AA7A2;
+  --xt-line:#2B3736;
+  --xt-parch:#FAF6EE;
+  --xt-brand:#6FB7AE;         /* teal links lighten on dark */
+  --xt-brand-deep:#06201F;
+  --xt-teal-50:rgba(111,183,174,.14);
+  --xt-accent:#D97757;
+  --xt-accent-ink:#FFFFFF;
+  --xt-accent-600:#C0603F;
+  color-scheme: dark;
+}
+html, body { background: var(--xt-page); color: var(--xt-ink); font-family: var(--xt-font); transition: background-color .35s ease, color .35s ease; }
+body, .master-wrapper-page, .master-wrapper-content { background: var(--xt-page); }
+h1,h2,h3,h4, .page-title h1, .xt-section h2, .xt-section__title, .xt-hero h1, .product-name h1,
+.category-page .xt-cat-hero h1, .full-description h2, .full-description h3,
+.blogpost-page .post-body h2, .blogpost-page .post-body h3, .post-title a, .news-title a, .xt-foot-title {
+  font-family: var(--xt-font-display); letter-spacing:-0.02em; font-weight:600;
+  font-optical-sizing:auto; font-variation-settings:"SOFT" 30, "WONK" 0;
+}
+.font-display { font-family: var(--xt-font-display); letter-spacing:-0.02em; }
+.grain { background-image: radial-gradient(rgba(15,61,62,0.05) 1px, transparent 1px); background-size:3px 3px; }
+[data-theme="dark"] .grain { background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px); }
+.xt-mono { font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; color: var(--xt-muted); }
+
+/* buttons: terracotta pill primary, teal-outline secondary, terracotta focus */
+.button-1, .button-2, input[type="button"].button-1, input[type="submit"].button-1,
+.add-to-cart-button, .product-box-add-to-cart-button, .checkout-button, .xt-btn-primary, .xt-buybar__btn {
+  border-radius: var(--xt-r-pill); box-shadow: 0 10px 24px -12px rgba(217,119,87,.85);
+}
+.xt-btn { border-radius: var(--xt-r-pill); }
+.xt-btn-ghost { background: transparent; color: var(--xt-brand); border:1px solid var(--xt-brand); }
+.button-2, input.button-2 { box-shadow:none; border:1px solid var(--xt-brand); color: var(--xt-brand) !important; background: transparent !important; }
+a { color: var(--xt-brand); }
+input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-accent); box-shadow:0 0 0 3px rgba(217,119,87,.25); }
+
+/* hero: cream editorial (replaces the dark gradient) */
+.xt-hero { position:relative; overflow:hidden; background: var(--xt-page); color: var(--xt-ink); border:1px solid var(--xt-line); }
+.xt-hero::before { content:""; position:absolute; inset:0; z-index:0; background:
+  radial-gradient(640px 640px at -8% -25%, var(--xt-teal-50), transparent 60%),
+  radial-gradient(520px 520px at 112% 125%, rgba(232,150,121,.16), transparent 60%); }
+.xt-hero > * { position:relative; z-index:1; }
+.xt-hero h1 { color: var(--xt-ink); font-weight:500; line-height:.98; font-size: clamp(2.1rem,6vw,4.2rem); }
+.xt-hero h1 em, .xt-hero .xt-em { font-style:normal; color: var(--xt-accent-600); }
+[data-theme="dark"] .xt-hero h1 em, [data-theme="dark"] .xt-hero .xt-em { color: var(--xt-accent); }
+.xt-hero p { color: var(--xt-ink-soft); }
+.xt-trust, .xt-trust span { color: var(--xt-muted); }
+
+/* eyebrow pill */
+.xt-eyebrow { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius: var(--xt-r-pill);
+  background: var(--xt-teal-50); color: var(--xt-brand); font-weight:600; letter-spacing:.01em; text-transform:none; font-size:.82rem; }
+.xt-eyebrow::before { content:""; width:7px; height:7px; border-radius:50%; background: var(--xt-accent); }
+
+/* trust stats */
+.xt-stats { display:grid; grid-template-columns:repeat(2,1fr); gap:18px 24px; max-width:640px; margin: var(--xt-s8) auto 0; }
+@media (min-width:640px){ .xt-stats { grid-template-columns:repeat(4,1fr);} }
+.xt-stat__n { font-family: var(--xt-font-display); font-weight:600; font-size:1.9rem; line-height:1; color: var(--xt-brand); }
+[data-theme="dark"] .xt-stat__n { color: var(--xt-ink); }
+.xt-stat__n span { color: var(--xt-accent); }
+.xt-stat__l { margin-top:6px; font-size:.8rem; color: var(--xt-muted); line-height:1.35; }
+
+/* numbered differentiators (last card inverted teal) */
+.xt-diff { display:grid; grid-template-columns:1fr; gap:16px; counter-reset:d; }
+@media (min-width:640px){ .xt-diff { grid-template-columns:repeat(2,1fr);} }
+@media (min-width:992px){ .xt-diff { grid-template-columns:repeat(4,1fr);} }
+.xt-diff__item { position:relative; padding:26px 22px; border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); background: var(--xt-surface); transition: transform .25s, box-shadow .25s, border-color .25s; }
+.xt-diff__item:hover { transform: translateY(-2px); border-color: var(--xt-brand); box-shadow: 0 12px 30px -16px rgba(15,61,62,.25); }
+.xt-diff__item::before { counter-increment:d; content:"0" counter(d); font-family: var(--xt-font-mono); font-size:.8rem; color: var(--xt-accent); }
+.xt-diff__item h3 { margin:10px 0 6px; font-family: var(--xt-font-display); font-size:1.15rem; }
+.xt-diff__item p { margin:0; color: var(--xt-muted); font-size:.95rem; }
+.xt-diff__item--invert { background: var(--xt-brand); border-color: var(--xt-brand); }
+.xt-diff__item--invert h3 { color: var(--xt-parch); }
+.xt-diff__item--invert p { color: rgba(250,246,238,.8); }
+
+/* testimonials on a teal block */
+.xt-quote-band { background: var(--xt-brand); color: var(--xt-parch); border-radius: var(--xt-r-xl); padding: clamp(28px,5vw,56px); }
+.xt-quote-band h2, .xt-quote-band .xt-section__title { color: var(--xt-parch); }
+.xt-quote-band .xt-sub { color: rgba(250,246,238,.75); }
+.xt-quote { background: rgba(250,246,238,.06); border:1px solid rgba(250,246,238,.14); border-radius: var(--xt-r-lg); padding:22px; }
+.xt-quote p { margin:0 0 12px; color: var(--xt-parch); }
+.xt-quote cite { color: rgba(250,246,238,.7); font-style:normal; font-size:.85rem; }
+
+/* final CTA band (deep teal) */
+.xt-cta-band { background: var(--xt-brand-deep); color: var(--xt-parch); border-radius: var(--xt-r-xl); padding: clamp(32px,6vw,64px); text-align:center; }
+.xt-cta-band h2 { color: var(--xt-parch); font-family: var(--xt-font-display); }
+.xt-cta-band .xt-em { color: var(--xt-accent); font-style:normal; }
+.xt-cta-band p { color: rgba(250,246,238,.75); }
+
+/* payment / trust strip */
+.xt-pay { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px 14px; }
+.xt-pay span { font-family: var(--xt-font-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color: var(--xt-muted);
+  border:1px solid var(--xt-line); border-radius: var(--xt-r-pill); padding:6px 12px; background: var(--xt-surface); }
+
+/* re-tone earlier components to the new palette */
+.xt-support { background: var(--xt-surface-2); border:1px solid var(--xt-line); }
+.xt-support h2, .xt-support .xt-sub { color: var(--xt-brand); }
+.xt-note { background: var(--xt-teal-50); border:1px solid var(--xt-line); color: var(--xt-ink-soft); }
+.category-page .xt-cat-hero { background: linear-gradient(135deg, var(--xt-teal-50) 0%, var(--xt-surface-2) 100%); }
+.xt-badge--free { background: var(--xt-teal-50); color: var(--xt-brand); }
+.xt-badge--format { background: rgba(217,119,87,.14); color: var(--xt-accent-600); }
+.xt-step::before { background: var(--xt-accent); }
+.item-box .picture, .product-essential .gallery { background: var(--xt-surface-2); }
+
+/* footer column labels are styled in §6 against nopCommerce 4.90's real `.footer-menu__title`
+   (the legacy `.footer-block .title` markup no longer exists), so no extra rule is needed here. */
+
+/* WhatsApp float (created by theme.js from the first wa.me link on the page) */
+.xt-wa-float { position:fixed; z-index:50; right:18px; bottom:90px; width:56px; height:56px; border-radius:50%;
+  background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px -8px rgba(37,211,102,.7); }
+@media (min-width:768px){ .xt-wa-float { bottom:24px; right:24px; } }
+.xt-wa-float::before { content:""; position:absolute; inset:0; border-radius:50%; background:#25D366; opacity:.55; animation: xt-wapulse 2.4s ease-out 3; }
+@keyframes xt-wapulse { 0%{transform:scale(1);opacity:.55} 100%{transform:scale(1.8);opacity:0} }
+.xt-wa-float svg { width:28px; height:28px; position:relative; }
+
+/* light/dark toggle (created by theme.js; injected into the header, else floats top-right) */
+.xt-theme-toggle { width:42px; height:42px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface);
+  color: var(--xt-ink); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.xt-theme-toggle:hover { border-color: var(--xt-brand); }
+.xt-theme-toggle .icon-sun { display:none; }
+.xt-theme-toggle .icon-moon { display:block; }
+[data-theme="dark"] .xt-theme-toggle .icon-sun { display:block; }
+[data-theme="dark"] .xt-theme-toggle .icon-moon { display:none; }
+.xt-theme-toggle.is-floating { position:fixed; z-index:60; top:14px; right:14px; box-shadow: var(--xt-sh-2); }
+@media (prefers-reduced-motion: reduce) { .xt-wa-float::before { animation:none; } }
+
+/* 22. CHECK EBOOK STORE + CART (revision) ===============================
+   Restyles nopCommerce product cards into "Check" eBook book-cards, turns the header cart into an
+   icon + terracotta count badge (bump on add), and restyles nopCommerce's flyout mini-cart into a
+   right slide-over drawer. The REAL nopCommerce cart/checkout/Midtrans flow is used throughout —
+   no mock cart, no localStorage cart, no front-end checkout. Plus reusable designed book-cover
+   jackets, filter chips and a bundle banner for curated widgets/topics. */
+
+/* product cards = premium book cards (catalog / home / featured grids) */
+.item-box .product-item { border-radius: var(--xt-r-xl); }
+.item-box .picture img { box-shadow: 0 16px 36px -20px rgba(0,0,0,.45); }
+.item-box .product-title a { font-family: var(--xt-font-display); font-weight:600; letter-spacing:-.01em; }
+.item-box .prices .actual-price { font-family: var(--xt-font-display); }
+/* small card add-to-cart = TEAL pill (terracotta is reserved for the big/bundle CTAs) */
+.item-box .product-box-add-to-cart-button {
+  background: var(--xt-brand) !important; color: var(--xt-parch) !important; border:0;
+  border-radius: var(--xt-r-pill); box-shadow:none; width:auto;
+}
+.item-box .product-box-add-to-cart-button:hover { background: var(--xt-brand-deep) !important; }
+
+/* designed book-cover jacket (reusable: curated widgets/topics, or as an image fallback) */
+.xt-jacket { position:relative; aspect-ratio:3/4; border-radius:12px; overflow:hidden; display:flex; box-shadow:0 16px 36px -20px rgba(0,0,0,.55); color:#FAF6EE; }
+.xt-jacket__in { position:relative; z-index:2; display:flex; flex-direction:column; height:100%; width:100%; padding:20px 18px 18px 24px; }
+.xt-jacket__spine { position:absolute; left:0; top:0; bottom:0; width:11px; background:linear-gradient(90deg, rgba(0,0,0,.32), rgba(0,0,0,0)); z-index:3; }
+.xt-jacket__frame { position:absolute; inset:12px 12px 12px 18px; border:1px solid currentColor; opacity:.2; border-radius:5px; z-index:1; }
+.xt-jacket::after { content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(255,255,255,.08), transparent 40%, rgba(0,0,0,.30)); pointer-events:none; }
+.xt-jacket__imprint { font-family: var(--xt-font-mono); font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; opacity:.7; }
+.xt-jacket__series { font-family: var(--xt-font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; opacity:.78; }
+.xt-jacket__title { font-family: var(--xt-font-display); font-weight:600; letter-spacing:-.02em; line-height:1.02; font-size:1.4rem; margin-top:7px; }
+.xt-jacket__by { font-size:11.5px; opacity:.82; margin-top:9px; }
+.xt-jacket__rule { height:1px; background:currentColor; opacity:.28; margin-bottom:9px; }
+.xt-jacket--teal { background:#0F3D3E; color:#FAF6EE; }
+.xt-jacket--deep { background:#0A2C2D; color:#FAF6EE; }
+.xt-jacket--terra{ background:#BC5E3E; color:#FBEFE7; }
+.xt-jacket--ink  { background:#1C2625; color:#F1EAD9; }
+.xt-jacket--gold { background:#C8A24B; color:#241D08; }
+.xt-jacket--sand { background:#E7DCC4; color:#173130; }
+
+/* badges + filter chips (chips style category navigation; nopCommerce drives the filtering) */
+.xt-badge--best { background: var(--xt-accent); color:#fff; }
+.xt-badge--new  { background: var(--xt-brand); color: var(--xt-parch); }
+.xt-chip { display:inline-flex; align-items:center; padding:8px 16px; border-radius: var(--xt-r-pill); font-size:.82rem; font-weight:600; cursor:pointer;
+  background: var(--xt-surface); border:1px solid var(--xt-line); color: var(--xt-ink-soft); transition: background-color .2s, color .2s, border-color .2s; text-decoration:none; }
+.xt-chip:hover { border-color: var(--xt-brand); text-decoration:none; }
+.xt-chip.is-active, .xt-chip[aria-current="true"], .xt-chip[aria-current="page"] { background: var(--xt-brand); color: var(--xt-parch); border-color: var(--xt-brand); }
+
+/* bundle banner (admin promo block in a widget/topic, or a real "bundle" product) */
+.xt-bundle { background: var(--xt-brand); color: var(--xt-parch); border-radius: var(--xt-r-xl); padding: clamp(24px,4vw,40px); }
+.xt-bundle h3 { font-family: var(--xt-font-display); color: var(--xt-parch); font-size: clamp(1.3rem,3vw,1.8rem); margin:0 0 8px; }
+.xt-bundle p { color: rgba(250,246,238,.78); margin:0; }
+.xt-bundle .xt-btn { margin-top: var(--xt-s4); }
+
+/* header cart: icon + terracotta count badge + bump on add (real nopCommerce cart) */
+.header-links .ico-cart, .header-links a.cart, .header-links .cart-label { position:relative; }
+.cart-qty, .header-links .cart-qty {
+  display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 5px;
+  border-radius:10px; background: var(--xt-accent); color:#fff; font-size:11px; font-weight:700; line-height:1;
+}
+.xt-cart-bump { display:inline-flex; animation: xt-cartbump .4s ease; }
+@keyframes xt-cartbump { 0%,100%{transform:scale(1)} 35%{transform:scale(1.18)} }
+
+/* cart drawer — nopCommerce's flyout mini-cart restyled as a right slide-over.
+   Real "View cart"/"Checkout" buttons inside still go to /cart and /checkout. */
+.xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:60; }
+html.xt-cart-open .xt-cart-overlay { opacity:1; visibility:visible; }
+.flyout-cart {
+  position:fixed; top:0; right:0; height:100%; width:min(440px,100vw);
+  background: var(--xt-surface); border-left:1px solid var(--xt-line);
+  transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
+  z-index:61; display:flex; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
+}
+html.xt-cart-open .flyout-cart { transform:translateX(0); }
+.flyout-cart .mini-shopping-cart { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
+.flyout-cart .count { padding:20px 22px; border-bottom:1px solid var(--xt-line); font-weight:600; }
+.flyout-cart .items { flex:1; overflow-y:auto; padding:8px 22px; }
+.flyout-cart .item { display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--xt-line); }
+.flyout-cart .item .picture img { width:46px; height:61px; object-fit:cover; border-radius:6px; box-shadow:0 6px 14px -8px rgba(0,0,0,.5); }
+.flyout-cart .item .product .name a { font-weight:700; color: var(--xt-ink); }
+.flyout-cart .item .price, .flyout-cart .item .quantity, .flyout-cart .item .attributes { color: var(--xt-muted); font-size:.85rem; }
+.flyout-cart .totals { padding:16px 22px; border-top:1px solid var(--xt-line); font-size:1.05rem; }
+.flyout-cart .buttons { padding:16px 22px 22px; display:flex; flex-direction:column; gap:10px; border-top:1px solid var(--xt-line); }
+.flyout-cart .buttons .button-1 { width:100%; }
+.flyout-cart .buttons .checkout-button { background: var(--xt-accent); color:#fff; }
+.flyout-cart .buttons .cart-button { background: transparent; color: var(--xt-brand); border:1px solid var(--xt-brand); }
+.xt-cart-close { position:absolute; top:14px; right:16px; z-index:5; width:36px; height:36px; border-radius:50%; border:1px solid var(--xt-line); background: var(--xt-surface); color: var(--xt-ink); font-size:20px; line-height:1; cursor:pointer; }
+
+/* 23. CUSTOM HEADER (matches the Check design header structure) =========
+   Built by Views/Shared/_Header.cshtml. This theme owns the header markup here, so these rules
+   don't fight DefaultClean. The separate nopCommerce menu bar is hidden (nav lives in the header). */
+.header-menu { display:none !important; }              /* nav moved into the header */
+/* full-bleed header (the utility/headbar bars center their own ~1160 inner wrappers). The `.header`
+   part beats DefaultClean's `.header{width:980px}`/`{1200px}` so the bars never get boxed-in. */
+.header.xt-header { background: var(--xt-page); width:auto; max-width:none; margin:0; }
+
+/* top utility strip */
+.xt-utility { background: var(--xt-brand-deep); color: var(--xt-parch); font-size:.82rem; }
+.xt-utility__in { max-width: var(--xt-wrap); margin:0 auto; padding:8px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.xt-utility__msg { color: rgba(250,246,238,.85); }
+.xt-utility__right { display:flex; align-items:center; gap:14px; }
+.xt-utility a, .xt-utility .language-selector .selector-title, .xt-utility .language-list a { color: rgba(250,246,238,.9); }
+.xt-utility a:hover { color:#fff; }
+.xt-utility .language-selector, .xt-utility .language-list { display:flex; align-items:center; gap:8px; margin:0; padding:0; border:0; }
+.xt-utility .language-list li { display:inline-flex; list-style:none; margin:0; }
+.xt-utility select { background: transparent; color: var(--xt-parch); border:1px solid rgba(250,246,238,.3); border-radius: var(--xt-r-sm); padding:4px 8px; min-height:auto; }
+
+/* sticky main bar */
+.xt-headbar { position:sticky; top:0; z-index:1000; background: var(--xt-page); border-bottom:1px solid var(--xt-line); }
+.xt-headbar__in { max-width: var(--xt-wrap); margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:18px; }
+.xt-headbar__logo { flex:none; }
+.xt-headbar__logo img { max-height:42px; width:auto; }
+.xt-nav { display:flex; align-items:center; gap:22px; flex:1; min-width:0; overflow-x:auto; }
+.xt-nav::-webkit-scrollbar { display:none; }
+.xt-nav { scrollbar-width:none; }
+.xt-nav a { color: var(--xt-ink-soft); font-weight:600; white-space:nowrap; text-decoration:none; padding:6px 0; }
+.xt-nav a:hover { color: var(--xt-brand); }
+.xt-headbar__actions { display:flex; align-items:center; gap:12px; margin-left:auto; flex:none; }
+.xt-headbar__actions .search-box { margin:0; }
+.xt-headbar__actions .search-box-text { min-height:40px; width:160px; max-width:42vw; }
+/* action cluster: search + circular icon buttons (account/cart) + toggle + CTA */
+.xt-headbar__actions .header-links, .xt-headbar__actions .header-links ul { display:flex; align-items:center; gap:10px; margin:0; padding:0; list-style:none; }
+.xt-headbar__actions .header-links li { margin:0; display:inline-flex; }
+/* declutter to match the design: drop wishlist / inbox / register from the header cluster */
+.xt-headbar__actions .header-links .ico-wishlist, .xt-headbar__actions .header-links .ico-inbox, .xt-headbar__actions .header-links .ico-register { display:none; }
+/* remaining links (account/login/logout/cart) → circular icon buttons (label text hidden, SVG mask shown) */
+.xt-headbar__actions .header-links > ul > li > a {
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border-radius:50%; border:1px solid var(--xt-line);
+  background: var(--xt-surface); color: var(--xt-ink); font-size:0; white-space:nowrap;
+}
+.xt-headbar__actions .header-links > ul > li > a:hover { border-color: var(--xt-brand); color: var(--xt-brand); text-decoration:none; }
+.xt-headbar__actions .header-links > ul > li > a::before {
+  content:""; width:20px; height:20px; background: currentColor;
+  -webkit-mask: var(--xt-ico) center / 20px 20px no-repeat; mask: var(--xt-ico) center / 20px 20px no-repeat;
+}
+.xt-headbar__actions .ico-account, .xt-headbar__actions .ico-login { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjgiIHI9IjMuNiIvPjxwYXRoIGQ9Ik01LjUgMjBhNi41IDYuNSAwIDAgMSAxMyAwIi8+PC9zdmc+"); }
+.xt-headbar__actions .ico-logout { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNOS41IDRINS41QTEuNSAxLjUgMCAwIDAgNCA1LjV2MTNBMS41IDEuNSAwIDAgMCA1LjUgMjBoNCIvPjxwYXRoIGQ9Ik0xNS41IDE2LjUgMjAgMTJsLTQuNS00LjVNMjAgMTJIOS41Ii8+PC9zdmc+"); }
+.xt-headbar__actions .ico-cart   { --xt-ico: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48Y2lyY2xlIGN4PSI5IiBjeT0iMjAiIHI9IjEuMyIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMjAiIHI9IjEuMyIvPjxwYXRoIGQ9Ik0yLjUgNEg1bDIuMiAxMC45YTEgMSAwIDAgMCAxIC44aDguNWExIDEgMCAwIDAgMS0uNzhMMjAuNiA4SDYiLz48L3N2Zz4="); }
+.xt-headbar__actions .ico-cart .cart-label { display:none; }
+.xt-headbar__actions .ico-cart .cart-qty { position:absolute; top:-4px; right:-4px; }
+/* terracotta header CTA — unique class so it never collides with the homepage's .xt-cta button
+   GROUP container (§9), which the HomepageText topic uses to wrap the hero / CTA-band buttons. */
+.xt-headcta { display:inline-flex; align-items:center; white-space:nowrap; background: var(--xt-accent); color:#fff; font-weight:800;
+  border-radius: var(--xt-r-pill); padding:10px 18px; text-decoration:none; box-shadow:0 6px 18px -8px rgba(217,119,87,.7); }
+.xt-headcta:hover { background: var(--xt-accent-600); color:#fff; text-decoration:none; }
+
+@media (max-width: 1000px) {
+  .xt-utility__msg { display:none; }
+  .xt-headbar__in { flex-wrap:wrap; gap:12px; }
+  .xt-nav { order:3; width:100%; gap:18px; padding-bottom:2px; }
+  .xt-headbar__actions .search-box-text { width:120px; }
+}
+@media (max-width: 560px) {
+  .xt-headbar__actions .header-links > ul > li > a.ico-account { display:none; } /* compact: keep cart + CTA on small screens */
+}

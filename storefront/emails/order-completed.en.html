@@ -1,0 +1,44 @@
+<!--
+  MESSAGE TEMPLATE: OrderCompleted.CustomerNotification  (English / default language)
+  WHERE: Admin → Content management → Message templates → "OrderCompleted.CustomerNotification" → edit (English).
+  STATE: Active by default. For a digital-only store the order auto-completes after payment, so this is the
+         "download available / how to read your eBook" message. (If you prefer a single fulfilment email, you may
+         disable this and rely on OrderPaid instead — see storefront/emails/README.md.)
+  SUBJECT:  Your download is ready — %Store.Name%
+  Replace [WHATSAPP_E164].
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;margin:0;padding:24px 0;">
+  <tr><td align="center">
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
+      <tr><td style="background:#0f172a;padding:22px 28px;">
+        <a href="%Store.URL%" style="color:#ffffff;font-size:20px;font-weight:bold;text-decoration:none;">%Store.Name%</a>
+      </td></tr>
+      <tr><td style="padding:28px;">
+        <h1 style="margin:0 0 12px;font-size:20px;">Your download is available 📚</h1>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#334155;">Hello %Order.CustomerFullName%, your order <strong>#%Order.OrderNumber%</strong> is complete. Here's how to enjoy your eBook:</p>
+
+        <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;line-height:1.7;color:#334155;">
+          <li><strong>Download</strong> from the table below or from <strong>My account → Downloadable products</strong> — anytime.</li>
+          <li><strong>Formats:</strong> most titles include <strong>PDF</strong> (any device), <strong>EPUB</strong> (Apple Books, Google Play Books, most e-readers) and <strong>MOBI/AZW</strong> (Kindle).</li>
+          <li><strong>Keep it private:</strong> your copy is licensed to you personally — please don't share or re-upload the files.</li>
+        </ul>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px;">
+          <tr><td align="center" bgcolor="#f59e0b" style="border-radius:10px;">
+            <a href="%Store.URL%customer/downloadableproducts" target="_blank" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:bold;color:#1f2937;text-decoration:none;">Open My Downloads</a>
+          </td></tr>
+        </table>
+
+        <h3 style="margin:6px 0 8px;font-size:15px;">Your items</h3>
+        %Order.Product(s)%
+      </td></tr>
+      <tr><td style="background:#f8fafc;padding:18px 28px;font-size:12px;line-height:1.7;color:#64748b;border-top:1px solid #e2e8f0;">
+        Trouble opening a file? Chat with us on <a href="https://wa.me/[WHATSAPP_E164]" style="color:#6366f1;text-decoration:none;">WhatsApp</a> — we're happy to help.<br/>
+        <a href="%Store.URL%conditions-of-use" style="color:#64748b;">Terms</a> &middot;
+        <a href="%Store.URL%privacy-policy" style="color:#64748b;">Privacy</a> &middot;
+        <a href="%Store.URL%refund-policy" style="color:#64748b;">Refund Policy</a><br/>
+        &copy; %Store.Name%
+      </td></tr>
+    </table>
+  </td></tr>
+</table>

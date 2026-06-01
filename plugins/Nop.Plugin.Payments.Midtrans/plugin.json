@@ -1,0 +1,11 @@
+{
+  "Group": "Payment methods",
+  "FriendlyName": "Midtrans (Snap) — QRIS, Virtual Account, e-wallets",
+  "SystemName": "Payments.Midtrans",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.90" ],
+  "Author": "Xten.Launch",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.Midtrans.dll",
+  "Description": "Accept Indonesian payments (QRIS, Virtual Account / bank transfer, e-wallets, cards) via Midtrans Snap. Orders are marked Paid automatically on a signature-verified settlement notification, which activates downloadable products."
+}

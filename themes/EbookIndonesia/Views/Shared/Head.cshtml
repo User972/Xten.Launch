@@ -1,0 +1,42 @@
+@using Nop.Core.Domain.Catalog
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.UI
+
+@inject CatalogSettings catalogSettings
+@inject IThemeContext themeContext
+
+@*
+    Theme head injection. nopCommerce's _Root.Head.cshtml renders this partial inside <head>,
+    then emits the registered CSS/JS. `themeName` resolves to the ACTIVE theme's SystemName,
+    so the paths below automatically point at this theme. No nopCommerce core changes.
+*@
+@{
+    Layout = "";
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+    var supportRtl = await Html.ShouldUseRtlThemeAsync();
+
+    //BASE layout/structure from the stock DefaultClean stylesheet. This theme ships only a re-skin
+    //on top (it does NOT duplicate nopCommerce's full layout CSS), so DefaultClean must load first
+    //to provide the header/menu/columns/responsive structure.
+    NopHtml.AppendCssFileParts($"~/Themes/DefaultClean/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
+
+    //keep parity with the default theme so catalog galleries still get their CSS
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+
+    //this theme's re-skin (Check design system) — appended LAST so it overrides the base
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
+
+    //theme behaviour: dependency-free vanilla JS (FAQ accordion, sticky Buy CTA, smooth scroll,
+    //light/dark toggle, WhatsApp float)
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/theme.js");
+}
+@* Check design system: apply saved/system theme before first paint (no flash) *@
+<script>(function(){try{var t=localStorage.getItem('xt-theme');if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+@* Web fonts: Fraunces (display) + Plus Jakarta Sans (body) + JetBrains Mono (labels), non-blocking *@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@@400;500;600;700&family=JetBrains+Mono:wght@@400;500&display=swap" />

@@ -1,0 +1,26 @@
+# Secrets — never commit real environment files
+.env
+deploy/.env
+*.env
+!*.env.example
+
+# nopCommerce runtime/build artifacts (if the app is ever added to this repo)
+[Bb]in/
+[Oo]bj/
+App_Data/dataSettings.json
+App_Data/appsettings.json
+App_Data/DataProtectionKeys/
+Plugins/
+wwwroot/files/
+wwwroot/images/thumbs/
+
+# Backups / dumps
+*.dump
+*.sql.gz
+backups/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vs/
+.idea/

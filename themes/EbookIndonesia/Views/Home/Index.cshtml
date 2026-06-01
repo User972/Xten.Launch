@@ -1,0 +1,68 @@
+@using Nop.Services.Localization
+@using Nop.Core
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+
+@{
+    Layout = "_ColumnsOne";
+
+    var store = await storeContext.GetCurrentStoreAsync();
+
+    //title
+    var homepageTitle = await localizationService.GetLocalizedAsync(store, s => s.HomepageTitle);
+    if (!string.IsNullOrEmpty(homepageTitle))
+    {
+        NopHtml.AddTitleParts(homepageTitle);
+    }
+
+    //meta
+    var homepageDescription = await localizationService.GetLocalizedAsync(store, s => s.HomepageDescription);
+    if (!string.IsNullOrEmpty(homepageDescription))
+    {
+        NopHtml.AddMetaDescriptionParts(homepageDescription);
+    }
+
+    //page class
+    NopHtml.AppendPageCssClassParts("html-home-page");
+}
+@*
+    Editorial homepage — eBook Indonesia theme.
+    Narrative: brand story → value → featured eBooks → free preview/topics → popular → articles.
+    Everything stays admin-editable and bilingual:
+      • brand story / hero / value / how-it-works / who-for / FAQ / WhatsApp CTA live in the
+        "HomepageText" TOPIC (paste storefront/home/homepage.{en,id}.html there, per language).
+      • featured eBooks / topics / best-sellers / news come from nopCommerce's own components.
+    Every default widget zone is preserved so admins/plugins can still inject content.
+    No nopCommerce core changes.
+*@
+<div class="page home-page">
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+
+        @*1 — Brand story, value, how-it-works, who-it's-for, FAQ, WhatsApp (admin-editable, bilingual)*@
+        @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+
+        @*2 — Featured eBooks*@
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+        @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+
+        @*3 — Curated topics / genres (categories) + free-preview discovery*@
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+        @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+        @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+
+        @*4 — Popular / best-selling eBooks*@
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
+        @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+
+        @*5 — Latest articles (content-rich; link naturally into relevant eBooks)*@
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
+        @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
+
+        @*Optional engagement (kept so no admin feature is lost)*@
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
+        @await Component.InvokeAsync(typeof(HomepagePollsViewComponent))
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
+    </div>
+</div>

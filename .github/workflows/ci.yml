@@ -1,0 +1,52 @@
+name: CI
+
+# Runs on every push and PR.
+#  • static-checks  — always; fast; no external services. Make this a REQUIRED check in
+#                     branch protection to gate merges (Settings → Branches → Branch protection).
+#  • smoke          — runs deploy/qa/smoke.sh against a deployed STAGING instance, but ONLY when a
+#                     repository variable `STAGING_URL` is set (Settings → Secrets and variables →
+#                     Actions → Variables). Until then it is skipped (so it never blocks before
+#                     staging exists). When it runs, a red smoke test fails the check.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-checks:
+    name: Static checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run repo static checks
+        run: bash deploy/qa/static-checks.sh
+
+  smoke:
+    name: Smoke test (staging)
+    needs: static-checks
+    runs-on: ubuntu-latest
+    # Skipped unless a staging URL is configured as a repository variable.
+    if: ${{ vars.STAGING_URL != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke test against staging
+        env:
+          STAGING_URL:   ${{ vars.STAGING_URL }}
+          PRODUCT_PATH:  ${{ vars.STAGING_PRODUCT_PATH }}   # optional, e.g. /your-ebook-seo-name
+          CATEGORY_PATH: ${{ vars.STAGING_CATEGORY_PATH }}  # optional, e.g. /c/your-genre
+          QA_INSECURE:   ${{ vars.STAGING_INSECURE }}       # optional: set to 1 for self-signed TLS
+        run: |
+          set -u
+          chmod +x deploy/qa/smoke.sh
+          args=("$STAGING_URL")
+          [ -n "${PRODUCT_PATH:-}" ]  && args+=(--product  "$PRODUCT_PATH")
+          [ -n "${CATEGORY_PATH:-}" ] && args+=(--category "$CATEGORY_PATH")
+          echo "Running: deploy/qa/smoke.sh ${args[*]}"
+          deploy/qa/smoke.sh "${args[@]}"

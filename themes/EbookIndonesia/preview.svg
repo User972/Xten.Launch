@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" role="img" aria-label="eBook Indonesia theme preview">
+  <rect width="600" height="400" fill="#F7F3EC"/>
+  <rect width="600" height="64" fill="#06201F"/>
+  <text x="28" y="41" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" fill="#F7F3EC">eBook Indonesia</text>
+  <circle cx="556" cy="32" r="9" fill="#D97757"/>
+  <!-- hero -->
+  <rect x="28" y="92" width="544" height="150" rx="14" fill="#0F3D3E"/>
+  <text x="52" y="150" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#ffffff">Read more. Carry less.</text>
+  <text x="52" y="182" font-family="Arial, sans-serif" font-size="13" fill="#C7D8D5">Premium eBooks, instant download — QRIS, VA &amp; e-wallets.</text>
+  <rect x="52" y="198" width="132" height="34" rx="17" fill="#D97757"/>
+  <text x="76" y="220" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Browse eBooks</text>
+  <!-- book cards -->
+  <g>
+    <rect x="28"  y="262" width="124" height="110" rx="10" fill="#ffffff" stroke="#E4DCC8"/>
+    <rect x="44"  y="278" width="92"  height="58"  rx="6"  fill="#0F3D3E"/>
+    <rect x="44"  y="344" width="70"  height="9"   rx="4"  fill="#15201F"/>
+    <rect x="168" y="262" width="124" height="110" rx="10" fill="#ffffff" stroke="#E4DCC8"/>
+    <rect x="184" y="278" width="92"  height="58"  rx="6"  fill="#D97757"/>
+    <rect x="184" y="344" width="70"  height="9"   rx="4"  fill="#15201F"/>
+    <rect x="308" y="262" width="124" height="110" rx="10" fill="#ffffff" stroke="#E4DCC8"/>
+    <rect x="324" y="278" width="92"  height="58"  rx="6"  fill="#6FB7AE"/>
+    <rect x="324" y="344" width="70"  height="9"   rx="4"  fill="#15201F"/>
+    <rect x="448" y="262" width="124" height="110" rx="10" fill="#ffffff" stroke="#E4DCC8"/>
+    <rect x="464" y="278" width="92"  height="58"  rx="6"  fill="#0F3D3E"/>
+    <rect x="464" y="344" width="70"  height="9"   rx="4"  fill="#15201F"/>
+  </g>
+</svg>

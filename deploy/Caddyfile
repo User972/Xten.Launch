@@ -1,0 +1,46 @@
+# Caddy reverse proxy for nopCommerce — automatic HTTPS (Let's Encrypt), HTTP/2 + HTTP/3.
+# Reference: blueprint §1.4, §9.3, §10.3.
+
+{
+	email {$ACME_EMAIL}
+	# servers { protocols h1 h2 h3 }   # HTTP/3 is enabled by default on recent Caddy
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+
+	# --- Security headers (see §9, §17) ---
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "SAMEORIGIN"
+		# Tune a Content-Security-Policy to your theme/analytics before enabling broadly:
+		# Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; ..."
+		-Server
+	}
+
+	# --- Long cache for static assets (NOT for /download/* which is dynamic & per-user) ---
+	@static path /css/* /js/* /images/* /lib/* /icons/* *.woff2
+	header @static Cache-Control "public, max-age=604800, immutable"
+
+	# --- Rate-limit the paid download endpoint (§9.3) ---
+	# NOTE: rate_limit is a community Caddy module (needs a custom build via xcaddy).
+	# On stock Caddy this directive is unavailable -> enforce download rate-limiting at
+	# Cloudflare (rate-limiting rule on /download/*) instead. Example if you build it in:
+	#
+	#   rate_limit {
+	#       zone downloads {
+	#           match { path /download/* }
+	#           key    {remote_host}
+	#           events 30
+	#           window 1m
+	#       }
+	#   }
+
+	reverse_proxy nopcommerce:8080 {
+		# Caddy sets X-Forwarded-Proto/-For/-Host automatically; nopCommerce honors them
+		# because HostingConfig.UseProxy = true (set via compose env). (§3.2)
+		header_up Host {host}
+	}
+}

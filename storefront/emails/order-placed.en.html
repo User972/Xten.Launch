@@ -1,0 +1,46 @@
+<!--
+  MESSAGE TEMPLATE: OrderPlaced.CustomerNotification  (English / default language)
+  WHERE: Admin → Content management → Message templates → "OrderPlaced.CustomerNotification" → edit (English).
+  STATE: Active by default — no change needed.
+  SUBJECT:  Order #%Order.OrderNumber% received — %Store.Name%
+  Replace [WHATSAPP_E164] (e.g. 6281234567890). Tokens are auto-filled by nopCommerce.
+  Paste everything below into the Body (enable the HTML/source view in the editor first).
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;margin:0;padding:24px 0;">
+  <tr><td align="center">
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
+      <tr><td style="background:#0f172a;padding:22px 28px;">
+        <a href="%Store.URL%" style="color:#ffffff;font-size:20px;font-weight:bold;text-decoration:none;">%Store.Name%</a>
+      </td></tr>
+      <tr><td style="padding:28px;">
+        <h1 style="margin:0 0 12px;font-size:20px;">Thanks! We've received your order</h1>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#334155;">Hello %Order.CustomerFullName%,</p>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#334155;">Your order is in — it's now <strong>awaiting payment confirmation</strong>. As soon as your payment is confirmed, your eBook(s) unlock automatically and we'll email you the download link.</p>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 18px;font-size:14px;color:#334155;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;">
+          <tr><td style="padding:8px 0;color:#64748b;">Order number</td><td style="padding:8px 0;text-align:right;font-weight:bold;">#%Order.OrderNumber%</td></tr>
+          <tr><td style="padding:8px 0;color:#64748b;">Date</td><td style="padding:8px 0;text-align:right;">%Order.CreatedOn%</td></tr>
+          <tr><td style="padding:8px 0;color:#64748b;">Payment method</td><td style="padding:8px 0;text-align:right;">%Order.PaymentMethod%</td></tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px;">
+          <tr><td align="center" bgcolor="#f59e0b" style="border-radius:10px;">
+            <a href="%Order.OrderURLForCustomer%" target="_blank" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:bold;color:#1f2937;text-decoration:none;">View your order</a>
+          </td></tr>
+        </table>
+
+        <p style="margin:0 0 6px;font-size:13px;line-height:1.6;color:#64748b;">Paying by bank transfer? Please complete the transfer and send your proof via WhatsApp so we can confirm your order quickly.</p>
+
+        <h3 style="margin:18px 0 8px;font-size:15px;">Order summary</h3>
+        %Order.Product(s)%
+      </td></tr>
+      <tr><td style="background:#f8fafc;padding:18px 28px;font-size:12px;line-height:1.7;color:#64748b;border-top:1px solid #e2e8f0;">
+        Need help? Chat with us on <a href="https://wa.me/[WHATSAPP_E164]" style="color:#6366f1;text-decoration:none;">WhatsApp</a>.<br/>
+        <a href="%Store.URL%conditions-of-use" style="color:#64748b;">Terms</a> &middot;
+        <a href="%Store.URL%privacy-policy" style="color:#64748b;">Privacy</a> &middot;
+        <a href="%Store.URL%refund-policy" style="color:#64748b;">Refund Policy</a><br/>
+        &copy; %Store.Name%
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
