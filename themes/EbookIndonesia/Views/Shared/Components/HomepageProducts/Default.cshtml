@@ -1,0 +1,82 @@
+@model IList<ProductOverviewModel>
+
+@using System.Globalization
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@inject Nop.Core.IWorkContext workContext
+
+@*
+    eBook Indonesia — homepage "Ebook store" grid.
+    Renders nopCommerce's real "Show on home page" products in the theme's book-card design
+    (admin: Catalog → Products → edit → "Show on home page"). Cover = the product's first picture;
+    price, rating, and the Add-to-cart button are all live. Replaces the old static placeholder cards.
+*@
+@{
+    var lang = await workContext.GetWorkingLanguageAsync();
+    var isId = (lang?.UniqueSeoCode ?? "en").StartsWith("id", StringComparison.OrdinalIgnoreCase);
+}
+
+@if (Model.Count > 0)
+{
+    <div class="xt-bookgrid">
+        @foreach (var item in Model)
+        {
+            var url = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = item.SeName });
+            var pic = item.PictureModels?.FirstOrDefault();
+            var addToCartLink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG,
+                new { productId = item.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1 });
+            var review = item.ReviewOverviewModel;
+            <article class="xt-bookcard xt-lift" data-productid="@item.Id">
+                <div class="xt-bookcard__rel">
+                    @if (item.MarkAsNew)
+                    {
+                        <span class="xt-bookcard__tag xt-bookcard__tag--new">@(isId ? "Baru" : "New")</span>
+                    }
+                    <a class="xt-bookcard__cover" href="@url" title="@(pic?.Title)">
+                        <img alt="@(pic?.AlternateText)" src="@(pic?.ImageUrl)" loading="lazy" />
+                    </a>
+                </div>
+                @if (review != null && review.AllowCustomerReviews && review.TotalReviews > 0)
+                {
+                    var avg = (decimal)review.RatingSum / review.TotalReviews;
+                    <div class="xt-bookcard__rate">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg>
+                        <b>@avg.ToString("0.0", CultureInfo.InvariantCulture)</b>
+                        <span style="color:var(--xt-muted);">(@review.TotalReviews @(isId ? "ulasan" : "reviews"))</span>
+                    </div>
+                }
+                <h3><a href="@url">@item.Name</a></h3>
+                @if (!string.IsNullOrWhiteSpace(item.ShortDescription))
+                {
+                    <p>@Html.Raw(item.ShortDescription)</p>
+                }
+                <div class="xt-bookcard__foot">
+                    <div class="xt-bookcard__price">
+                        @if (!string.IsNullOrEmpty(item.ProductPrice?.OldPrice))
+                        {
+                            <span style="opacity:.55;text-decoration:line-through;font-size:.8em;margin-right:6px;">@item.ProductPrice.OldPrice</span>
+                        }
+                        @item.ProductPrice?.Price
+                    </div>
+                    @if (item.ProductPrice != null && !item.ProductPrice.DisableBuyButton)
+                    {
+                        <button type="button" class="xt-btn xt-btn-primary" style="padding:8px 16px;"
+                                onclick="AjaxCart.addproducttocart_catalog('@addToCartLink');return false;">
+                            @(isId ? "+ Keranjang" : "+ Cart")
+                        </button>
+                    }
+                    else
+                    {
+                        <a class="xt-btn xt-btn-ghost" href="@url" style="padding:8px 16px;">@(isId ? "Lihat →" : "View →")</a>
+                    }
+                </div>
+            </article>
+        }
+    </div>
+}
+else
+{
+    <p class="xt-lead" style="opacity:.72;">
+        @(isId ? "Ebook baru segera hadir — cek lagi nanti." : "New ebooks are on the way — check back soon.")
+    </p>
+}

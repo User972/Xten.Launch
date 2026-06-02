@@ -966,6 +966,11 @@ html.xt-cart-open .flyout-cart { transform:translateX(0) !important; }
 .xt-bookcard__foot { margin-top:auto; padding-top: var(--xt-s4); display:flex; align-items:center; justify-content:space-between; gap:10px; }
 .xt-bookcard__price { font-family: var(--xt-font-display); font-weight:600; font-size:1.2rem; }
 .xt-bookcard .xt-jacket { margin:0; }
+/* Real product cover (dynamic homepage grid) — same footprint as the .xt-jacket placeholder. */
+.xt-bookcard__cover { display:block; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background: var(--xt-line); box-shadow:0 16px 36px -20px rgba(0,0,0,.55); }
+.xt-bookcard__cover img { width:100%; height:100%; object-fit:cover; display:block; }
+.xt-bookcard h3 a { color:inherit; }
+.xt-ebook-chips { flex-wrap:wrap; }
 
 /* responsive: stepper scrolls horizontally on small screens */
 @media (max-width:899px){

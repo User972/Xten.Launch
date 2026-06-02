@@ -2,6 +2,7 @@
 @using Nop.Core
 @inject ILocalizationService localizationService
 @inject IStoreContext storeContext
+@inject IWorkContext workContext
 
 @{
     Layout = "_ColumnsOne";
@@ -24,38 +25,65 @@
 
     //page class
     NopHtml.AppendPageCssClassParts("html-home-page");
+
+    //current language drives the bilingual "Ebook store" heading below
+    var lang = await workContext.GetWorkingLanguageAsync();
+    var isId = (lang?.UniqueSeoCode ?? "en").StartsWith("id", StringComparison.OrdinalIgnoreCase);
 }
 @*
     Editorial homepage — eBook Indonesia theme.
     Narrative: brand story → value → featured eBooks → free preview/topics → popular → articles.
-    Everything stays admin-editable and bilingual:
-      • brand story / hero / value / how-it-works / who-for / FAQ / WhatsApp CTA live in the
-        "HomepageText" TOPIC (paste storefront/home/homepage.{en,id}.html there, per language).
-      • featured eBooks / topics / best-sellers / news come from nopCommerce's own components.
+    Admin-editable & bilingual; no nopCommerce core changes:
+      • Marketing copy lives in TWO topics so the live ebook store can sit mid-page:
+          - "HomepageText"      = hero → … → testimonials      (paste storefront/home/homepage.{en,id}.html)
+          - "HomepageTextLower" = locations → … → final CTA     (paste storefront/home/homepage-lower.{en,id}.html)
+      • The "Ebook store" section between them is DYNAMIC — its cards come from products you mark
+        "Show on home page" and its chips from categories you mark "Show on home page" (see the
+        HomepageProducts / HomepageCategories component overrides). Add/curate books in admin; no HTML edits.
     Every default widget zone is preserved so admins/plugins can still inject content.
-    No nopCommerce core changes.
 *@
 <div class="page home-page">
     <div class="page-body">
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
 
-        @*1 — Brand story, value, how-it-works, who-it's-for, FAQ, WhatsApp (admin-editable, bilingual)*@
+        @*1 — Upper marketing: brand story → value → programs → faculty → results → testimonials (admin-editable, bilingual)*@
         @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
 
-        @*2 — Featured eBooks*@
-        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
-        @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+        @*2 — LIVE eBook store (real products + categories from admin) — kept in its mid-page spot*@
+        <div class="xt-home">
+            <div class="xt-wrap">
+                <section class="xt-s xt-s--band" id="ebooks">
+                    <div class="xt-headrow xt-headrow--split xt-headrow--end">
+                        <div>
+                            <div class="xt-kicker">— @(isId ? "Toko ebook" : "Ebook store")</div>
+                            <h2 class="xt-h2">@Html.Raw(isId
+                                ? "Lanjutkan belajar di rumah, dengan <em>harga terjangkau</em>."
+                                : "Keep learning at home, at an <em>affordable price</em>.")</h2>
+                        </div>
+                        <p class="xt-lead">@(isId
+                            ? "Panduan, latihan soal, dan strategi langsung dari pengajar Check — format PDF & EPUB, bisa dibaca di perangkat apa saja."
+                            : "Guides, practice questions, and strategies straight from Check teachers — PDF & EPUB, readable on any device.")</p>
+                    </div>
 
-        @*3 — Curated topics / genres (categories) + free-preview discovery*@
-        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
-        @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
-        @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+                    @*chips = categories marked "Show on home page"*@
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+                    @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+
+                    @*grid = products marked "Show on home page"*@
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+                    @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+                </section>
+            </div>
+        </div>
+
+        @*3 — Lower marketing: locations → certifications → FAQ → final CTA (admin-editable, bilingual)*@
+        @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageTextLower" })
 
         @*4 — Popular / best-selling eBooks*@
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
         @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
 
-        @*5 — Latest articles (content-rich; link naturally into relevant eBooks)*@
+        @*5 — Latest articles*@
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
         @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
 

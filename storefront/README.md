@@ -7,9 +7,11 @@ confirmation / payment received / download available) — all in **English + Bah
 ```
 storefront/
 ├─ home/
-│  ├─ homepage.css        # styles (mobile-first, prefix xt-)
-│  ├─ homepage.en.html    # home markup (English)
-│  └─ homepage.id.html    # home markup (Bahasa Indonesia)
+│  ├─ homepage.css              # reference styles (the EbookIndonesia theme already ships these)
+│  ├─ homepage.en.html          # UPPER half — English    → Topic "HomepageText"
+│  ├─ homepage.id.html          # UPPER half — Indonesia   → Topic "HomepageText"
+│  ├─ homepage-lower.en.html    # LOWER half — English    → Topic "HomepageTextLower"
+│  └─ homepage-lower.id.html    # LOWER half — Indonesia   → Topic "HomepageTextLower"
 ├─ legal/
 │  ├─ terms.en.html   / terms.id.html      → Topic "Conditions of use"
 │  ├─ privacy.en.html / privacy.id.html    → Topic "Privacy info"
@@ -43,28 +45,40 @@ storefront/
 
 ## Home page
 
-The home markup is theme-agnostic and uses only `xt-`-prefixed classes. Two ways to use it:
+The **EbookIndonesia theme** renders the home page in three parts — no core changes:
 
-**Option A — HTML widget (no code).** Install an HTML-content widget (e.g. a marketplace
-"HTML widget" plugin), target the **`home_page_top`** widget zone, paste `homepage.en.html`
-(and the Bahasa Indonesia version on the ID-language widget), and put the contents of
-`homepage.css` inside a `<style>…</style>` block at the top of the markup.
+1. **Topic `HomepageText`** — upper marketing (hero → … → testimonials).
+2. **Live "Ebook store"** — rendered by the theme *between* the two topics (dynamic, see below).
+3. **Topic `HomepageTextLower`** — lower marketing (locations → certifications → FAQ → final CTA).
 
-**Option B — theme override (recommended for production).** In your custom theme, add the
-markup to `Views/Home/Index.cshtml` (or a partial) and move `homepage.css` into the theme's
-stylesheet/bundle. This keeps HTML and CSS separate and is the cleanest, upgrade-safe route —
-**no nopCommerce core changes**.
+### Paste the two topics
+**Admin → Content management → Topics** (enable the HTML/source view `<>` before pasting):
+- **`HomepageText`** (exists by default) — edit → paste `homepage.en.html` into the **English**
+  locale tab and `homepage.id.html` into the **Bahasa Indonesia** tab.
+- **`HomepageTextLower`** — **Add new** → System name `HomepageTextLower`, **Published** ✔ →
+  paste `homepage-lower.en.html` (English) and `homepage-lower.id.html` (Indonesia).
 
-### Wire up the links
-- `[CATALOGUE_URL]` → your catalogue/search entry point (e.g. `/search`, or a top category `/c/…`).
+> Paste only the HTML — the CSS already lives in the theme stylesheet (no `<style>` block needed).
+
+### The "Ebook store" section is dynamic — no HTML editing
+Between the two topics the theme shows your **real catalogue**, in the same book-card design:
+- **Books** = products you tick **Catalog → Products → (edit) → “Show on home page”**. Each card uses
+  the product's first picture as the cover, plus its price, star rating, and a working **Add-to-cart**
+  button (it opens the cart drawer). “New” products get a badge automatically.
+- **Filter chips** = categories you tick **Catalog → Categories → (edit) → “Show on home page”**;
+  each chip links to that category's catalog page.
+- Curate entirely from admin — add a product, tick the box, done. Until something is ticked the
+  section shows a friendly “coming soon” line.
+
+### Wire up the links (inside the two topics)
 - Legal links point to `/conditions-of-use`, `/privacy-policy`, `/refund-policy` — adjust if your
   topic SE names differ.
-- The WhatsApp button uses `https://wa.me/[WHATSAPP_E164]?text=…`.
+- The WhatsApp buttons use `https://wa.me/[WHATSAPP_E164]?text=…`.
+- Numbers, names, prices, phone & addresses in the topics are design **placeholders** — replace them.
 
 ### Localization
-Show the English markup on the English store and the Bahasa Indonesia markup on the ID store.
-With the HTML-widget approach, create one widget per language; with the theme approach, switch
-copy by the current working language (nopCommerce localized resources or a language check).
+Paste the English HTML on the English locale tab and the Bahasa Indonesia HTML on the ID tab for
+**both** topics. The dynamic Ebook-store heading switches language automatically.
 
 > The legal drafts are a starting point — have an Indonesian lawyer review Terms/Privacy/Refund,
 > and confirm tax/invoice wording with your accountant (blueprint §4.4, §7).
