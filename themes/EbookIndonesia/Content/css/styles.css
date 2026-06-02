@@ -424,19 +424,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* 20. PRODUCT & CATEGORY LANDING (deeper view overrides) ================= */
-/* Product: 3-area grid — desktop = content left + sticky buy right; mobile = cover→buy→content */
+/* Product detail — hero = cover (left, sticky) + OPEN buy column (right); design: Product Detail.html.
+   The editorial body (full description) moves BELOW the hero, so the tall buy column can't gap the cover. */
 .product-essential.xt-pd { display:block; }
-.xt-pd-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s6); align-items:start; }
-.xt-pd-main { display:contents; } /* mobile: cover/buy/content become orderable items of .xt-pd-grid */
-.xt-pd-grid .gallery     { order:1; }
-.xt-pd-grid .xt-pd-buy   { order:2; }
-.xt-pd-grid .xt-pd-content { order:3; min-width:0; }
-.xt-pd-content .full-description { max-width:none; margin: var(--xt-s4) 0 0; }
-/* tidy the book cover inside the beige tile (centered, never upscaled past its natural size) */
+.xt-pd-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s8); align-items:start; }
+/* book-cover tile */
+.product-essential.xt-pd .gallery { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); padding: clamp(20px,4vw,40px); }
 .product-essential.xt-pd .gallery .picture { text-align:center; }
-.product-essential.xt-pd .gallery .picture img { display:inline-block; max-width:100%; height:auto; }
-.xt-buybox { background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s6); box-shadow: var(--xt-sh-1); }
-.xt-buybox .product-name h1 { margin-top:0; }
+.product-essential.xt-pd .gallery .picture img { display:inline-block; max-width:330px; width:100%; height:auto; border-radius: var(--xt-r); box-shadow:0 24px 50px -24px rgba(0,0,0,.5); }
+/* the buy COLUMN is open — only the price block is carded (.xt-pricecard), matching the design */
+.xt-buybox { background:transparent; border:0; box-shadow:none; padding:0; }
+.xt-buybox .product-name h1 { margin-top:0; font-size: clamp(1.9rem,3.4vw,2.6rem); line-height:1.06; }
+/* editorial body sits BELOW the hero, at reading width */
+.xt-pd-content { min-width:0; margin-top: var(--xt-s12); }
+.xt-pd-content .full-description { max-width:680px; margin: var(--xt-s4) 0 0; }
 /* auto Table of Contents (built by theme.js; hidden until built) */
 .xt-toc { display:none; }
 .xt-toc.is-built { display:block; background: var(--xt-surface-2); border:1px solid var(--xt-line); border-left:4px solid var(--xt-brand); border-radius: var(--xt-r); padding: var(--xt-s4) var(--xt-s5); margin-bottom: var(--xt-s6); }
@@ -453,12 +454,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .category-page .xt-cat-hero h1 { font-size: clamp(1.7rem,3.8vw,2.5rem); margin:0; }
 .category-page .xt-cat-hero .category-description { font-family: var(--xt-serif); font-size:1.08rem; line-height:1.75; color: var(--xt-ink-soft); margin: var(--xt-s3) 0 0; max-width:760px; text-align:left; }
 @media (min-width: 992px) {
-  /* main column (cover stacked over the editorial body) is its OWN flow; the sticky buy box sits
-     beside it and can be any height without forcing a gap under the cover (the old grid-row span did). */
-  .xt-pd-grid { grid-template-columns: minmax(0,1fr) clamp(300px,32%,380px); column-gap: var(--xt-s12); }
-  .xt-pd-main { display:grid; grid-template-columns:1fr; gap: var(--xt-s8); align-content:start; min-width:0; }
-  .product-essential.xt-pd .gallery { position:static; top:auto; justify-self:start; max-width:360px; } /* beat §17 sticky-cover; keep the cover a sensible size in the wide column */
-  .xt-pd-buy .xt-buybox { position:sticky; top: var(--xt-s4); }
+  /* cover (left, sticky, narrower) + open buy column (right, wider) — the 5/7 design split */
+  .xt-pd-grid { grid-template-columns: clamp(290px,40%,430px) minmax(0,1fr); column-gap: var(--xt-s12); }
+  .product-essential.xt-pd .gallery { position:sticky; top: var(--xt-s4); }
 }
 
 /* 19. PRINT ============================================================== */
@@ -1013,3 +1011,71 @@ html.xt-cart-open .flyout-cart { transform:translateX(0) !important; }
 [data-theme="dark"] .xt-prog.xt-why__c--invert,
 [data-theme="dark"] .xt-diff__item--invert,
 [data-theme="dark"] .xt-chip.is-active { background: #0F3D3E; border-color: #0F3D3E; }
+
+/* 25. PRODUCT DETAIL — "Product Detail.html" polish ======================
+   Recreates the Claude Design product page on the REAL nopCommerce 4.90 partials:
+   clean cover|buy hero, an inset PRICE CARD, branded rating row, a "Detail produk"
+   specs card, and styled reviews. No mock cart/checkout — the real flow is unchanged. */
+
+/* —— buy column: meta, rating, availability —— */
+.xt-pd-buy .short-description { font-size:1.02rem; color: var(--xt-ink-soft); line-height:1.6; margin: var(--xt-s3) 0 var(--xt-s5); max-width:560px; }
+.xt-pd-buy .product-reviews-overview { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin: var(--xt-s3) 0; }
+.xt-pd-buy .product-review-links a { color: var(--xt-brand); font-weight:600; font-size:.9rem; }
+.xt-pd-buy .product-review-links a:hover { color: var(--xt-accent); }
+.xt-pd-buy .availability, .xt-pd-buy .delivery, .xt-pd-buy .stock, .xt-pd-buy .additional-shipping-charge { color: var(--xt-muted); font-size:.9rem; margin:.2rem 0; }
+.xt-pd-buy .sku, .xt-pd-buy .manufacturers, .xt-pd-buy .gtin, .xt-pd-buy .vendor { color: var(--xt-muted); font-size:.84rem; font-family: var(--xt-font-mono, "JetBrains Mono", ui-monospace, monospace); }
+
+/* —— PRICE CARD (the design's inset card; real _ProductPrice + _AddToCart inside) —— */
+.xt-pricecard { margin-top: var(--xt-s6); padding: clamp(18px,3vw,26px); background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); box-shadow: var(--xt-sh-2); }
+.xt-pricecard .prices { margin:0 0 var(--xt-s4); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.xt-pricecard .prices .product-price span, .xt-pricecard .actual-price { font-family: var(--xt-font-display); font-weight:600; font-size: clamp(2rem,4vw,2.6rem); line-height:1; color: var(--xt-ink); }
+.xt-pricecard .old-product-price span, .xt-pricecard .old-price { text-decoration:line-through; color: var(--xt-muted); font-size:1.1rem; font-weight:500; }
+.xt-pricecard .tax-shipping-info, .xt-pricecard .tax-shipping-info a { font-size:.82rem; color: var(--xt-muted); }
+.xt-pricecard .add-to-cart-panel { display:flex; align-items:center; gap: var(--xt-s3); flex-wrap:wrap; margin: var(--xt-s2) 0 0; }
+.xt-pricecard .qty-label { color: var(--xt-muted); font-size:.85rem; }
+.xt-pricecard .qty-input { width:64px; height:48px; text-align:center; border:1px solid var(--xt-line); border-radius: var(--xt-r-pill); background: var(--xt-surface-2); font-weight:700; font-size:1rem; color: var(--xt-ink); }
+.xt-pricecard .add-to-cart-button { flex:1 1 auto; min-width:200px; padding:14px 26px; border-radius: var(--xt-r-pill); background: var(--xt-brand); color:#FAF6EE; font-weight:700; font-size:1.02rem; border:0; box-shadow:0 10px 24px -12px rgba(15,61,62,.85); transition: background .2s ease, transform .2s ease; }
+.xt-pricecard .add-to-cart-button:hover { background:#0A2C2D; transform:translateY(-1px); }
+/* free-preview / sample download → terracotta ghost button under the card */
+.xt-pd-buy .download-sample-button { display:inline-flex; margin-top: var(--xt-s4); padding:11px 20px; border-radius: var(--xt-r-pill); border:1px solid var(--xt-accent); color: var(--xt-accent); font-weight:700; background:transparent; }
+.xt-pd-buy .download-sample-button:hover { background: rgba(217,119,87,.08); }
+/* secondary actions (wishlist / compare / email) → quiet inline buttons */
+.xt-pd-buy .overview-buttons { display:flex; align-items:center; gap: var(--xt-s5); flex-wrap:wrap; margin-top: var(--xt-s5); }
+.xt-pd-buy .overview-buttons .button-2, .xt-pd-buy .overview-buttons a, .xt-pd-buy .overview-buttons button { background:transparent; border:0; color: var(--xt-muted); font-weight:600; font-size:.9rem; padding:0; }
+.xt-pd-buy .overview-buttons .button-2:hover, .xt-pd-buy .overview-buttons a:hover, .xt-pd-buy .overview-buttons button:hover { color: var(--xt-accent); }
+
+/* —— ABOUT: full description below the hero —— */
+.xt-pd-content .full-description { font-family: var(--xt-font); font-size:1.04rem; line-height:1.78; color: var(--xt-ink-soft); }
+.xt-pd-content .full-description h2 { font-family: var(--xt-font-display); font-weight:600; font-size:1.5rem; color: var(--xt-ink); margin: var(--xt-s8) 0 var(--xt-s3); }
+.xt-pd-content .full-description ul { list-style:none; padding-left:0; }
+.xt-pd-content .full-description ul li { position:relative; padding-left:1.8em; margin:.55em 0; }
+.xt-pd-content .full-description ul li::before { content:""; position:absolute; left:0; top:.1em; width:1.15em; height:1.15em; border-radius:50%; background: rgba(15,61,62,.10); }
+.xt-pd-content .full-description ul li::after { content:""; position:absolute; left:.34em; top:.42em; width:.46em; height:.24em; border-left:2px solid var(--xt-brand); border-bottom:2px solid var(--xt-brand); transform:rotate(-45deg); }
+
+/* —— DETAIL PRODUK card (real _ProductSpecifications, table restyled to dl rows) —— */
+.product-specs-box { max-width:560px; margin: var(--xt-s10) 0 0; padding: clamp(18px,3vw,26px); background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); }
+.product-specs-box > .title { font-family: var(--xt-font-mono, "JetBrains Mono", ui-monospace, monospace); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; font-weight:600; color: var(--xt-accent); margin:0 0 var(--xt-s3); }
+.product-specs-box thead { display:none; }
+.product-specs-box .table-wrapper { overflow:visible; }
+.product-specs-box .data-table { width:100%; border:0; }
+.product-specs-box .data-table tbody { display:block; }
+.product-specs-box .data-table tr { display:flex; justify-content:space-between; gap:1rem; padding:.65rem 0; border-bottom:1px solid var(--xt-line); }
+.product-specs-box .data-table tr:last-child { border-bottom:0; }
+.product-specs-box .spec-header td, .product-specs-box .spec-group-name { font-family: var(--xt-font-display); font-weight:600; color: var(--xt-ink); padding-top: var(--xt-s3); }
+.product-specs-box .spec-name { color: var(--xt-muted); border:0; padding:0; }
+.product-specs-box .spec-value { color: var(--xt-ink); font-weight:600; text-align:right; border:0; padding:0; }
+
+/* —— REVIEWS (real _ProductReviews list + write-review form) —— */
+.product-reviews { margin-top: var(--xt-s12); padding-top: var(--xt-s10); border-top:1px solid var(--xt-line); }
+.product-review-list { display:grid; gap: var(--xt-s4); margin-top: var(--xt-s6); }
+.product-review-item { background: var(--xt-surface); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: var(--xt-s5) var(--xt-s6); }
+.product-review-item .review-item-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+.product-review-item .review-title { font-family: var(--xt-font-display); font-weight:600; font-size:1.05rem; color: var(--xt-ink); }
+.product-review-item .review-content .review-text { color: var(--xt-ink-soft); line-height:1.65; margin-top: var(--xt-s2); }
+.product-review-item .review-info { color: var(--xt-muted); font-size:.85rem; margin-top: var(--xt-s3); }
+.product-review-item .review-info .user a { color: var(--xt-brand); font-weight:600; }
+.write-review { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: clamp(20px,3vw,32px); margin-top: var(--xt-s8); }
+.write-review .review-title, .write-review .review-text, .write-review input[type=text], .write-review textarea { width:100%; padding:12px 14px; border:1px solid var(--xt-line); border-radius: var(--xt-r); background: var(--xt-surface); color: var(--xt-ink); font-family: var(--xt-font); font-size:1rem; }
+.write-review textarea, .write-review .review-text { resize:vertical; min-height:120px; }
+.write-review .write-product-review-button { margin-top: var(--xt-s4); padding:13px 28px; border-radius: var(--xt-r-pill); background: var(--xt-brand); color:#FAF6EE; font-weight:700; border:0; }
+.write-review .write-product-review-button:hover { background:#0A2C2D; }
