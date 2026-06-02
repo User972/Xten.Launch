@@ -425,13 +425,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* 20. PRODUCT & CATEGORY LANDING (deeper view overrides) ================= */
 /* Product detail — hero = cover (left, sticky) + OPEN buy column (right); design: Product Detail.html.
-   The editorial body (full description) moves BELOW the hero, so the tall buy column can't gap the cover. */
+   The editorial body moves BELOW the hero. NB: DefaultClean floats .gallery(46%) + .overview(52%) at
+   >=1001px and squares the cover via .picture:before{padding-top:100%} with an absolute img — we undo
+   all of that here so the two columns fill our grid tracks and the cover renders at full size. */
 .product-essential.xt-pd { display:block; }
 .xt-pd-grid { display:grid; grid-template-columns:1fr; gap: var(--xt-s8); align-items:start; }
+/* both columns must FILL their grid track (kill DefaultClean's desktop float + % width) */
+.product-essential.xt-pd .gallery,
+.product-essential.xt-pd .overview { width:auto; max-width:none; float:none; margin:0; }
 /* book-cover tile */
-.product-essential.xt-pd .gallery { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); padding: clamp(20px,4vw,40px); }
-.product-essential.xt-pd .gallery .picture { text-align:center; }
-.product-essential.xt-pd .gallery .picture img { display:inline-block; max-width:330px; width:100%; height:auto; border-radius: var(--xt-r); box-shadow:0 24px 50px -24px rgba(0,0,0,.5); }
+.product-essential.xt-pd .gallery { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); padding: clamp(18px,3vw,32px); max-width:380px; margin-inline:auto; }
+.product-essential.xt-pd .gallery .picture-wrapper { margin:0; }
+.product-essential.xt-pd .gallery .picture { text-align:center; max-width:none; margin:0; overflow:visible; }
+.product-essential.xt-pd .gallery .picture:before { content:none; padding-top:0; }            /* undo DefaultClean's forced 1:1 square */
+.product-essential.xt-pd .gallery .picture img { position:static; width:100%; max-width:100%; max-height:none; height:auto; margin:0 auto; border-radius: var(--xt-r); box-shadow:0 24px 50px -24px rgba(0,0,0,.5); }
 /* the buy COLUMN is open — only the price block is carded (.xt-pricecard), matching the design */
 .xt-buybox { background:transparent; border:0; box-shadow:none; padding:0; }
 .xt-buybox .product-name h1 { margin-top:0; font-size: clamp(1.9rem,3.4vw,2.6rem); line-height:1.06; }
@@ -1032,17 +1039,18 @@ html.xt-cart-open .flyout-cart { transform:translateX(0) !important; }
 .xt-pricecard .old-product-price span, .xt-pricecard .old-price { text-decoration:line-through; color: var(--xt-muted); font-size:1.1rem; font-weight:500; }
 .xt-pricecard .tax-shipping-info, .xt-pricecard .tax-shipping-info a { font-size:.82rem; color: var(--xt-muted); }
 .xt-pricecard .add-to-cart-panel { display:flex; align-items:center; gap: var(--xt-s3); flex-wrap:wrap; margin: var(--xt-s2) 0 0; }
-.xt-pricecard .qty-label { color: var(--xt-muted); font-size:.85rem; }
-.xt-pricecard .qty-input { width:64px; height:48px; text-align:center; border:1px solid var(--xt-line); border-radius: var(--xt-r-pill); background: var(--xt-surface-2); font-weight:700; font-size:1rem; color: var(--xt-ink); }
-.xt-pricecard .add-to-cart-button { flex:1 1 auto; min-width:200px; padding:14px 26px; border-radius: var(--xt-r-pill); background: var(--xt-brand); color:#FAF6EE; font-weight:700; font-size:1.02rem; border:0; box-shadow:0 10px 24px -12px rgba(15,61,62,.85); transition: background .2s ease, transform .2s ease; }
-.xt-pricecard .add-to-cart-button:hover { background:#0A2C2D; transform:translateY(-1px); }
+.product-essential.xt-pd .xt-pricecard .qty-label { color: var(--xt-muted); font-size:.85rem; }
+.product-essential.xt-pd .xt-pricecard .qty-input { width:64px; height:48px; text-align:center; border:1px solid var(--xt-line); border-radius: var(--xt-r-pill); background: var(--xt-surface-2); font-weight:700; font-size:1rem; color: var(--xt-ink); }
+/* add-to-cart: scope under .product-essential.xt-pd so we OUTSPECIFY DefaultClean's .overview .add-to-cart-button (the blue button) */
+.product-essential.xt-pd .xt-pricecard .add-to-cart-button { flex:1 1 auto; min-width:200px; height:auto; padding:14px 26px; border-radius: var(--xt-r-pill); background: var(--xt-brand) !important; color:#FAF6EE !important; font-weight:700; font-size:1.02rem; text-transform:none; border:0; box-shadow:0 10px 24px -12px rgba(15,61,62,.85); transition: background .2s ease, transform .2s ease; }
+.product-essential.xt-pd .xt-pricecard .add-to-cart-button:hover { background:#0A2C2D !important; transform:translateY(-1px); }
 /* free-preview / sample download → terracotta ghost button under the card */
-.xt-pd-buy .download-sample-button { display:inline-flex; margin-top: var(--xt-s4); padding:11px 20px; border-radius: var(--xt-r-pill); border:1px solid var(--xt-accent); color: var(--xt-accent); font-weight:700; background:transparent; }
-.xt-pd-buy .download-sample-button:hover { background: rgba(217,119,87,.08); }
-/* secondary actions (wishlist / compare / email) → quiet inline buttons */
-.xt-pd-buy .overview-buttons { display:flex; align-items:center; gap: var(--xt-s5); flex-wrap:wrap; margin-top: var(--xt-s5); }
-.xt-pd-buy .overview-buttons .button-2, .xt-pd-buy .overview-buttons a, .xt-pd-buy .overview-buttons button { background:transparent; border:0; color: var(--xt-muted); font-weight:600; font-size:.9rem; padding:0; }
-.xt-pd-buy .overview-buttons .button-2:hover, .xt-pd-buy .overview-buttons a:hover, .xt-pd-buy .overview-buttons button:hover { color: var(--xt-accent); }
+.product-essential.xt-pd .download-sample-button { display:inline-flex; margin-top: var(--xt-s4); padding:11px 20px; border-radius: var(--xt-r-pill); border:1px solid var(--xt-accent) !important; color: var(--xt-accent) !important; font-weight:700; background:transparent !important; }
+.product-essential.xt-pd .download-sample-button:hover { background: rgba(217,119,87,.08) !important; }
+/* secondary actions (wishlist / compare / email) → quiet inline buttons (beat DefaultClean's .button-2 pills) */
+.product-essential.xt-pd .overview-buttons { display:flex; align-items:center; gap: var(--xt-s5); flex-wrap:wrap; margin-top: var(--xt-s5); }
+.product-essential.xt-pd .overview-buttons .button-2, .product-essential.xt-pd .overview-buttons a, .product-essential.xt-pd .overview-buttons button { background:transparent !important; border:0 !important; height:auto; color: var(--xt-muted); font-weight:600; font-size:.9rem; text-transform:none; padding:0; }
+.product-essential.xt-pd .overview-buttons .button-2:hover, .product-essential.xt-pd .overview-buttons a:hover, .product-essential.xt-pd .overview-buttons button:hover { color: var(--xt-accent); }
 
 /* —— ABOUT: full description below the hero —— */
 .xt-pd-content .full-description { font-family: var(--xt-font); font-size:1.04rem; line-height:1.78; color: var(--xt-ink-soft); }
@@ -1077,5 +1085,5 @@ html.xt-cart-open .flyout-cart { transform:translateX(0) !important; }
 .write-review { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-lg); padding: clamp(20px,3vw,32px); margin-top: var(--xt-s8); }
 .write-review .review-title, .write-review .review-text, .write-review input[type=text], .write-review textarea { width:100%; padding:12px 14px; border:1px solid var(--xt-line); border-radius: var(--xt-r); background: var(--xt-surface); color: var(--xt-ink); font-family: var(--xt-font); font-size:1rem; }
 .write-review textarea, .write-review .review-text { resize:vertical; min-height:120px; }
-.write-review .write-product-review-button { margin-top: var(--xt-s4); padding:13px 28px; border-radius: var(--xt-r-pill); background: var(--xt-brand); color:#FAF6EE; font-weight:700; border:0; }
-.write-review .write-product-review-button:hover { background:#0A2C2D; }
+.product-reviews .write-review .write-product-review-button { margin-top: var(--xt-s4); padding:13px 28px; border-radius: var(--xt-r-pill); background: var(--xt-brand) !important; color:#FAF6EE !important; font-weight:700; border:0; height:auto; text-transform:none; }
+.product-reviews .write-review .write-product-review-button:hover { background:#0A2C2D !important; }

@@ -174,10 +174,13 @@
                                 @Html.Raw(Model.FullDescription)
                             </div>
                         }
-                        <section class="xt-author">
-                            <!--Authors are modelled as Manufacturers (localized partial kept verbatim)-->
-                            @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
-                        </section>
+                        @if (Model.ProductManufacturers.Count > 0)
+                        {
+                            <section class="xt-author">
+                                <!--Authors are modelled as Manufacturers (localized partial kept verbatim)-->
+                                @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
+                            </section>
+                        }
                         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsEssentialBottom, additionalData = Model })
                     </div>
                 </div>
