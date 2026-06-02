@@ -76,12 +76,32 @@
                     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsEssentialTop, additionalData = Model })
                     <div class="xt-pd-grid">
 
-                        <!--cover-->
-                        <div class="gallery">
-                            <!--product pictures-->
-                            @await Html.PartialAsync("_ProductDetailsPictures", Model)
-                            <!--product videos-->
-                            @await Html.PartialAsync("_ProductDetailsVideos", Model)
+                        <!--main column: cover + editorial body share ONE flow so the tall sticky buy
+                            box beside them can't push the text down (the old grid-row span did that)-->
+                        <div class="xt-pd-main">
+                            <!--cover-->
+                            <div class="gallery">
+                                <!--product pictures-->
+                                @await Html.PartialAsync("_ProductDetailsPictures", Model)
+                                <!--product videos-->
+                                @await Html.PartialAsync("_ProductDetailsVideos", Model)
+                            </div>
+
+                            <!--editorial body: auto TOC, full description, dedicated author block-->
+                            <div class="xt-pd-content">
+                                <nav class="xt-toc"></nav>
+                                @if (!string.IsNullOrEmpty(Model.FullDescription))
+                                {
+                                    <div class="full-description">
+                                        @Html.Raw(Model.FullDescription)
+                                    </div>
+                                }
+                                <section class="xt-author">
+                                    <!--Authors are modelled as Manufacturers (localized partial kept verbatim)-->
+                                    @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
+                                </section>
+                                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsEssentialBottom, additionalData = Model })
+                            </div>
                         </div>
 
                         <!--sticky buy box-->
@@ -159,22 +179,6 @@
                                 @await Html.PartialAsync("_ShareButton", Model)
                                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsOverviewBottom, additionalData = Model })
                             </div>
-                        </div>
-
-                        <!--editorial body: auto TOC, full description, dedicated author block-->
-                        <div class="xt-pd-content">
-                            <nav class="xt-toc"></nav>
-                            @if (!string.IsNullOrEmpty(Model.FullDescription))
-                            {
-                                <div class="full-description">
-                                    @Html.Raw(Model.FullDescription)
-                                </div>
-                            }
-                            <section class="xt-author">
-                                <!--Authors are modelled as Manufacturers (localized partial kept verbatim)-->
-                                @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
-                            </section>
-                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsEssentialBottom, additionalData = Model })
                         </div>
 
                     </div>
