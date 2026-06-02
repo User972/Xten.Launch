@@ -679,15 +679,23 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 
 /* cart drawer — nopCommerce's flyout mini-cart restyled as a right slide-over.
    Real "View cart"/"Checkout" buttons inside still go to /cart and /checkout. */
-.xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:60; }
+/* overlay + drawer sit above the sticky header (z:1000) and are portaled to <body> by theme.js so
+   they share the root stacking context (otherwise the header's contexts trap the drawer behind this). */
+.xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:9998; }
 html.xt-cart-open .xt-cart-overlay { opacity:1; visibility:visible; }
 .flyout-cart {
-  position:fixed; top:0; right:0; height:100%; width:min(440px,100vw);
+  /* !important throughout: DefaultClean ships a desktop dropdown rule
+       @media (min-width:1001px){ .flyout-cart{ position:absolute; top:100%; right:0; z-index:100; width:300px } }
+     plus an inline style="display:none" on #flyout-cart. Both have equal-or-higher precedence than
+     our plain class rule, so at >=1001px the cart rendered as a 300px box at z-index 100 BEHIND our
+     overlay (z 9998). Author !important is the only thing that beats an inline style AND wins the
+     equal-specificity load-order battle against DefaultClean's @media rule, at every viewport width. */
+  position:fixed !important; top:0 !important; right:0 !important; height:100% !important; width:min(440px,100vw) !important;
   background: var(--xt-surface); border-left:1px solid var(--xt-line);
   transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
-  z-index:61; display:flex; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
+  z-index:9999 !important; display:flex !important; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
 }
-html.xt-cart-open .flyout-cart { transform:translateX(0); }
+html.xt-cart-open .flyout-cart { transform:translateX(0) !important; }
 .flyout-cart .mini-shopping-cart { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
 .flyout-cart .count { padding:20px 22px; border-bottom:1px solid var(--xt-line); font-weight:600; }
 .flyout-cart .items { flex:1; overflow-y:auto; padding:8px 22px; }
@@ -789,7 +797,12 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 /* section rhythm + tinted "paper" band */
 .xt-home .xt-s { padding: clamp(52px,7vw,100px) 0; }
 .xt-home .xt-s:first-child { padding-top: var(--xt-s6); }
-.xt-s--band { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); padding-left: clamp(18px,4vw,44px); padding-right: clamp(18px,4vw,44px); }
+.xt-s--band { background: var(--xt-surface-2); border:1px solid var(--xt-line); border-radius: var(--xt-r-xl); }
+/* Inner side gutters for the beige panels. These must out-specify `.xt-home .xt-s { padding: … 0 }`
+   above — that shorthand sets left/right to 0 and (being more specific than a bare `.xt-s--band`)
+   was zeroing these out, so the panel content hugged the rounded edges. Scope under .xt-home to match
+   its specificity and win by source order; generous gutters give the panels real breathing room. */
+.xt-home .xt-s--band { padding-left: clamp(24px,5vw,64px); padding-right: clamp(24px,5vw,64px); }
 
 /* section header: mono kicker + big Fraunces heading + side lead + optional link */
 .xt-kicker { font-family: var(--xt-font-mono); text-transform:uppercase; letter-spacing:.18em; font-size:.72rem; color: var(--xt-accent-600); }
@@ -953,9 +966,43 @@ html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .xt-bookcard__foot { margin-top:auto; padding-top: var(--xt-s4); display:flex; align-items:center; justify-content:space-between; gap:10px; }
 .xt-bookcard__price { font-family: var(--xt-font-display); font-weight:600; font-size:1.2rem; }
 .xt-bookcard .xt-jacket { margin:0; }
+/* Real product cover (dynamic homepage grid) — same footprint as the .xt-jacket placeholder. */
+.xt-bookcard__cover { display:block; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background: var(--xt-line); box-shadow:0 16px 36px -20px rgba(0,0,0,.55); }
+.xt-bookcard__cover img { width:100%; height:100%; object-fit:cover; display:block; }
+.xt-bookcard h3 a { color:inherit; }
+.xt-ebook-chips { flex-wrap:wrap; }
 
 /* responsive: stepper scrolls horizontally on small screens */
 @media (max-width:899px){
   .xt-stepper { grid-auto-flow:column; grid-auto-columns:78%; grid-template-columns:none; overflow-x:auto; scroll-snap-type:x mandatory; }
   .xt-stepper__item { scroll-snap-align:start; }
 }
+
+/* the "not sure?" helper card (last cell in #programs) reuses .xt-prog for layout but is meant to read
+   as the inverted teal accent. .xt-prog's own surface background is declared later in the cascade, so it
+   would win over .xt-why__c--invert and leave the card's cream inline text on a cream card (invisible in
+   light mode). A compound selector (higher specificity) restores the intended teal in both modes. */
+.xt-prog.xt-why__c--invert { background: var(--xt-brand); border-color: var(--xt-brand); }
+
+/* faculty: 4 teachers read best as a single row on desktop. The topic markup sets an inline 2-col grid
+   (sensible on phones/tablets); widen it to 4-up on desktop so the portrait cards aren't oversized.
+   Scoped to #faculty; !important is required only because it overrides the element's inline style. */
+@media (min-width:992px){
+  #faculty .xt-cardgrid { grid-template-columns:repeat(4,1fr) !important; }
+}
+
+/* Dark mode: the "inverted teal" accent surfaces (testimonial band, bundle, why-choose #04, methodology
+   step #5, the teal results card, the programs "not sure?" card, hero proof pill, active filter chip)
+   all use var(--xt-brand) as a BACKGROUND. In dark mode that token intentionally lightens (#6FB7AE) so
+   teal links/text stay legible — but as a panel behind cream text it goes low-contrast. Keep these
+   accent panels a deep teal in dark mode so their cream text reads crisply, matching their light-mode
+   look and the deep-teal final-CTA band. */
+[data-theme="dark"] .xt-quote-band,
+[data-theme="dark"] .xt-bundle,
+[data-theme="dark"] .xt-lead-card__proof,
+[data-theme="dark"] .xt-why__c--invert,
+[data-theme="dark"] .xt-stepper__item--invert,
+[data-theme="dark"] .xt-result--teal,
+[data-theme="dark"] .xt-prog.xt-why__c--invert,
+[data-theme="dark"] .xt-diff__item--invert,
+[data-theme="dark"] .xt-chip.is-active { background: #0F3D3E; border-color: #0F3D3E; }

@@ -1,0 +1,124 @@
+# Per-customer (tenant) stack: nopCommerce app + PostgreSQL + nginx.
+#
+# One copy of this directory exists per tenant under deploy/customers/<slug>/, created by
+# deploy/scripts/new-customer.sh (which also writes the per-tenant .env). Each tenant is fully
+# isolated: its own DB, its own volumes, its own network. The tenant's `nginx` is the only
+# service on the shared `webproxy` network — the shared proxy routes <DOMAIN> to it and
+# terminates TLS; nginx forwards to the app over the tenant-private `internal` network.
+#
+# Start with:  docker compose --project-directory deploy/customers/<slug> -p <slug> up -d
+# (new-customer.sh does this for you. The -p <slug> name prefixes the volumes/network.)
+
+services:
+  nopcommerce:
+    # Shared image, built once by new-customer.sh and reused by every tenant. `build` is kept so
+    # `up` can self-build if the image is missing; it is NOT rebuilt when the image already exists.
+    image: nop-ebook:${NOP_VERSION:-release-4.90.4}
+    build:
+      context: ../../..                       # repository root (theme + plugin live here)
+      dockerfile: deploy/app/Dockerfile
+      args:
+        NOP_VERSION: ${NOP_VERSION:-release-4.90.4}
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      HostingConfig__UseProxy: "true"         # behind nginx -> nginx-proxy; trust X-Forwarded-*
+      # Cache: in-process memory (no shared Redis in the per-tenant stack). Each tenant runs a
+      # single app instance, so memory cache is correct and keeps tenants isolated.
+      # --- OPTIONAL headless install of the DB connection (default OFF -> use the wizard once) ---
+      NOP_SEED_DATASETTINGS: "${NOP_SEED_DATASETTINGS:-false}"
+      NOP_DATA_PROVIDER: "postgresql"
+      NOP_DB_HOST: "postgres"
+      NOP_DB_PORT: "5432"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - appdata:/app/App_Data                 # install state, dataSettings/appsettings, DP keys
+      - plugins:/app/Plugins
+      - images:/app/wwwroot/images
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [internal]
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # Tuning is modest because MANY tenants share one VM (unlike the old single-store box).
+    # Scale per box: rough budget ~ (shared_buffers + ~0.5 GB app) per tenant. See deploy/README.md.
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=256MB"
+      - "-c"
+      - "effective_cache_size=768MB"
+      - "-c"
+      - "work_mem=8MB"
+      - "-c"
+      - "max_connections=80"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../../config/init-citext.sql:/docker-entrypoint-initdb.d/10-citext.sql:ro   # citext (§2.3)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [internal]
+
+  db-backup:
+    # Nightly pg_dump -Fc with rotation, into the tenant-private `backups` volume.
+    # IMPORTANT: still copy these off the VM (object storage) and run a periodic restore test —
+    # a backup you've never restored doesn't exist. See deploy/README.md.
+    image: prodrigestivill/postgres-backup-local:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SCHEDULE: "${BACKUP_SCHEDULE:-@daily}"
+      BACKUP_KEEP_DAYS: "${BACKUP_KEEP_DAYS:-7}"
+      BACKUP_KEEP_WEEKS: "${BACKUP_KEEP_WEEKS:-4}"
+      BACKUP_KEEP_MONTHS: "${BACKUP_KEEP_MONTHS:-6}"
+      POSTGRES_EXTRA_OPTS: "-Fc"        # custom format -> pg_restore
+    volumes:
+      - backups:/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [internal]
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    environment:
+      # Consumed by the SHARED nginx-proxy + acme-companion to route + issue TLS for this tenant.
+      VIRTUAL_HOST: ${DOMAIN}
+      VIRTUAL_PORT: "80"
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - nopcommerce
+    networks: [internal, webproxy]
+
+volumes:
+  appdata:
+  plugins:
+  images:
+  pgdata:
+  backups:
+
+networks:
+  internal:           # tenant-private: app <-> postgres <-> nginx
+  webproxy:           # shared, created by deploy/proxy/ — only nginx is attached
+    external: true
+    name: webproxy

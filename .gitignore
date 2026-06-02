@@ -1,6 +1,8 @@
 # Secrets — never commit real environment files
 .env
 deploy/.env
+deploy/proxy/.env
+deploy/customers/*/.env
 *.env
 !*.env.example
 
