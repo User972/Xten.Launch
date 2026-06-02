@@ -687,7 +687,9 @@ html.xt-cart-open .xt-cart-overlay { opacity:1; visibility:visible; }
   position:fixed; top:0; right:0; height:100%; width:min(440px,100vw);
   background: var(--xt-surface); border-left:1px solid var(--xt-line);
   transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
-  z-index:9999; display:flex; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
+  /* display:flex !important beats nopCommerce's inline style="display:none" on #flyout-cart
+     (inline styles outrank our class selectors; only author !important can override them). */
+  z-index:9999; display:flex !important; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
 }
 html.xt-cart-open .flyout-cart { transform:translateX(0); }
 .flyout-cart .mini-shopping-cart { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
