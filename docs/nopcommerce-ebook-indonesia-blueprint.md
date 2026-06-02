@@ -40,7 +40,16 @@ Notes:
 
 ### 1.2 Docker Compose architecture
 
-Five logical services (compose file: `deploy/docker-compose.yml`):
+> **⚠️ Implementation update — the deploy is now MULTI-TENANT.** This section describes one store's
+> logical services (the original design). The live scaffold evolved so **one VM hosts many independent
+> stores**: a **shared `nginx-proxy` + `acme-companion`** (reverse proxy + auto-TLS) routes each domain
+> to its own **isolated per-tenant stack** (nopCommerce app + PostgreSQL + nginx + nightly db-backup
+> sidecar; no per-tenant Redis — in-process cache). The single-stack `deploy/docker-compose.yml` +
+> `Caddyfile` + combined `.env.example` were **replaced** (reverse proxy moved **Caddy → nginx-proxy**).
+> The diagram below still applies per tenant. See **`deploy/README.md`** and Appendix A for the current
+> layout (`deploy/proxy/`, `deploy/customers/template/`, `deploy/scripts/new-customer.sh`).
+
+Five logical services (per-tenant; the original single-stack `deploy/docker-compose.yml` is superseded):
 
 ```
                       Internet (HTTPS 443)
@@ -89,8 +98,8 @@ nopCommerce keeps its identity and uploaded content under `App_Data` and `wwwroo
 ### 1.4 OS, reverse proxy, TLS, domain
 
 - **Linux OS:** **Ubuntu 24.04 LTS** (or Debian 12). Long support window, broad Docker tooling, easy unattended-upgrades.
-- **Reverse proxy:** **Caddy** for MVP/small production — automatic Let's Encrypt TLS, HTTP/2 + HTTP/3, dead-simple config (`deploy/Caddyfile`). Choose **Nginx** instead only if you need very fine-grained rules or already standardize on it.
-- **TLS/SSL:** Let's Encrypt, fully automated by Caddy (or Certbot for Nginx). Force HTTPS, HSTS, TLS 1.2+ only. Optionally place **Cloudflare** in front (free WAF, DDoS protection, DNS, CDN for static assets — see §10.4). If you use Cloudflare proxied, set SSL mode to **Full (strict)**.
+- **Reverse proxy:** the implementation uses **`nginx-proxy` + `acme-companion`** (a shared, multi-tenant proxy with automatic Let's Encrypt TLS and host-based routing — see `deploy/proxy/`). Caddy was the original MVP recommendation (simpler single-host config) but was superseded by nginx-proxy to host many stores on one VM; either is fine for a single store.
+- **TLS/SSL:** Let's Encrypt, fully automated by `acme-companion` (Caddy/Certbot are alternatives). Force HTTPS, HSTS, TLS 1.2+ only. Optionally place **Cloudflare** in front (free WAF, DDoS protection, DNS, CDN for static assets — see §10.4). If you use Cloudflare proxied, set SSL mode to **Full (strict)**.
 - **Domain:** Use a dedicated domain (e.g. a `.com` or Indonesian `.co.id`/`.id`). Point `A`/`AAAA` to the VPS (or Cloudflare). Configure `www` → apex redirect. Set the canonical store URL in nopCommerce (Configuration → Stores).
 
 ### 1.5 Same VPS vs separated DB
@@ -476,7 +485,7 @@ Draft with the customer's lawyer; structure to cover:
 - **Avoid public static file links:** never use the "download URL" field for paid products; keep files in the DB (or, if on disk, **under `App_Data`/outside `wwwroot`** so they're never statically served).
 - **Store files outside the public web root:** DB storage (default) achieves this. If you switch to disk for large files, store under a non-served path and keep serving through the controller (or a storage plugin that proxies through auth).
 - **Expiring links (custom flows):** if you ever build custom direct links (e.g. a CDN-signed URL for very large files), make them **short-lived signed URLs** (HMAC + expiry + one-time/limited use) — never permanent.
-- **Rate-limit suspicious download behavior:** at the reverse proxy, rate-limit `/download/*` per IP/account (e.g. N requests/min) to blunt scraping/credential-sharing abuse (`deploy/Caddyfile` shows a sample). Combine with the per-product **download-count cap** (§5.7).
+- **Rate-limit suspicious download behavior:** at the reverse proxy, rate-limit `/download/*` per IP/account (e.g. N requests/min) to blunt scraping/credential-sharing abuse (add it to the per-tenant `deploy/customers/template/nginx.conf`). Combine with the per-product **download-count cap** (§5.7).
 - **Audit download logs:** track download activity (orders → order item download count; add a custom audit/event log via a plugin if you need per-download IP/time records). Review outliers (one account, many IPs, hitting the cap fast).
 
 ### 9.4 Customer-specific PDF watermarking — worth it?
@@ -508,8 +517,8 @@ Draft with the customer's lawyer; structure to cover:
 
 ### 10.3 Static asset optimization
 - Enable nopCommerce **bundling + minification** (WebOptimizer) for CSS/JS.
-- Reverse proxy: **gzip/brotli** compression + long `Cache-Control` for static files (`/css`, `/js`, `/images` thumbs). `deploy/Caddyfile` includes this.
-- Serve over **HTTP/2/HTTP/3** (Caddy default).
+- Reverse proxy: **gzip** compression + long `Cache-Control` for static files (`/css`, `/js`, `/images` thumbs) — configure in the per-tenant `deploy/customers/template/nginx.conf`.
+- Serve over **HTTP/2** (enable at the shared `nginx-proxy`).
 
 ### 10.4 CDN — yes for assets, NOT for paid eBook files
 - Put **Cloudflare** (or similar) in front for **images, CSS, JS, fonts** — big win for Indonesian mobile users on variable networks.
@@ -809,14 +818,15 @@ Configure under `Content Management → Message templates`; set the **Email acco
 
 ---
 
-### Appendix A — Deploy scaffold in this repo
-- `deploy/docker-compose.yml` — app + PostgreSQL + Redis + Caddy + backup sidecar, internal network, named volumes.
-- `deploy/.env.example` — all secrets/config as env vars (copy to `.env`, never commit `.env`).
-- `deploy/Caddyfile` — auto-TLS, security headers, gzip/brotli, `/download/*` rate-limit, static caching.
-- `deploy/app/Dockerfile` — builds nopCommerce 4.90 from source on .NET 9.
+### Appendix A — Deploy scaffold in this repo (multi-tenant)
+- `deploy/proxy/` — **shared** `nginx-proxy` + `acme-companion` (auto-TLS, host-based routing); run once per VM. Creates the external `webproxy` network every tenant attaches to.
+- `deploy/customers/template/` — **per-tenant** stack (nopCommerce app + PostgreSQL + nginx + nightly db-backup sidecar + `nginx.conf`), scaffolded per store into `deploy/customers/<slug>/` (git-ignored `.env`).
+- `deploy/scripts/new-customer.sh` — provisions a tenant end-to-end: builds the shared image once, scaffolds the stack, writes a random `POSTGRES_PASSWORD`, brings it up as compose project `<slug>`.
+- `deploy/azure/` — host-VM provisioning on Azure (`provision-vm.sh` + README).
+- `deploy/app/Dockerfile` — builds the **shared** nopCommerce 4.90 image from source on .NET 9 (theme + Midtrans plugin baked in).
 - `deploy/app/entrypoint.sh` — optional headless seeding of `dataSettings.json` from secrets.
-- `deploy/config/dataSettings.template.json` — PostgreSQL connection template.
-- `deploy/config/appsettings.redis-snippet.json` — Redis/hosting/cache block to merge into `App_Data/appsettings.json`.
+- `deploy/config/dataSettings.template.json` — PostgreSQL connection template; `init-citext.sql` pre-creates `citext`.
+- _(The earlier single-stack `deploy/docker-compose.yml`, `deploy/Caddyfile`, and combined `deploy/.env.example` were removed — superseded by the multi-tenant layout above.)_
 - `plugins/Nop.Plugin.Payments.Midtrans/` — buildable Midtrans Snap payment plugin (redirect + signature-verified webhook → mark order paid → activate downloads). See its README.
 - `storefront/` — mobile-first home page (CSS + EN/ID markup) and Terms/Privacy/Refund topic content in English + Bahasa Indonesia.
 
