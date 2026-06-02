@@ -684,14 +684,18 @@ input:focus, select:focus, textarea:focus { outline:0; border-color: var(--xt-ac
 .xt-cart-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:9998; }
 html.xt-cart-open .xt-cart-overlay { opacity:1; visibility:visible; }
 .flyout-cart {
-  position:fixed; top:0; right:0; height:100%; width:min(440px,100vw);
+  /* !important throughout: DefaultClean ships a desktop dropdown rule
+       @media (min-width:1001px){ .flyout-cart{ position:absolute; top:100%; right:0; z-index:100; width:300px } }
+     plus an inline style="display:none" on #flyout-cart. Both have equal-or-higher precedence than
+     our plain class rule, so at >=1001px the cart rendered as a 300px box at z-index 100 BEHIND our
+     overlay (z 9998). Author !important is the only thing that beats an inline style AND wins the
+     equal-specificity load-order battle against DefaultClean's @media rule, at every viewport width. */
+  position:fixed !important; top:0 !important; right:0 !important; height:100% !important; width:min(440px,100vw) !important;
   background: var(--xt-surface); border-left:1px solid var(--xt-line);
   transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
-  /* display:flex !important beats nopCommerce's inline style="display:none" on #flyout-cart
-     (inline styles outrank our class selectors; only author !important can override them). */
-  z-index:9999; display:flex !important; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
+  z-index:9999 !important; display:flex !important; flex-direction:column; overflow:hidden; box-shadow:-20px 0 60px -30px rgba(0,0,0,.5);
 }
-html.xt-cart-open .flyout-cart { transform:translateX(0); }
+html.xt-cart-open .flyout-cart { transform:translateX(0) !important; }
 .flyout-cart .mini-shopping-cart { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
 .flyout-cart .count { padding:20px 22px; border-bottom:1px solid var(--xt-line); font-weight:600; }
 .flyout-cart .items { flex:1; overflow-y:auto; padding:8px 22px; }
