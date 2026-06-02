@@ -10,18 +10,21 @@ Implementation blueprint and deployment scaffold for a **digital-eBook nopCommer
 
 ## Deploy scaffold
 
-The [`deploy/`](deploy/) folder contains a runnable starting point referenced by the blueprint:
+The [`deploy/`](deploy/) folder is a **multi-tenant** scaffold — one VM hosts many independent stores
+behind a shared reverse proxy:
 
-| File | Purpose |
+| Path | Purpose |
 |---|---|
-| `deploy/docker-compose.yml` | App + PostgreSQL + Redis + Caddy + backup sidecar |
-| `deploy/.env.example` | All secrets/config as env vars (copy to `.env`, never commit) |
-| `deploy/Caddyfile` | Auto-TLS, security headers, gzip, static caching |
-| `deploy/app/Dockerfile` | Builds nopCommerce 4.90 (.NET 9) from source |
-| `deploy/app/entrypoint.sh` | Optional headless seeding of `dataSettings.json` |
-| `deploy/config/*` | PostgreSQL/Redis config templates + `citext` init |
+| `deploy/proxy/` | Shared `nginx-proxy` + `acme-companion` (auto-TLS, host routing) — run once per VM |
+| `deploy/customers/template/` | Isolated per-tenant stack (nopCommerce app + PostgreSQL + nginx + nightly db-backup) |
+| `deploy/scripts/new-customer.sh` | Provisions a new tenant end-to-end (random secrets) |
+| `deploy/app/Dockerfile` | Builds the **shared** nopCommerce 4.90 (.NET 9) image (theme + Midtrans plugin baked in) |
+| `deploy/azure/` | Provision the host VM on Azure (`provision-vm.sh`) |
+| `deploy/config/*` | PostgreSQL config templates + `citext` init |
 
 See **[deploy/README.md](deploy/README.md)** for the quick-start.
+(The earlier single-stack `docker-compose.yml` + `Caddyfile` + combined `.env.example` were replaced by
+the layout above; reverse proxy moved Caddy → nginx-proxy.)
 
 ## Midtrans payment plugin
 
@@ -42,9 +45,11 @@ and **[storefront/emails/README.md](storefront/emails/README.md)**.
 ## Storefront theme
 
 [`themes/EbookIndonesia/`](themes/EbookIndonesia/) — a custom nopCommerce 4.90 / .NET 9 theme that
-makes the storefront feel like a **modern publisher / curated eBook platform** (soft commerce,
-editorial, mobile-first, EN/ID). CSS-led design system + three faithful view overrides (Head,
-Home, Footer) + admin/widget/content playbook. **No core changes**; every widget zone preserved.
+re-skins the storefront as the **"Check"** tutoring brand (IELTS/TOEFL/PTE) with an integrated **eBook
+showcase** (soft commerce, editorial, mobile-first, EN/ID, light/dark). CSS-led design system + faithful
+view overrides (Head, Header, Home, Footer, LanguageSelector, Product, Category) + **live HomepageProducts/
+HomepageCategories** components that drive the homepage eBook grid from real admin data + admin/widget/
+content playbook. **No core changes**; every widget zone preserved.
 The Docker build copies it into `Nop.Web/Themes/EbookIndonesia`. See
 **[its README](themes/EbookIndonesia/README.md)**, the
 [decision table](themes/EbookIndonesia/docs/default-elements-decision-table.md), and

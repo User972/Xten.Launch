@@ -1,22 +1,69 @@
 # eBook Indonesia theme — implementation plan & progress
 
-Resume-able progress log. Strategy: **CSS-led design system + 3 faithful view overrides
-(Head, Home, Footer) + admin/widget/content playbook + Docker integration**. Every default
+Resume-able progress log. Strategy: **CSS-led design system + faithful view overrides
+(Head, Header, Home, Footer, LanguageSelector, Product, Category, + the live HomepageProducts/
+HomepageCategories components) + admin/widget/content playbook + Docker integration**. Every default
 widget zone and dynamic component is preserved → upgrade-safe, plugin-safe, no core changes.
 
 Legend: ✅ done · 🟡 partial (CSS/recipe done; optional deeper override pending) · ⬜ not started
 
-## Session log — Merge main + pin .NET 9 + Dependabot guard + PR #11 — ✅ (branch `claude/modest-tesla-BvVLM`)
+> **Branch / PR status (current):** work continues on `claude/jolly-gates-626mK` (sits at the `main`
+> tip, no open PR yet). Lineage `zen-bell → epic-sagan → modest-tesla` (**PR #11, merged**) →
+> `magical-cannon` (**PR #14, merged**) — all on `main`. Dependabot's .NET-10 PRs (#12, #13) were
+> correctly closed; the .NET-9 pin + Dependabot guard are on `main`.
+
+## Session log — LIVE eBook grid + multi-tenant deploy + cart-drawer & visual fixes — ✅ (PR #14 merged → `main`)
+Everything below landed via **PR #14** (`claude/magical-cannon-H56L5`) on top of the now-merged PR #11.
+- **LIVE eBook store** (`3758e8f`): the homepage "Ebook store" was static placeholder HTML (fake
+  titles/prices, View → `/search`). Made dynamic with TWO component overrides — `HomepageProducts/
+  Default.cshtml` renders "Show on home page" products as the theme's **book-cards** (real cover image,
+  price, star rating, working Add-to-cart that opens the drawer, "New" badge from MarkAsNew), and
+  `HomepageCategories/Default.cshtml` renders "Show on home page" categories as **filter chips**.
+  `Index.cshtml` now renders the live `#ebooks` section **between two topics** to keep its mid-page spot;
+  the homepage topic was **split** into `HomepageText` (upper: hero → testimonials) and `HomepageTextLower`
+  (lower: locations → FAQ → final CTA), and the static ebook block was removed. New
+  `storefront/home/homepage-lower.{en,id}.html`; `.xt-bookcard__cover`/`.xt-bookgrid` CSS added;
+  `storefront/README.md` updated with the new wiring. **Admin:** tick "Show on home page" on ebook
+  products + categories, and paste the **two** topic halves. No core changes. (This closes the previously
+  "optional, NOT done" live-grid item.)
+- **Multi-tenant deploy refactor** (`aae5ad3`): replaced the single-stack `docker-compose.yml` + `Caddyfile`
+  + combined `.env.example` with `deploy/proxy/` (shared `nginx-proxy` + `acme-companion`, auto-TLS,
+  host-based routing), `deploy/customers/template/` (isolated per-tenant stack: app + postgres + nginx +
+  nightly `db-backup` sidecar), `deploy/scripts/new-customer.sh` (provision a tenant with random secrets),
+  and `deploy/azure/` (host-VM provisioning). Reverse proxy moved **Caddy → nginx-proxy**. Added
+  `.gitattributes` (force LF on scripts/compose/conf) and `.gitignore` entries for `proxy/` + per-tenant
+  `.env`. `deploy/README.md` fully rewritten for the multi-tenant flow.
+- **Cart drawer fixed for real** (`3a1fbd8`, `c4eebaa`, `51d7156`): the slide-over opened the dim overlay
+  but the panel stayed invisible. Three root causes, all solved (see AGENT-HANDOFF gotcha #6): (1) the
+  header's sticky bar + `_Root` wrappers create stacking contexts, so the body overlay painted OVER the
+  drawer → **portal `#flyout-cart` to `<body>`** on init/open (overlay z:9998, drawer z:9999); (2)
+  nopCommerce renders the flyout with an inline `display:none` → **`display:flex !important`** is the only
+  author rule that beats it; (3) at `>=1001px` DefaultClean ships `.flyout-cart{position:absolute;z-index:
+  100;width:300px}` which won by load order → **`!important` on position/top/right/height/width/z-index +
+  the open transform**. Verified with headless repros against real release-4.90.4 DefaultClean CSS + `_Root`
+  layout. Real cart/checkout/Midtrans flow unchanged.
+- **Visual polish, CSS-only, headless-verified** (`9f46544`, `0f301fe`, `f09d1ba`): fixed the invisible
+  "not sure?" programs card (compound selector restores the teal in both modes), widened the **faculty grid
+  to 4-up** on desktop, restored the **beige homepage bands' side gutters** (clamp 24–64px, scoped under
+  `.xt-home .xt-s--band`), and pinned the **dark-mode teal accent panels** to deep `#0F3D3E` so cream text
+  stays readable (the `--xt-brand` token lightens in dark mode — gotcha #7). Verified by local headless
+  render (light/dark, desktop/mobile); **no HomepageText re-paste needed**.
+- **Verification status:** the homepage + cart drawer are now iterated against **headless browser renders**
+  of real 4.90.4 markup — a real step past "never rendered" — but **a deployed instance has still not been
+  screenshotted or smoke-tested end-to-end** (live cart → /checkout → Midtrans). That's the top next check.
+
+## Session log — Merge main + pin .NET 9 + Dependabot guard + PR #11 — ✅ (branch `claude/modest-tesla-BvVLM`, merged)
 - Merged latest `main` (Dependabot updates + GitHub Actions bumps: checkout v6, setup-dotnet v5, trivy 0.36).
 - **Re-pinned Docker base images to .NET 9** (`39725ec`): Dependabot had bumped sdk+aspnet to 10; nopCommerce
   4.90.4 is a net9.0 app and won't start on a .NET-10-only runtime (and it breaks the .NET 9 constraint).
   Added Dockerfile comments to deter re-bumping.
 - **`.github/dependabot.yml`**: added an `ignore` for `version-update:semver-major` on
   `mcr.microsoft.com/dotnet/{sdk,aspnet}` so the 9→10 bump can't recur (minor/patch stays allowed). Rides into
-  `main` when PR #11 merges. ⚠️ `main` still carries the 10.x Dockerfile until PR #11 (which has the pin) merges.
-- **PR #11 → `main` is OPEN** (created from the Claude Code UI; this session is subscribed to its activity).
-  CI green: Static checks ✅, Trivy ✅, smoke skipped (no STAGING_URL); no review comments; `mergeable_state:
-  clean`. Pushing to this branch updates PR #11.
+  `main` when PR #11 merges. _(Update: PR #11 has since **merged**, so the .NET 9 pin + this guard are now on
+  `main` and Dependabot's .NET-10 PRs #12/#13 were closed.)_
+- **PR #11 → `main`** was opened from the Claude Code UI and went green (Static checks ✅, Trivy ✅, smoke
+  skipped — no STAGING_URL; `mergeable_state: clean`), then **merged** (followed by PR #14). _(This entry is
+  the point-in-time record from when PR #11 was still open.)_
 - Docs refreshed: `docs/AGENT-HANDOFF.md` (current state / next steps / design source / branch) + this log.
 
 ## Session log — Full "Check Homepage" build from the REAL design bundle — ✅ (branch `claude/modest-tesla-BvVLM`)
@@ -127,12 +174,17 @@ Re-skinned the theme to the `Check Homepage.html` visual system (bundle `xten-cu
 - ✅ `Content/js/theme.js` — vanilla: FAQ accordion, **sticky mobile Buy bar** (triggers the real
   add-to-cart button — no logic bypass), smooth-scroll.
 
-## Phase 2 — Homepage — ✅
-- ✅ `Views/Home/Index.cshtml` — editorial narrative (brand story → value → featured → topics →
-  popular → articles); renders the bilingual **`HomepageText` topic** + all components + all widget
-  zones. Content comes from `storefront/home/homepage.{en,id}.html` (enhanced with who-it's-for,
-  benefits, FAQ, final CTA).
-- Admin step: paste the homepage content into the `HomepageText` topic (per language).
+## Phase 2 — Homepage — ✅ (now the full Check design + a LIVE eBook grid)
+- ✅ `Views/Home/Index.cshtml` — editorial narrative; renders **`HomepageText`** (upper) → the **live
+  `#ebooks` store** (HomepageCategories chips + HomepageProducts grid) → **`HomepageTextLower`** (lower)
+  → best-sellers → news → polls. **All widget zones preserved.**
+- ✅ The "Ebook store" section is **dynamic** (PR #14): `HomepageProducts`/`HomepageCategories` component
+  overrides render products/categories marked "Show on home page" as book-cards + filter chips (real
+  cover/price/rating/Add-to-cart). No static placeholder HTML.
+- Admin step: paste **two** topics — `homepage.{en,id}.html` → `HomepageText`, `homepage-lower.{en,id}.html`
+  → `HomepageTextLower` (per language) — and tick "Show on home page" on ebook products + categories.
+- ⬜ Deployed screenshot pass (light/dark, desktop/mobile) to tune §24 spacing — iterated via headless
+  renders, not yet on a real instance.
 
 ## Phase 3 — Product page — ✅
 - ✅ CSS landing-page treatment: cover, headline, subtitle, **price (IDR)**, prominent Buy button,
@@ -171,13 +223,17 @@ Re-skinned the theme to the `Check Homepage.html` visual system (bundle `xten-cu
 - ⬜ Optional: small download-page guidance partial / checkout reassurance via widget zone content
   (admin can add now; no override needed).
 
-## Phase 7 — Docker integration & docs — ✅
-- ✅ `deploy/docker-compose.yml` build context → repo root; `deploy/app/Dockerfile` copies the theme
-  into the published `Nop.Web/Themes/EbookIndonesia`; runtime COPY paths fixed; root `.dockerignore`
-  added to keep context lean. The Midtrans plugin is copied in and added to the solution so it
-  compiles into the image (single `docker compose up --build` → theme **and** plugin).
-- ✅ Docs: theme `README.md`, `docs/default-elements-decision-table.md`, this progress file; root
-  README/blueprint pointers updated.
+## Phase 7 — Docker integration & docs — ✅ (now MULTI-TENANT)
+- ✅ `deploy/app/Dockerfile` builds the **shared** nopCommerce image: clones `release-4.90.4`, bakes in the
+  theme (`Nop.Web/Themes/EbookIndonesia`) **and** the Midtrans plugin (`dotnet sln add`), builds, publishes.
+- ✅ **Multi-tenant refactor (PR #14):** one VM hosts many stores. `deploy/proxy/` = shared `nginx-proxy` +
+  `acme-companion` (auto-TLS, host routing); `deploy/customers/template/` = isolated per-tenant stack (app +
+  postgres + nginx + nightly `db-backup` sidecar); `deploy/scripts/new-customer.sh` provisions a tenant with
+  random secrets; `deploy/azure/` provisions the host VM. The old single-stack `docker-compose.yml` +
+  `Caddyfile` + combined `.env.example` were removed (reverse proxy: **Caddy → nginx-proxy**).
+- ✅ Docs: `deploy/README.md` rewritten for the multi-tenant flow; `storefront/README.md` updated for the
+  two-topic + "Show on home page" wiring; theme `README.md`, `docs/default-elements-decision-table.md`, this
+  progress file, `docs/AGENT-HANDOFF.md`, root README + blueprint refreshed.
 
 ## Phase 8 — QA & polish — 🟡
 - ✅ Static checks: JSON valid, CSS balanced, JS/Razor syntax sanity, no core edits, no secrets,
@@ -185,7 +241,10 @@ Re-skinned the theme to the `Check Homepage.html` visual system (bundle `xten-cu
 - ✅ Runtime QA is now **repeatable**: `deploy/qa/smoke.sh` (theme active, security headers, the
   product/category overrides, the **download-auth guard**, and the **Midtrans webhook guard**) +
   `deploy/qa/QA-CHECKLIST.md` (manual mobile visual / functional / security / perf / a11y passes).
-- ⬜ Execute the QA pass against a deployed instance and record sign-off in the checklist.
+- 🟡 The homepage + cart drawer have been iterated against **headless browser renders** of real 4.90.4
+  markup (light/dark, desktop/mobile) — a step past "never rendered".
+- ⬜ Execute the QA pass against a **real deployed instance** (deployed screenshot + live cart → /checkout
+  → Midtrans smoke) and record sign-off in the checklist.
 
 ## Definition of done for the optional ⬜ items
 Only pursue a view override when a concrete need can't be met by CSS + admin content. If so, base it
